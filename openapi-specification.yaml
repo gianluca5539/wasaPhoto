@@ -1,0 +1,777 @@
+openapi: 3.0.3
+info:
+  title: WASAPhoto By Gianluca Gabriel Monte 1982801
+  description: |-
+    This OpenAPI document describes the API for WASAPhoto, a social network focused on sharing
+    key moments with your friends, by posting pictures that others can like and comment on!
+    This document may be subject to changes overtime. Please note that a "soft" approach
+    was the path of choice regarding bans, so the response in case a user is banned will just
+    be a 404 not found error.
+    The authentication token is set to be an UUID, but this can change when the backend is
+    complete since more efficient or versatile configurations could be implemented.
+  version: '1'
+
+paths:
+  /login:
+    post:
+      tags: ['Own User']
+      summary: Logs in the user
+      description: |-
+        If the user does not exist it will be created and logged in automatically,
+        and the User object is returned along with a token for authentication.
+        The user token is a UUID.
+      operationId: doLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Maria
+                  pattern: 'ˆ.*?$'
+                  minLength: 3
+                  maxLength: 16
+        required: true
+      responses:
+        '200':
+          description: User log-in successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  token:
+                    type: string
+                    example: '550e8400-e29b-41d4-a716-446655440000'
+        '500':
+          description: Internal server error
+
+  /changeusername:
+    put:
+      tags: ['Own User']
+      summary: Changes the user's display name
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error, stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: setMyUserName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newname:
+                  type: string
+                  example: 'Maria123'
+                  pattern: 'ˆ.*?$'
+                  minLength: 3
+                  maxLength: 16
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Username change successful
+        '404':
+          description: User not found
+        '403':
+          description: Action forbidden
+        '500':
+          description: Internal server error
+
+  /changefeeling:
+    put:
+      tags: ['Own User']
+      summary: Changes the user's feeling
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error, stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: setFeeling
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newfeeling:
+                  type: number
+                  example: 1
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Feeling change successful
+        '404':
+          description: User not found
+        '403':
+          description: Action forbidden
+        '500':
+          description: Internal server error
+
+  /changepicture:
+    put:
+      tags: ['Own User']
+      summary: Changes the user's profile picture
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: setProfilePicture
+      requestBody:
+        description: New picture data, in base64 format
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newpicture:
+                  type: string
+                  example: 'BaWD39Sds4ndfi345dfjr0d=='
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Picture change successful
+        '404':
+          description: User not found
+        '403':
+          description: Action forbidden
+        '500':
+          description: Internal server error
+
+  /changebio:
+    put:
+      tags: ['Own User']
+      summary: Changes the user's bio
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: setBio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newbio:
+                  type: string
+                  example: 'Hello guys!'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Bio change successful
+        '404':
+          description: User not found
+        '403':
+          description: Action forbidden
+        '500':
+          description: Internal server error
+
+  /addusertofollows:
+    put:
+      tags: ['Social']
+      summary: Starts following an user
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the user has banned the requesting user, it will also return a 404 error.
+      operationId: followUser
+      requestBody:
+        description: ID of the user to start following
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12s74fd8440d'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User followed successfully
+        '404':
+          description: User not found or requesting user banned
+        '500':
+          description: Internal server error
+
+  /removeuserfromfollows:
+    put:
+      tags: ['Social']
+      summary: Stops following an user
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the user was not followed to begin with, it will return 200 too.
+      operationId: unfollowUser
+      requestBody:
+        description: ID of the user to stop following
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12s74fd8440d'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User unfollowed successfully
+        '404':
+          description: User not found or requesting user banned
+        '500':
+          description: Internal server error
+
+  /banuser:
+    put:
+      tags: ['Social']
+      summary: Blocks a user from viewing a profile
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the user is the same as the requesting one, it will return a 403 error.
+      operationId: banUser
+      requestBody:
+        description: ID of the user to ban
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12s74fd8440d'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User banned successfully
+        '404':
+          description: User not found
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /unbanuser:
+    put:
+      tags: ['Social']
+      summary: Unblocks a banned user
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the user is the same as the requesting one, it will return a 403 error.
+      operationId: unbanUser
+      requestBody:
+        description: ID of the user to unban
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12s74fd8440d'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User unbanned successfully
+        '404':
+          description: User not found
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /stream:
+    get:
+      tags: ['Main functions']
+      summary: Gets the stream of the current user
+      description: |-
+        It will return the user's feed as an array of posts, or error 500 if an error in the backend occurs
+      operationId: getUserStream
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Posts found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: User not found
+
+  /profile/{username}:
+    get:
+      tags: ['Main functions']
+      summary: Gets the profile of a given user
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getUserProfile
+      parameters:
+        - name: username
+          in: path
+          description: Username of the user we want to get the profile of
+          required: true
+          schema:
+            type: string
+          example: 'Maria'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile found and returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '500':
+          description: Internal server error
+
+  /following/{username}:
+    get:
+      tags: ['Profiles']
+      summary: Gets the users that a given user is following
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getUserFollowing
+      parameters:
+        - name: username
+          in: path
+          description: Username of the user we want the "following" of
+          required: true
+          schema:
+            type: string
+          example: 'Maria'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Users found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+  /followers/{username}:
+    get:
+      tags: ['Profiles']
+      summary: Gets the users that follow a given user
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getUserFollowers
+      parameters:
+        - name: username
+          in: path
+          description: Username of the user we want the "followers" of
+          required: true
+          schema:
+            type: string
+          example: 'Maria'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Users found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+  /newphoto:
+    post:
+      tags: ['Posts']
+      summary: Uploads a new picture
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: uploadPhoto
+      requestBody:
+        description: Base64 of the picture and caption
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  example: 'CaAFodfdsfh=='
+                caption:
+                  type: string
+                  example: 'Hello there'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Picture posted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /deletephoto/{pictureid}:
+    delete:
+      tags: ['Posts']
+      summary: Deletes a picture
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: deletePhoto
+      parameters:
+        - name: pictureid
+          in: path
+          description: id of the picture we want to delete
+          required: true
+          schema:
+            type: string
+          example: '123s83uZv84'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Picture deleted successfully
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /likephoto:
+    post:
+      tags: ['Posts']
+      summary: Likes a picture
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the picture was already liked it will return 200 too.
+      operationId: likePhoto
+      requestBody:
+        description: ID of the picture to like
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '23fg4h234d2s'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Picture liked successfully
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /unlikephoto:
+    post:
+      tags: ['Posts']
+      summary: Removes the like from a picture
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the picture was already unliked it will return 200 too.
+      operationId: unlikePhoto
+      requestBody:
+        description: ID of the picture to unlike
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '23fg4h234d2s'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Picture unliked successfully
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /newcomment:
+    post:
+      tags: ['Posts']
+      summary: Comments a picture
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: commentPhoto
+      requestBody:
+        description: ID of the picture and comment text
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '23fg4h234d2s'
+                text:
+                  type: string
+                  example: 'Good picure!'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Users found and returned as an array
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /deletecomment/{commentid}:
+    delete:
+      tags: ['Posts']
+      summary: Deletes a comment
+      description: |-
+        If the token is incorrect, it will return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+      operationId: uncommentPhoto
+      parameters:
+        - name: commentid
+          in: path
+          description: ID of the comment to delete
+          required: true
+          schema:
+            type: string
+          example: 'Maria'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Comment deleted successfully
+        '403':
+          description: Operation not permitted
+        '500':
+          description: Internal server error
+
+  /comments/{pictureid}:
+    get:
+      tags: ['Posts']
+      summary: Gets the comments of a given picture
+      description: |-
+        If the picture does not exist, it will return an error (404).
+        If the picture exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getComments
+      parameters:
+        - name: pictureid
+          in: path
+          description: ID of the picture to get the comments of
+          required: true
+          schema:
+            type: string
+          example: 'f34d645gh535'
+      responses:
+        '200':
+          description: Users found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Picture not found
+        '500':
+          description: Internal server error
+
+  /likes/{pictureid}:
+    get:
+      tags: ['Posts']
+      summary: Gets the likes of a given picture (users)
+      description: |-
+        If the picture does not exist, it will return an error (404).
+        If the picture exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getLikes
+      parameters:
+        - name: pictureid
+          in: path
+          description: ID of the picture to get the likes of
+          required: true
+          schema:
+            type: string
+          example: 'f34d645gh535'
+      responses:
+        '200':
+          description: Users found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: Picture not found
+        '500':
+          description: Internal server error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12s74fd8440d'
+        username:
+          type: string
+          example: 'Maria'
+        feeling:
+          type: number
+        bio:
+          type: string
+          example: 'Hello! What a wonderul world'
+        pictureURL:
+          type: string
+          example: 'api.com/Maria/propic.jpg'
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12s74fd8440d'
+        username:
+          type: string
+          example: 'Maria'
+        feeling:
+          type: number
+        pictureURL:
+          type: string
+          example: 'api.com/Maria/propic.jpg'
+        text:
+          type: string
+          example: 'Good one!'
+
+    Post:
+      type: object
+      properties:
+        postid:
+          type: string
+          example: '12s74fd8440d'
+        userid:
+          type: string
+          example: 'uXs71f4sdf0X'
+        username:
+          type: string
+          example: 'Maria'
+        feeling:
+          type: number
+        profilePictureURL:
+          type: string
+          example: 'api.com/Maria/propic.jpg'
+        pictureURL:
+          type: string
+          example: 'api.com/posts/picture123.jpg'
+        caption:
+          type: string
+          example: 'Hello :) !'
+        createdAt:
+          type: number
+          example: 244358438755348
+        likecount:
+          type: number
+          example: 12
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '12s74fd8440d'
+        username:
+          type: string
+          example: 'Maria'
+        feeling:
+          type: number
+        profilePictureURL:
+          type: string
+          example: 'api.com/Maria/propic.jpg'
+        posts:
+          type: array
+          items:
+            type: object
+            properties:
+              postid:
+                type: string
+                example: '12s74fd8440d'
+              pictureURL:
+                type: string
+                example: 'api.com/posts/picture123.jpg'
+              caption:
+                type: string
+                example: 'Hello :) !'
+              createdAt:
+                type: number
+                example: 244358438755348
+              likecount:
+                type: number
+                example: 12
