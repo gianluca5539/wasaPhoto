@@ -51,7 +51,7 @@ paths:
           description: Internal server error
 
   /changeusername:
-    put:
+    patch:
       tags: ['Own User']
       summary: Changes the user's display name
       description: |-
@@ -85,7 +85,7 @@ paths:
           description: Internal server error
 
   /changefeeling:
-    put:
+    patch:
       tags: ['Own User']
       summary: Changes the user's feeling
       description: |-
@@ -116,7 +116,7 @@ paths:
           description: Internal server error
 
   /changepicture:
-    put:
+    patch:
       tags: ['Own User']
       summary: Changes the user's profile picture
       description: |-
@@ -148,7 +148,7 @@ paths:
           description: Internal server error
 
   /changebio:
-    put:
+    patch:
       tags: ['Own User']
       summary: Changes the user's bio
       description: |-
@@ -178,8 +178,8 @@ paths:
         '500':
           description: Internal server error
 
-  /addusertofollows:
-    put:
+  /followuser/{id}:
+    post:
       tags: ['Social']
       summary: Starts following an user
       description: |-
@@ -188,17 +188,14 @@ paths:
         If everything goes fine it will return code 200.
         If the user has banned the requesting user, it will also return a 404 error.
       operationId: followUser
-      requestBody:
-        description: ID of the user to start following
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '12s74fd8440d'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: Username of the user we want to follow
+          required: true
+          schema:
+            type: string
+            example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -209,8 +206,8 @@ paths:
         '500':
           description: Internal server error
 
-  /removeuserfromfollows:
-    put:
+  /unfollowuser/{id}:
+    post:
       tags: ['Social']
       summary: Stops following an user
       description: |-
@@ -219,17 +216,14 @@ paths:
         If everything goes fine it will return code 200.
         If the user was not followed to begin with, it will return 200 too.
       operationId: unfollowUser
-      requestBody:
-        description: ID of the user to stop following
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '12s74fd8440d'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: Username of the user we want to stop following
+          required: true
+          schema:
+            type: string
+            example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -240,8 +234,8 @@ paths:
         '500':
           description: Internal server error
 
-  /banuser:
-    put:
+  /banuser/{id}:
+    post:
       tags: ['Social']
       summary: Blocks a user from viewing a profile
       description: |-
@@ -250,17 +244,14 @@ paths:
         If everything goes fine it will return code 200.
         If the user is the same as the requesting one, it will return a 403 error.
       operationId: banUser
-      requestBody:
-        description: ID of the user to ban
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '12s74fd8440d'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: Username of the user we want to ban
+          required: true
+          schema:
+            type: string
+            example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -273,8 +264,8 @@ paths:
         '500':
           description: Internal server error
 
-  /unbanuser:
-    put:
+  /unbanuser/{id}:
+    post:
       tags: ['Social']
       summary: Unblocks a banned user
       description: |-
@@ -283,17 +274,14 @@ paths:
         If everything goes fine it will return code 200.
         If the user is the same as the requesting one, it will return a 403 error.
       operationId: unbanUser
-      requestBody:
-        description: ID of the user to unban
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '12s74fd8440d'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: Username of the user we want to unban
+          required: true
+          schema:
+            type: string
+          example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -458,7 +446,7 @@ paths:
         '500':
           description: Internal server error
 
-  /deletephoto/{pictureid}:
+  /deletephoto/{id}:
     delete:
       tags: ['Posts']
       summary: Deletes a picture
@@ -467,7 +455,7 @@ paths:
         If everything goes fine it will return code 200.
       operationId: deletePhoto
       parameters:
-        - name: pictureid
+        - name: id
           in: path
           description: id of the picture we want to delete
           required: true
@@ -484,7 +472,7 @@ paths:
         '500':
           description: Internal server error
 
-  /likephoto:
+  /likephoto/{id}:
     post:
       tags: ['Posts']
       summary: Likes a picture
@@ -493,17 +481,14 @@ paths:
         If everything goes fine it will return code 200.
         If the picture was already liked it will return 200 too.
       operationId: likePhoto
-      requestBody:
-        description: ID of the picture to like
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '23fg4h234d2s'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the picture to like
+          required: true
+          schema:
+            type: string
+            example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -514,7 +499,7 @@ paths:
         '500':
           description: Internal server error
 
-  /unlikephoto:
+  /unlikephoto/{id}:
     post:
       tags: ['Posts']
       summary: Removes the like from a picture
@@ -523,17 +508,14 @@ paths:
         If everything goes fine it will return code 200.
         If the picture was already unliked it will return 200 too.
       operationId: unlikePhoto
-      requestBody:
-        description: ID of the picture to unlike
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '23fg4h234d2s'
-        required: true
+      parameters:
+        - name: id
+          in: path
+          description: ID of the picture to unlike
+          required: true
+          schema:
+            type: string
+            example: '12s74fd8440d'
       security:
         - bearerAuth: []
       responses:
@@ -580,7 +562,7 @@ paths:
         '500':
           description: Internal server error
 
-  /deletecomment/{commentid}:
+  /deletecomment/{id}:
     delete:
       tags: ['Posts']
       summary: Deletes a comment
@@ -589,7 +571,7 @@ paths:
         If everything goes fine it will return code 200.
       operationId: uncommentPhoto
       parameters:
-        - name: commentid
+        - name: id
           in: path
           description: ID of the comment to delete
           required: true
