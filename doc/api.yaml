@@ -67,7 +67,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/username:
-    patch:
+    post:
       tags: ['Own User']
       summary: Changes the user's display name
       description: |-
@@ -128,7 +128,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/feeling:
-    patch:
+    post:
       tags: ['Own User']
       summary: Changes the user's feeling
       description: |-
@@ -184,7 +184,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/profilepicture:
-    patch:
+    post:
       tags: ['Own User']
       summary: Changes the user's profile picture
       description: |-
@@ -239,7 +239,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/bio:
-    patch:
+    post:
       tags: ['Own User']
       summary: Changes the user's bio
       description: |-
