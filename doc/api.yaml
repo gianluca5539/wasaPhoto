@@ -47,7 +47,7 @@ paths:
                   token:
                     type: string
                     example: '550e8400-e29b-41d4-a716-446655440000'
-          '201':
+        '201':
           description: User created and log-in successful
           content:
             application/json:
@@ -67,7 +67,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/username:
-    post:
+    put:
       tags: ['Own User']
       summary: Changes the user's display name
       description: |-
@@ -128,7 +128,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/feeling:
-    post:
+    put:
       tags: ['Own User']
       summary: Changes the user's feeling
       description: |-
@@ -184,7 +184,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/profilepicture:
-    post:
+    put:
       tags: ['Own User']
       summary: Changes the user's profile picture
       description: |-
@@ -239,7 +239,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /users/{userid}/bio:
-    post:
+    put:
       tags: ['Own User']
       summary: Changes the user's bio
       description: |-
