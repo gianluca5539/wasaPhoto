@@ -1,0 +1,27 @@
+# Logs
+webui/logs
+webui/*.log
+webui/npm-debug.log*
+webui/yarn-debug.log*
+webui/yarn-error.log*
+webui/pnpm-debug.log*
+webui/lerna-debug.log*
+
+webui/node_modules
+webui/.DS_Store
+webui/dist
+webui/dist-ssr
+webui/coverage
+webui/*.local
+webui/cypress/videos/
+webui/cypress/screenshots/
+
+# Editor directories and files
+webui/.vscode/*
+webui/!.vscode/extensions.json
+webui/.idea
+webui/*.suo
+webui/*.ntvs*
+webui/*.njsproj
+webui/*.sln
+webui/*.sw?
