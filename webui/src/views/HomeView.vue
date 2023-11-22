@@ -17,6 +17,7 @@ export default {
       :pictureURL="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
     />
     <div class="homepage-feed-container">
+      <div class="homepage-feed-spacer"></div>
       <HomePostComponent
         :pictureURL="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
         :name="'Test123'"
@@ -71,6 +72,14 @@ export default {
     width: 100%;
     height: fit-content;
     align-items: center;
+    .homepage-feed-spacer {
+      width: 100%;
+      height: 0px;
+      transition: height 0.3s ease;
+      @media screen and (max-width: 1150px) {
+        height: 30px;
+      }
+    }
   }
 }
 </style>
