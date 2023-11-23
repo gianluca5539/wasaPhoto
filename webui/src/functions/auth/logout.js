@@ -2,6 +2,6 @@ export const logout = () => {
   console.log('lgout');
   // delete all localStorage items
   localStorage.clear();
-  // go to /login
+  // clear history and redirect to login page (vue)
   window.location.href = '/login';
 };

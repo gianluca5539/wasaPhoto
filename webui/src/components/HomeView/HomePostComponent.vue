@@ -1,7 +1,19 @@
 <script>
+import HeartIcon from 'vue-material-design-icons/Heart.vue';
+import PostPopUp from '../PostPopUp.vue';
+
 export default {
   name: 'HomePostComponent',
+  data() {
+    return {
+      postOpen: false
+    };
+  },
   props: {
+    id: {
+      type: Number,
+      required: true
+    },
     name: {
       type: String,
       required: true
@@ -18,17 +30,54 @@ export default {
       type: String,
       required: true
     },
+    likeCount: {
+      type: Number,
+      required: true
+    },
     caption: {
       type: String,
       required: true
     }
+  },
+  methods: {
+    openPost() {
+      this.postOpen = true;
+    },
+    togglePostLike() {
+      console.log('like post');
+    }
+  },
+  components: {
+    HeartIcon,
+    PostPopUp
   }
-}
+};
 </script>
 
 <template>
-  <button class="home-post-card">
-    <img :src="pictureURL" class="home-post-card-image" />
+  <PostPopUp
+    v-if="this.postOpen"
+    :id="this.id"
+    :name="this.name"
+    :feeling="this.feeling"
+    :pictureURL="this.pictureURL"
+    :profilePictureURL="this.profilePictureURL"
+    :likeCount="this.likeCount"
+    :caption="this.caption"
+    :closePost="
+      () => {
+        this.postOpen = false;
+      }
+    "
+  />
+  <button @click="openPost()" class="home-post-card">
+    <div class="home-post-card-image-container">
+      <img :src="pictureURL" class="home-post-card-image" />
+      <button @click.stop="togglePostLike()" class="home-post-card-like-button">
+        <HeartIcon class="home-post-card-like-icon" />
+        <div class="home-post-card-like-text">{{ likeCount ?? '0' }}</div>
+      </button>
+    </div>
     <div class="home-post-card-details">
       <div class="home-post-card-user-picture">
         <img :src="profilePictureURL" alt="" />
@@ -80,14 +129,46 @@ export default {
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
     min-width: 0;
   }
-  .home-post-card-image {
-    width: 100%;
-    max-height: 1000px;
-    object-fit: cover;
-    border-radius: 20px;
+  .home-post-card-image-container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
     margin-bottom: 10px;
-    @media screen and (max-width: 650px) {
-      border-radius: 0;
+    .home-post-card-image {
+      width: 100%;
+      max-height: 1000px;
+      object-fit: cover;
+      border-radius: 20px;
+      @media screen and (max-width: 650px) {
+        border-radius: 0;
+      }
+    }
+    .home-post-card-like-button {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      width: fit-content;
+      display: flex;
+      flex-direction: row;
+      border: none;
+      transition: all 0.3s ease;
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+        color: red;
+      }
+      .home-post-card-like-icon {
+        margin-right: 5px;
+      }
+      .home-post-card-like-text {
+        color: white !important;
+      }
     }
   }
   .home-post-card-details {
