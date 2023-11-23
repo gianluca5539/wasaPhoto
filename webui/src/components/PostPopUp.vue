@@ -46,6 +46,9 @@ export default {
   },
   mounted() {
     console.log('TODO download comments for post with id: ' + this.id);
+  },
+  beforeDestroy() {
+    document.body.classList.remove('no-scroll');
   }
 };
 </script>
@@ -89,7 +92,7 @@ export default {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;

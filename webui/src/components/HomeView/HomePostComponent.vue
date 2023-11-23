@@ -41,7 +41,12 @@ export default {
   },
   methods: {
     openPost() {
+      document.body.classList.add('no-scroll'); // disable scrolling on page
       this.postOpen = true;
+    },
+    closePost() {
+      this.postOpen = false;
+      document.body.classList.remove('no-scroll'); // enable scrolling on page
     },
     togglePostLike() {
       console.log('like post');
@@ -64,16 +69,15 @@ export default {
     :profilePictureURL="this.profilePictureURL"
     :likeCount="this.likeCount"
     :caption="this.caption"
-    :closePost="
-      () => {
-        this.postOpen = false;
-      }
-    "
+    :closePost="this.closePost"
   />
-  <button @click="openPost()" class="home-post-card">
+  <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">
       <img :src="pictureURL" class="home-post-card-image" />
-      <button @click.stop="togglePostLike()" class="home-post-card-like-button">
+      <button
+        @click.stop="this.togglePostLike()"
+        class="home-post-card-like-button"
+      >
         <HeartIcon class="home-post-card-like-icon" />
         <div class="home-post-card-like-text">{{ likeCount ?? '0' }}</div>
       </button>

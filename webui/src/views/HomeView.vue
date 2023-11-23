@@ -52,6 +52,9 @@ export default {
 </template>
 
 <style lang="scss">
+body.no-scroll {
+  overflow: hidden;
+}
 .homepage-container {
   width: 100vw;
   max-width: 100vw;
