@@ -70,6 +70,7 @@ export default {
     :likeCount="this.likeCount"
     :caption="this.caption"
     :closePost="this.closePost"
+    :togglePostLike="this.togglePostLike"
   />
   <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">
