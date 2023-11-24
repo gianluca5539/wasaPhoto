@@ -81,10 +81,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       requestBody:
         content:
@@ -142,10 +142,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       requestBody:
         content:
@@ -198,10 +198,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       requestBody:
         description: New picture data, in base64 format
@@ -253,10 +253,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       requestBody:
         content:
@@ -310,10 +310,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -349,10 +349,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -388,10 +388,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -433,10 +433,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -502,10 +502,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -538,10 +538,10 @@ paths:
           description: id of the current user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -584,10 +584,10 @@ paths:
           description: id of the user
           required: true
           schema:
-            type: string
-            example: '12s74fd8440d'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -673,10 +673,10 @@ paths:
           description: id of the picture we want to delete
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -711,10 +711,10 @@ paths:
           description: id of the picture we want to like
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -749,10 +749,10 @@ paths:
           description: id of the picture we want to unlike
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -786,10 +786,10 @@ paths:
           description: id of the picture we want to comment
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       requestBody:
         description: comment text
@@ -838,10 +838,10 @@ paths:
           description: ID of the comment to delete
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       security:
         - bearerAuth: []
@@ -876,10 +876,10 @@ paths:
           description: ID of the picture to get the comments of
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       responses:
         '200':
@@ -920,10 +920,10 @@ paths:
           description: ID of the picture to get the likes of
           required: true
           schema:
-            type: string
-            example: '123s83uZv84'
+            type: number
+            example: 12
             pattern: 'ˆ.*?$'
-            minLength: 15
+            minLength: 0
             maxLength: 30
       responses:
         '200':
@@ -962,10 +962,10 @@ components:
       properties:
         id:
           description: ID of the user
-          type: string
-          example: '12s74fd8440d'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         username:
           description: username of the user
@@ -996,17 +996,17 @@ components:
       properties:
         id:
           description: ID of the comment
-          type: string
-          example: '12s74fd8440d'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         userid:
           description: ID of the author
-          type: string
-          example: '12s74fd8440d'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         username:
           description: username of the author
@@ -1037,17 +1037,17 @@ components:
       properties:
         postid:
           description: ID of the post
-          type: string
-          example: '12s74fd8440d'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         userid:
           description: ID of the author
-          type: string
-          example: 'uXs71f4sdf0X'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         username:
           description: username of the author
@@ -1091,10 +1091,10 @@ components:
       properties:
         id:
           description: ID of the user
-          type: string
-          example: '12s74fd8440d'
+          type: number
+          example: 12
           pattern: 'ˆ.*?$'
-          minLength: 15
+          minLength: 0
           maxLength: 30
         username:
           description: username of the user
@@ -1122,8 +1122,8 @@ components:
             properties:
               postid:
                 description: ID of the post
-                type: string
-                example: '12s74fd8440d'
+                type: number
+                example: 12
               pictureURL:
                 description: url of the picture
                 type: string
