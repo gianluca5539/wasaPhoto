@@ -17,6 +17,10 @@ export default {
       type: Boolean,
       required: true
     },
+    date: {
+      type: Date,
+      required: true
+    },
     feeling: {
       type: Number,
       required: true
@@ -64,6 +68,10 @@ export default {
         }"
       >
         {{ this.name }}
+        <div class="post-popup-comment-card-date">
+          {{ date.getDate() }}/{{ date.getMonth() }}/{{ date.getFullYear() }}
+          {{ date.getHours() }}:{{ date.getMinutes() }}
+        </div>
       </div>
       <div
         :class="{
@@ -142,6 +150,18 @@ export default {
       &.authorcomment {
         text-align: left;
         color: orange;
+      }
+      .post-popup-comment-card-date {
+        font-size: 12px;
+        font-weight: 100;
+        color: rgb(145, 145, 145);
+        max-width: 100%;
+        word-wrap: break-word;
+        text-align: right;
+        min-height: fit-content;
+        &.authorcomment {
+          text-align: left;
+        }
       }
     }
     .post-popup-comment-card-comment {

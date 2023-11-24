@@ -34,6 +34,10 @@ export default {
       type: Number,
       required: true
     },
+    date: {
+      type: Date,
+      required: true
+    },
     caption: {
       type: String,
       required: true
@@ -68,6 +72,7 @@ export default {
     :pictureURL="this.pictureURL"
     :profilePictureURL="this.profilePictureURL"
     :likeCount="this.likeCount"
+    :date="this.date"
     :caption="this.caption"
     :closePost="this.closePost"
     :togglePostLike="this.togglePostLike"

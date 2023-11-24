@@ -37,6 +37,10 @@ export default {
       type: Number,
       required: true
     },
+    date: {
+      type: Date,
+      required: true
+    },
     caption: {
       type: String,
       required: true
@@ -117,8 +121,7 @@ export default {
                 selected: this.selectedView == 'likes'
               }"
             >
-              <!-- todo change this to like count -->
-              {{ '1000 ' }} Likes
+              {{ likeCount + ' ' }} Likes
             </button>
           </div>
           <div
@@ -148,6 +151,7 @@ export default {
                 :authorcomment="true"
                 :caption="true"
                 name="Lorentz27"
+                :date="new Date()"
                 :feeling="1"
                 comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
                 pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
@@ -163,6 +167,7 @@ export default {
                 :caption="false"
                 name="John Doe"
                 :feeling="1"
+                :date="new Date()"
                 comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
                 pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
               />
@@ -231,7 +236,7 @@ export default {
         .post-popup-image-container-heart {
           position: absolute;
           top: 50%;
-          left: 45%;
+          left: 47%;
           transform: scale(0);
           z-index: 4;
           color: white;

@@ -24,6 +24,7 @@ export default {
         :name="'Test123'"
         :feeling="1"
         :profilePictureURL="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
         :caption="'Hello world, this is a test.'"
         :likeCount="123"
       />
@@ -33,6 +34,7 @@ export default {
         :name="'Test123'"
         :feeling="1"
         :profilePictureURL="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
         :caption="'Hello world, this is a test.'"
         :likeCount="125"
       />
@@ -42,6 +44,7 @@ export default {
         :name="'Test123'"
         :feeling="1"
         :profilePictureURL="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
         :caption="'Hello world, this is a test.'"
         :likeCount="10000"
       />
