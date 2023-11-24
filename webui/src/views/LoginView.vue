@@ -4,25 +4,25 @@ export default {
     return {
       loading: false,
       username: ''
-    }
+    };
   },
   methods: {
     async login(e) {
-      e.preventDefault()
+      e.preventDefault();
       if (this.username.trim() !== '') {
-        this.loading = true
+        this.loading = true;
 
         // TODO get the uuid from the backend
-        let uuid = 'asdassda'
+        let uuid = 'asdassda';
         if (uuid != '') {
-          localStorage.setItem('token', uuid)
-          this.loading = false
-          this.$router.push('/')
+          localStorage.setItem('token', uuid);
+          this.loading = false;
+          this.$router.push('/');
         }
       }
     }
   }
-}
+};
 </script>
 
 <template>
@@ -96,7 +96,16 @@ export default {
         flex-direction: row;
         .login-page-colorful {
           margin-left: 15px;
-          background: linear-gradient(90deg, #ff6c3f, #ffa700, #ff0, #0f0, #00f, #a50, #ff00e0);
+          background: linear-gradient(
+            90deg,
+            #ff6c3f,
+            #ffa700,
+            #ff0,
+            #0f0,
+            #00f,
+            #a50,
+            #ff00e0
+          );
           background-size: 1000% 100%;
           -webkit-background-clip: text;
           color: transparent;
@@ -164,7 +173,7 @@ export default {
             &:hover {
               cursor: pointer;
               background-color: #ff882d;
-              transform: scale(1.05);
+              transform: scale(1.02);
             }
           }
         }

@@ -1,6 +1,6 @@
 <script>
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
-import PostPopUp from '../PostPopUp.vue';
+import PostPopUp from '../PostPopUp/PostPopUp.vue';
 
 export default {
   name: 'HomePostComponent',
@@ -122,7 +122,7 @@ export default {
   position: relative;
   transition: all 0.3s ease;
   &:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
     cursor: pointer;
   }
   @media screen and (max-width: 650px) {

@@ -135,7 +135,7 @@ export default {
   transition: all 0.2s ease;
   text-decoration: none;
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     @media screen and (min-width: 1000px) {
       transform: scale(1);
     }

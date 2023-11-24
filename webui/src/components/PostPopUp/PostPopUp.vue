@@ -1,4 +1,6 @@
 <script>
+import PostPopUpLikeCard from './PostPopUpLikeCard.vue';
+
 export default {
   data() {
     return {
@@ -49,7 +51,8 @@ export default {
   },
   beforeDestroy() {
     document.body.classList.remove('no-scroll');
-  }
+  },
+  components: { PostPopUpLikeCard }
 };
 </script>
 
@@ -80,6 +83,22 @@ export default {
             >
               Likes
             </button>
+          </div>
+          <div
+            v-if="this.selectedView == 'likes'"
+            class="post-popup-view-section-likes"
+          >
+            <PostPopUpLikeCard
+              v-for="like in [
+                1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1
+              ]"
+              :key="like"
+              name="John Doe"
+              :feeling="1"
+              bio="I am a happy person because I am happy and have a happy life."
+              pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+            />
           </div>
         </div>
       </div>
@@ -142,6 +161,7 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
+          margin-bottom: 30px;
           .post-popup-view-option-button {
             background: none;
             outline: none;
@@ -155,12 +175,22 @@ export default {
             color: rgb(86, 86, 86);
             letter-spacing: 1px;
             &:hover {
-              transform: scale(1.05);
+              transform: scale(1.02);
             }
             &.selected {
               text-decoration: underline;
             }
           }
+        }
+        .post-popup-view-section-likes {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          padding: 0px 20px;
+          overflow-y: scroll;
         }
       }
     }
