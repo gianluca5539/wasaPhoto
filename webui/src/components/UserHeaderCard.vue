@@ -150,7 +150,6 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: 20px;
     position: relative;
     width: 50px;
     height: 50px;
@@ -172,6 +171,10 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-left: 20px;
+    @media screen and (max-width: 650px) {
+      display: none;
+    }
   }
 }
 </style>

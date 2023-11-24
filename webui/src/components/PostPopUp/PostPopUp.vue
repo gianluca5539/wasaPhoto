@@ -224,6 +224,10 @@ export default {
       width: 100%;
       display: flex;
       flex-direction: row;
+      @media screen and (max-width: 1100px) {
+        flex-direction: column;
+        padding-bottom: 30px;
+      }
       .post-popup-image-container {
         width: 60%;
         height: 100%;
@@ -233,6 +237,10 @@ export default {
         background-color: white;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
         position: relative;
+        @media screen and (max-width: 1100px) {
+          width: 100%;
+          height: 50%;
+        }
         .post-popup-image-container-heart {
           position: absolute;
           top: 50%;
@@ -260,6 +268,12 @@ export default {
         justify-content: flex-start;
         align-items: center;
         margin-left: 20px;
+        @media screen and (max-width: 1100px) {
+          width: 100%;
+          height: 50%;
+          margin-left: 0px;
+          margin-top: 20px;
+        }
         .post-popup-view-options {
           display: flex;
           justify-content: center;
