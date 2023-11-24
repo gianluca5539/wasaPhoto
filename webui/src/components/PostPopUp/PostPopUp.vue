@@ -3,6 +3,7 @@ import PostPopUpLikeCard from './PostPopUpLikeCard.vue';
 import PostPopUpCommentCard from './PostPopUpCommentCard.vue';
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import BrokenHeartIcon from 'vue-material-design-icons/HeartBroken.vue';
+import SendIcon from 'vue-material-design-icons/Send.vue';
 
 export default {
   data() {
@@ -57,6 +58,9 @@ export default {
         this.showHeart = null;
       }, 1000);
       this.togglePostLike();
+    },
+    sendComment() {
+      console.log('send comment');
     }
   },
   mounted() {
@@ -69,7 +73,8 @@ export default {
     PostPopUpLikeCard,
     PostPopUpCommentCard,
     HeartIcon,
-    BrokenHeartIcon
+    BrokenHeartIcon,
+    SendIcon
   }
 };
 </script>
@@ -135,31 +140,50 @@ export default {
           </div>
           <div
             v-if="this.selectedView == 'comments'"
-            class="post-popup-view-section-interactions"
+            class="post-popup-view-section-comments-section"
           >
-            <PostPopUpCommentCard
-              :userid="1"
-              :authorcomment="true"
-              :caption="true"
-              name="Lorentz27"
-              :feeling="1"
-              comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
-              pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-            />
-            <PostPopUpCommentCard
-              v-for="like in [
-                1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 1, 1
-              ]"
-              :userid="2"
-              :authorcomment="false"
-              :key="like"
-              :caption="false"
-              name="John Doe"
-              :feeling="1"
-              comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
-              pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-            />
+            <div class="post-popup-view-section-interactions">
+              <PostPopUpCommentCard
+                :userid="1"
+                :authorcomment="true"
+                :caption="true"
+                name="Lorentz27"
+                :feeling="1"
+                comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
+                pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+              />
+              <PostPopUpCommentCard
+                v-for="like in [
+                  1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1, 1, 1, 1
+                ]"
+                :userid="2"
+                :authorcomment="false"
+                :key="like"
+                :caption="false"
+                name="John Doe"
+                :feeling="1"
+                comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
+                pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+              />
+            </div>
+            <div class="post-popup-comment-input-section">
+              <textarea
+                v-model="inputValue"
+                type="text"
+                name="comment-input"
+                id="1"
+                autogrow="true"
+                placeholder="Your comment..."
+              />
+              <SendIcon
+                class="post-popup-comment-send-button"
+                style="cursor: pointer"
+                @click="sendComment()"
+                color="rgb(86, 86, 86)"
+                size="30"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -256,13 +280,65 @@ export default {
             }
           }
         }
+        .post-popup-view-section-comments-section {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          width: 100%;
+          padding: 0px 20px;
+          overflow-y: scroll;
+          .post-popup-comment-input-section {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            min-height: 80px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+            textarea {
+              width: 88%;
+              height: 100%;
+              background: none;
+              outline: none;
+              border: none;
+              padding: 5px 10px;
+              font-size: 20px;
+              font-weight: 600;
+              color: rgb(86, 86, 86);
+              letter-spacing: 1px;
+              font-size: 18px;
+              resize: none;
+              &::placeholder {
+                color: rgb(86, 86, 86);
+                font-weight: 600;
+                letter-spacing: 1px;
+              }
+            }
+            .post-popup-comment-send-button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 12%;
+              height: 70%;
+              color: orange;
+              transition: all 0.3s ease;
+              border-left: 1px solid rgb(237, 237, 237);
+              &:hover {
+                transform: scale(1.1);
+              }
+            }
+          }
+        }
         .post-popup-view-section-interactions {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
           align-items: center;
           width: 100%;
-          height: 100%;
+
           padding: 0px 20px;
           overflow-y: scroll;
         }
