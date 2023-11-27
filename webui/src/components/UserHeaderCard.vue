@@ -16,10 +16,18 @@ export default {
     checkOptionsOpen() {
       this.optionsOpen = window.innerWidth > 1000;
     },
+    openMyProfile() {
+      let userid = localStorage.getItem('userid');
+      this.$router.push(`/profile/${userid}`);
+    },
     logout
   },
   props: {
-    name: {
+    userid: {
+      type: Number,
+      required: true
+    },
+    username: {
       type: String,
       required: true
     },
@@ -32,7 +40,7 @@ export default {
       required: true
     }
   },
-  mounted() {
+  created() {
     window.addEventListener('resize', this.checkOptionsOpen);
   },
   beforeDestroy() {
@@ -59,7 +67,7 @@ export default {
         </div>
       </div>
     </div>
-    <div class="user_header_card-name">{{ name }}</div>
+    <div class="user_header_card-name">{{ username }}</div>
   </button>
   <div class="user_header_card-options-container" v-if="optionsOpen">
     <button class="user_header_card-container open" @click="toggleOptions">
@@ -75,9 +83,11 @@ export default {
           </div>
         </div>
       </div>
-      <div class="user_header_card-name">{{ name }}</div>
+      <div class="user_header_card-name">{{ username }}</div>
     </button>
-    <button class="user_header_card-option">My Profile</button>
+    <button @click="openMyProfile" class="user_header_card-option">
+      My Profile
+    </button>
     <button @click="logout" class="user_header_card-option">Logout</button>
   </div>
 </template>

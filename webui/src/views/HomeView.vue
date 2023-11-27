@@ -1,20 +1,35 @@
 <script>
-import HomeHeaderComponent from '../components/HomeView/HomeHeaderComponent.vue';
+import HeaderComponent from '../components/HeaderComponent.vue';
 import HomePostComponent from '../components/HomeView/HomePostComponent.vue';
 export default {
+  data() {
+    return {
+      userid: null,
+      username: null,
+      feeling: null,
+      pictureURL: null
+    };
+  },
   components: {
-    HomeHeaderComponent: HomeHeaderComponent,
+    HeaderComponent: HeaderComponent,
     HomePostComponent
+  },
+  async created() {
+    this.userid = parseInt(localStorage.getItem('userid'));
+    this.username = localStorage.getItem('username');
+    this.feeling = parseInt(localStorage.getItem('feeling'));
+    this.pictureURL = localStorage.getItem('pictureURL');
   }
 };
 </script>
 
 <template>
   <div class="homepage-container">
-    <HomeHeaderComponent
-      :name="'Test123'"
-      :feeling="1"
-      :pictureURL="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+    <HeaderComponent
+      :userid="this.userid"
+      :username="this.username"
+      :feeling="this.feeling"
+      :pictureURL="this.pictureURL"
     />
     <div class="homepage-feed-container">
       <div class="homepage-feed-spacer"></div>

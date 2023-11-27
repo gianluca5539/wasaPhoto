@@ -67,7 +67,7 @@ export default {
       console.log('send comment');
     }
   },
-  mounted() {
+  created() {
     console.log('TODO download comments for post with id: ' + this.id);
   },
   beforeDestroy() {

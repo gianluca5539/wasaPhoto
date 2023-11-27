@@ -16,6 +16,13 @@ export default {
         let uuid = 'asdassda';
         if (uuid != '') {
           localStorage.setItem('token', uuid);
+          localStorage.setItem('userid', 123423);
+          localStorage.setItem('username', 'Test1234');
+          localStorage.setItem('feeling', 2);
+          localStorage.setItem(
+            'pictureURL',
+            'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'
+          );
           this.loading = false;
           this.$router.push('/');
         }

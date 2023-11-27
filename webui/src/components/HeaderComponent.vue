@@ -1,10 +1,14 @@
 <script>
-import UserHeaderCard from '../UserHeaderCard.vue';
+import UserHeaderCard from './UserHeaderCard.vue';
 
 export default {
-  name: 'HomeHeaderComponent',
+  name: 'HeaderComponent',
   props: {
-    name: {
+    userid: {
+      type: Number,
+      required: true
+    },
+    username: {
       type: String,
       required: true
     },
@@ -24,7 +28,12 @@ export default {
 <template>
   <div class="homepage-header-container">
     <div class="homepage-header-title">WASAPhoto</div>
-    <UserHeaderCard :name="name" :feeling="feeling" :pictureURL="pictureURL" />
+    <UserHeaderCard
+      :userid="userid"
+      :username="username"
+      :feeling="feeling"
+      :pictureURL="pictureURL"
+    />
   </div>
 </template>
 
