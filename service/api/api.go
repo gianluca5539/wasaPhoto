@@ -45,6 +45,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+
+type User struct {
+	UserID int `json:"userid"`
+	Username string `json:"username"`
+	Feeling int `json:"feeling"`
+	Bio string `json:"bio"`
+	PictureURL string `json:"picture_url"`
+}
+
+
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {
 	// Logger where log entries are sent
