@@ -48,6 +48,8 @@ type User struct {
 type AppDatabase interface {
 	GetName() (string, error)
 	SetName(name string) error
+	GetUserByUsername(username string) (User, bool, error)
+	CreateUser(username string) (User, error)
 
 	Ping() error
 }
@@ -75,14 +77,12 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}
 
 	var tableNameUser string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT, feeling INT, bio TEXT, picture_url TEXT);`
+		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT NOT NULL, feeling INT, bio TEXT, picture_url TEXT);`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
-		} else {
-			logger.Println("initializing database support")
 		}
 	}
 

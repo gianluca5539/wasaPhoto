@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -46,41 +47,48 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	username := r.FormValue("username")
 
 	// Check if the username exists
-	user, err := rt.db.GetUserByUsername(username)
+	user,found, err := rt.db.GetUserByUsername(username)
 	if err != nil {
-		rt.logger.WithError(err).Error("error in login while getting user from database")
-		rt.sendError(w, http.StatusInternalServerError, "internal server error")
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("internal server error"))
 		return
 	}
-	if user == nil {
-		// create user in db
+	// If the user doesn't exist, create a new user in the database
+	if !found {
 		user, err = rt.db.CreateUser(username)
 		if err != nil {
-			rt.logger.WithError(err).Error("error in login while creating user in database")
-			rt.sendError(w, http.StatusInternalServerError, "internal server error")
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("internal server error"))
 			return
-		}
+		} 
 		token, err := GenerateJWTToken(user.UserID)
 		if err != nil {
-			rt.logger.WithError(err).Error("error in login while generating JWT token")
-			rt.sendError(w, http.StatusInternalServerError, "internal server error")
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		rt.sendJSON(w, http.StatusCreated, map[string]interface{}{
+
+		res := map[string]interface{}{
 			"user": user,
 			"token": token,
-		})
+		}
+		// Return the user and the token
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(res)
 	} else {
-		// Generate the JWT token
 		token, err := GenerateJWTToken(user.UserID)
 		if err != nil {
-			rt.logger.WithError(err).Error("error in login while generating JWT token")
-			rt.sendError(w, http.StatusInternalServerError, "internal server error")
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		rt.sendJSON(w, http.StatusOK, map[string]interface{}{
+
+		res := map[string]interface{}{
 			"user": user,
 			"token": token,
-		})
+		}
+		// Return the user and the token
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(res)
 	}
-}
+}; 
