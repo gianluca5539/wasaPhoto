@@ -15,6 +15,10 @@ type CustomJWTClaims struct {
 	jwt.StandardClaims
 }
 
+type LoginRequest struct {
+	Username string `json:"username"`
+}
+
 const (
 	// JWTSigningKey is the key used to sign the JWT token
 	JWTSigningKey = "wasaphoto_secret" // in production should be put in .env or something
@@ -33,7 +37,7 @@ func GenerateJWTToken(UserID int) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	ss, err := token.SignedString(JWTSigningKey)
+	ss, err := token.SignedString([]byte(JWTSigningKey))
 	if err != nil {
 		return "", fmt.Errorf("error in GenerateJWTToken while signing token: %w", err)
 	}
@@ -43,14 +47,20 @@ func GenerateJWTToken(UserID int) (string, error) {
 
 
 func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	// Get the username and password from the request body
-	username := r.FormValue("username")
+	var loginReq LoginRequest
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&loginReq)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	username := loginReq.Username
 
 	// Check if the username exists
 	user,found, err := rt.db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("internal server error"))
 		return
 	}
 	// If the user doesn't exist, create a new user in the database
@@ -58,7 +68,6 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		user, err = rt.db.CreateUser(username)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("internal server error"))
 			return
 		} 
 		token, err := GenerateJWTToken(user.UserID)
@@ -73,12 +82,13 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		}
 		// Return the user and the token
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(res)
 	} else {
 		token, err := GenerateJWTToken(user.UserID)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("internal server error" + err.Error()))
 			return
 		}
 

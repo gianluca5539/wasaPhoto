@@ -46,10 +46,9 @@ type User struct {
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	GetName() (string, error)
-	SetName(name string) error
 	GetUserByUsername(username string) (User, bool, error)
 	CreateUser(username string) (User, error)
+	DeleteAllData() (error)
 
 	Ping() error
 }

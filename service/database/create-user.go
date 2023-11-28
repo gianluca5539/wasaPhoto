@@ -1,21 +1,30 @@
 package database
 
-import "fmt"
-
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) CreateUser(username string) (User, error) {
+
 	var u User
-	query_str := fmt.Sprintf("INSERT INTO user (username) VALUES (%s)", username)
-	rows, err := db.c.Query(query_str)
+
+	query_str := "INSERT INTO user (username) VALUES (?);"
+	result, err := db.c.Exec(query_str, username)
 	if err != nil {
 		return u,err
 	}
-	for rows.Next() {
-		err := rows.Scan(&u.UserID, &u.Username, &u.Feeling, &u.Bio, &u.PictureURL)
-		if err != nil {
-			return u, err
-		}
+
+	// Get the last inserted ID
+	lastInsertedID, err := result.LastInsertId()
+	if err != nil {
+		// Handle the error
+		return u,err
 	}
 
-	return u, nil
+	// create user
+	u = User{
+		UserID:     int(lastInsertedID),
+		Username:   username,
+		Feeling:    0,
+	}
+
+	
+	return u, nil // found and no error
 }
