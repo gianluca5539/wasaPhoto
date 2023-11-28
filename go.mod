@@ -1,4 +1,4 @@
-module git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated
+module github.com/gianluca5539/WASA
 
 go 1.17
 
@@ -9,6 +9,7 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/sirupsen/logrus v1.9.3
+	github.com/golang-jwt/jwt v1.0.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
