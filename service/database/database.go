@@ -77,7 +77,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	var tableNamePost string
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&tableNameUser)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid TEXT NOT NULL, picture);`
+		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid TEXT NOT NULL, picture TEXT NOT NULL, caption TEXT, createdAt DATETIME NOT NULL, likecount INT NOT NULL);`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
