@@ -10,10 +10,10 @@ func (db *appdbimpl) GetUserByUsername(username string) (User,bool, error) {
 	
 	var nullableFeeling sql.NullInt64
 	var nullableBio sql.NullString
-	var nullablePictureURL sql.NullString
+	var nullablePicture sql.NullString
 
 	query_str := "SELECT * FROM user WHERE username = '" + username + "';"
-	err := db.c.QueryRow(query_str).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePictureURL)
+	err := db.c.QueryRow(query_str).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
 	
 	if err == sql.ErrNoRows {
 		return u,false, nil // not found but no error
@@ -28,8 +28,8 @@ func (db *appdbimpl) GetUserByUsername(username string) (User,bool, error) {
 	if nullableBio.Valid {
 		u.Bio = nullableBio.String
 	}
-	if nullablePictureURL.Valid {
-		u.PictureURL = nullablePictureURL.String
+	if nullablePicture.Valid {
+		u.Picture = nullablePicture.String
 	}
 	
 	return u,true, nil // found and no error

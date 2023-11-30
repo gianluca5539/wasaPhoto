@@ -8,7 +8,7 @@ export default {
       userid: null,
       username: null,
       feeling: null,
-      pictureURL: null
+      picture: null
     };
   },
   components: { HeaderComponent },
@@ -20,7 +20,7 @@ export default {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.pictureURL = localStorage.getItem('pictureURL');
+    this.picture = localStorage.getItem('picture');
   }
 };
 </script>
@@ -31,7 +31,7 @@ export default {
       :userid="this.userid"
       :username="this.username"
       :feeling="this.feeling"
-      :pictureURL="this.pictureURL"
+      :picture="this.picture"
     />
     <div class="profile-page-content">
       <h1>{{ this.profileuserid }}'s Profile</h1>

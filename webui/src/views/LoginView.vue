@@ -20,7 +20,7 @@ export default {
           localStorage.setItem('username', 'Test1234');
           localStorage.setItem('feeling', 2);
           localStorage.setItem(
-            'pictureURL',
+            'picture',
             'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'
           );
           this.loading = false;

@@ -13,7 +13,7 @@ export default {
       type: String,
       required: true
     },
-    pictureUrl: {
+    picture: {
       type: String,
       required: true
     }
@@ -24,7 +24,7 @@ export default {
 <template>
   <button class="post-popup-like-card">
     <div class="post-popup-like-card-picure">
-      <img :src="pictureUrl" alt="Profile Picture" />
+      <img :src="picture" alt="Profile Picture" />
       <div class="post-popup-like-card-feeling">
         <span v-if="feeling === 0">😐</span>
         <span v-if="feeling === 1">😀</span>

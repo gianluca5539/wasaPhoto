@@ -41,7 +41,7 @@ type User struct {
 	Username string `json:"username"`
 	Feeling int `json:"feeling"`
 	Bio string `json:"bio"`
-	PictureURL string `json:"picture_url"`
+	Picture string `json:"picture"`
 }
 
 // AppDatabase is the high level interface for the DB
@@ -64,21 +64,20 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
 
-	// Check if table exists. If not, the database is empty, and we need to create the structure
-	var tableNameExample string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableNameExample)
+	var tableNameUser string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
+		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT NOT NULL, feeling INT, bio TEXT, picture TEXT);`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)
 		}
 	}
 
-	var tableNameUser string
-	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
+	var tableNamePost string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&tableNameUser)
 	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT NOT NULL, feeling INT, bio TEXT, picture_url TEXT);`
+		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid TEXT NOT NULL, picture);`
 		_, err = db.Exec(sqlStmt)
 		if err != nil {
 			return nil, fmt.Errorf("error creating database structure: %w", err)

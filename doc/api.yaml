@@ -984,7 +984,7 @@ components:
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 160
-        pictureURL:
+        picture:
           description: profile picture of the user
           type: string
           example: 'api.com/Maria/propic.jpg'
@@ -1018,7 +1018,7 @@ components:
         feeling:
           description: feeling of the author
           type: number
-        pictureURL:
+        picture:
           description: profile picture of the author
           type: string
           example: 'api.com/Maria/propic.jpg'
@@ -1059,12 +1059,12 @@ components:
         feeling:
           description: feeling of the author
           type: number
-        profilePictureURL:
+        profilePicture:
           description: profile picture of the author
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
-        pictureURL:
+        picture:
           description: url of the picture in the post
           type: string
           example: 'api.com/posts/picture123.jpg'
@@ -1106,7 +1106,7 @@ components:
         feeling:
           description: feeling of the user
           type: number
-        profilePictureURL:
+        profilePicture:
           description: profile picture of the user
           type: string
           example: 'api.com/Maria/propic.jpg'
@@ -1124,7 +1124,7 @@ components:
                 description: ID of the post
                 type: number
                 example: 12
-              pictureURL:
+              picture:
                 description: url of the picture
                 type: string
                 example: 'api.com/posts/picture123.jpg'

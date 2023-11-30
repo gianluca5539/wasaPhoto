@@ -16,7 +16,7 @@ export default {
       type: Number,
       required: true
     },
-    pictureURL: {
+    picture: {
       type: String,
       required: true
     }
@@ -32,7 +32,7 @@ export default {
       :userid="userid"
       :username="username"
       :feeling="feeling"
-      :pictureURL="pictureURL"
+      :picture="picture"
     />
   </div>
 </template>

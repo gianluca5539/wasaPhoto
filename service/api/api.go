@@ -51,7 +51,7 @@ type User struct {
 	Username string `json:"username"`
 	Feeling int `json:"feeling"`
 	Bio string `json:"bio"`
-	PictureURL string `json:"picture_url"`
+	Picture string `json:"picture"`
 }
 
 
