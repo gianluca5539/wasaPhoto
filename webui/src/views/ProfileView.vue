@@ -7,6 +7,7 @@ export default {
       profileuserid: null,
       userid: null,
       username: null,
+      bio: null,
       feeling: null,
       picture: null
     };
@@ -20,6 +21,7 @@ export default {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
+    this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
   }
 };

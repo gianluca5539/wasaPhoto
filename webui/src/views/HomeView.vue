@@ -7,6 +7,7 @@ export default {
       userid: null,
       username: null,
       feeling: null,
+      bio: null,
       picture: null
     };
   },
@@ -17,6 +18,7 @@ export default {
   async created() {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
+    this.bio = localStorage.getItem('bio');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.picture = localStorage.getItem('picture');
   }
