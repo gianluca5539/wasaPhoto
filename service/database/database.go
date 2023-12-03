@@ -64,6 +64,8 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
 
+	var err error
+
 	var tableNameUser string
 	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
 	if errors.Is(err, sql.ErrNoRows) {
@@ -75,7 +77,7 @@ func New(db *sql.DB) (AppDatabase, error) {
 	}
 
 	var tableNamePost string
-	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&tableNameUser)
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&tableNamePost)
 	if errors.Is(err, sql.ErrNoRows) {
 		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid TEXT NOT NULL, picture TEXT NOT NULL, caption TEXT, createdAt DATETIME NOT NULL, likecount INT NOT NULL);`
 		_, err = db.Exec(sqlStmt)
