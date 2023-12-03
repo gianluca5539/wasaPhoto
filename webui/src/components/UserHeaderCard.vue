@@ -1,5 +1,7 @@
 <script>
 import { logout } from '../functions/auth/logout';
+import { getPictureURL } from '../functions/getPictureURL';
+
 export default {
   name: 'UserHeaderCard',
   data() {
@@ -20,7 +22,8 @@ export default {
       let userid = localStorage.getItem('userid');
       this.$router.push(`/profile/${userid}`);
     },
-    logout
+    logout,
+    getPictureURL
   },
   props: {
     userid: {
@@ -56,7 +59,7 @@ export default {
     @click="toggleOptions"
   >
     <div class="user_header_card-picture">
-      <img :src="picture" alt="" />
+      <img :src="getPictureURL(-1)" alt="" />
       <div class="user_header_card-feeling">
         <div>
           <span v-if="feeling === 0">😐</span>
@@ -72,7 +75,7 @@ export default {
   <div class="user_header_card-options-container" v-if="optionsOpen">
     <button class="user_header_card-container open" @click="toggleOptions">
       <div class="user_header_card-picture">
-        <img :src="picture" alt="" />
+        <img :src="getPictureURL(-1)" alt="" />
         <div class="user_header_card-feeling">
           <div>
             <span v-if="feeling === 0">😐</span>

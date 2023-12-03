@@ -65,7 +65,65 @@ export default {
         :caption="'Hello world, this is a test.'"
         :likeCount="10000"
       />
-
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
+      />
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
+      />
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
+      />
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
+      />
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
+      />
+      <HomePostComponent
+        :id="3"
+        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
+        :name="'Test123'"
+        :feeling="1"
+        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
+        :date="new Date()"
+        :caption="'Hello world, this is a test.'"
+        :likeCount="10000"
       />
     </div>
   </div>
