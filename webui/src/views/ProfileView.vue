@@ -6,6 +6,11 @@ export default {
   data() {
     return {
       profileuserid: null,
+      profileusername: null,
+      profilebio: null,
+      profilepicture: null,
+      profilefeeling: null,
+
       userid: null,
       username: null,
       bio: null,
@@ -14,19 +19,49 @@ export default {
     };
   },
   methods: {
-    getPictureURL
+    getPictureURL,
+    async getProfile(id) {
+      const token = localStorage.getItem('token');
+      const res = await this.$axios
+        .get(`/users/${id}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            throw new Error(`User not found`);
+          }
+          if (err.response.status === 500) {
+            throw new Error(`Server error`);
+          }
+          throw err;
+        });
+
+      // return the data
+      return res.data;
+    }
   },
   components: { HeaderComponent },
   async created() {
     this.profileuserid = this.$route.params.id;
-
-    // here you should query the stuff needed
 
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
+
+    try {
+      await this.getProfile(this.profileuserid).then((response) => {
+        this.profileusername = response.username;
+        this.profilefeeling = response.feeling;
+        this.profilebio = response.bio;
+        this.profilepicture = response.picture;
+      });
+    } catch (error) {
+      console.log(error); // todo handle this
+    }
   }
 };
 </script>
@@ -43,8 +78,8 @@ export default {
       <div class="profile-info-container">
         <img :src="getPictureURL(-1)" alt="" />
         <div class="profile-info-data">
-          <div class="profile-info-userame">{{ username }}</div>
-          <div class="profile-info-bio">{{ bio || 'No bio, yet.' }}</div>
+          <div class="profile-info-userame">{{ profileusername }}</div>
+          <div class="profile-info-bio">{{ profilebio || 'No bio, yet.' }}</div>
         </div>
       </div>
       <div class="profile-page-posts">
