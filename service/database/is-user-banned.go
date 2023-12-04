@@ -1,9 +1,5 @@
 package database
 
-import (
-	"fmt"
-)
-
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) IsUserBanned(id int, bannedBy int) (bool, error) {
 
