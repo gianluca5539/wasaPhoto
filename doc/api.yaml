@@ -183,7 +183,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/{userid}/profilepicture:
+  /users/{userid}/picture:
     put:
       tags: ['Own User']
       summary: Changes the user's profile picture
@@ -191,7 +191,7 @@ paths:
         If the user does not exist, it will return an error (404).
         If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
         If everything goes fine it will return code 200.
-      operationId: setProfilePicture
+      operationId: setpicture
       parameters:
         - name: userid
           in: path
@@ -1059,7 +1059,7 @@ components:
         feeling:
           description: feeling of the author
           type: number
-        profilePicture:
+        picture:
           description: profile picture of the author
           type: string
           example: 'api.com/Maria/propic.jpg'
@@ -1106,7 +1106,7 @@ components:
         feeling:
           description: feeling of the user
           type: number
-        profilePicture:
+        picture:
           description: profile picture of the user
           type: string
           example: 'api.com/Maria/propic.jpg'

@@ -33,7 +33,6 @@ package database
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 )
 
 type User struct {
@@ -47,8 +46,10 @@ type User struct {
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
 	GetUserByUsername(username string) (User, bool, error)
+	GetUserByUserID(id int) (User, bool, error)
 	CreateUser(username string) (User, error)
-	DeleteAllData() (error)
+	IsUserBanned(id int, bannedBy int) (bool, error)
+	ExecuteSQLDB(code string) ()
 
 	Ping() error
 }
@@ -62,28 +63,6 @@ type appdbimpl struct {
 func New(db *sql.DB) (AppDatabase, error) {
 	if db == nil {
 		return nil, errors.New("database is required when building a AppDatabase")
-	}
-
-	var err error
-
-	var tableNameUser string
-	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&tableNameUser)
-	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT NOT NULL, feeling INT, bio TEXT, picture TEXT);`
-		_, err = db.Exec(sqlStmt)
-		if err != nil {
-			return nil, fmt.Errorf("error creating database structure: %w", err)
-		}
-	}
-
-	var tableNamePost string
-	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&tableNamePost)
-	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid TEXT NOT NULL, picture TEXT NOT NULL, caption TEXT, createdAt DATETIME NOT NULL, likecount INT NOT NULL);`
-		_, err = db.Exec(sqlStmt)
-		if err != nil {
-			return nil, fmt.Errorf("error creating database structure: %w", err)
-		}
 	}
 
 	return &appdbimpl{
