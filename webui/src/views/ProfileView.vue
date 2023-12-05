@@ -10,6 +10,8 @@ export default {
       profilebio: null,
       profilepicture: null,
       profilefeeling: null,
+      profilefollowers: null,
+      profilefollowing: null,
 
       userid: null,
       username: null,
@@ -29,17 +31,45 @@ export default {
           }
         })
         .catch((err) => {
-          if (err.response.status === 404) {
-            throw new Error(`User not found`);
+          switch (err.response.status) {
+            case 404:
+              this.profileusername = 'User not found';
+              this.profilebio =
+                'Sorry, we looked everywhere but we could not find this user.';
+              this.profilepicture = '';
+              this.profilefeeling = -1;
+              break;
+            case 500:
+              this.profileusername = 'Server error';
+              this.profilebio =
+                'Sorry, we are having some problems with our servers. Please try again later.';
+              this.profilepicture = '';
+              this.profilefeeling = -1;
+              break;
+            default:
+              this.$router.push('/serviceunavailable');
+              break;
           }
-          if (err.response.status === 500) {
-            throw new Error(`Server error`);
-          }
-          throw err;
         });
 
-      // return the data
-      return res.data;
+      const response = res.data;
+      this.profileusername = response.username;
+      this.profilefeeling = response.feeling;
+      this.profilebio = response.bio;
+      this.profilepicture = response.picture;
+      this.profilefollowers = response.followers;
+      this.profilefollowing = response.following;
+    },
+    getFollowNumber(x) {
+      if (x === null) return 0;
+      let length = x.length;
+      if (length > 1000000) {
+        return `${(length / 1000000).toFixed(1)}M`;
+      } else if (length > 10000) {
+        return `${(length / 1000).toFixed(1)}K`;
+      } else {
+        return length;
+      }
     }
   },
   components: { HeaderComponent },
@@ -52,16 +82,7 @@ export default {
     this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
 
-    try {
-      await this.getProfile(this.profileuserid).then((response) => {
-        this.profileusername = response.username;
-        this.profilefeeling = response.feeling;
-        this.profilebio = response.bio;
-        this.profilepicture = response.picture;
-      });
-    } catch (error) {
-      console.log(error); // todo handle this
-    }
+    await this.getProfile(this.profileuserid);
   }
 };
 </script>
@@ -76,10 +97,28 @@ export default {
     />
     <div class="profile-page-content">
       <div class="profile-info-container">
-        <img :src="getPictureURL(-1)" alt="" />
-        <div class="profile-info-data">
-          <div class="profile-info-userame">{{ profileusername }}</div>
-          <div class="profile-info-bio">{{ profilebio || 'No bio, yet.' }}</div>
+        <div class="profile-info-data-container">
+          <img :src="getPictureURL(-1)" alt="" />
+          <div class="profile-info-data">
+            <div class="profile-info-userame">{{ profileusername }}</div>
+            <div class="profile-info-bio">
+              {{ profilebio || 'No bio, yet.' }}
+            </div>
+          </div>
+        </div>
+        <div class="profile-info-social">
+          <button>
+            Followers
+            <div class="profile-info-social-number">
+              {{ getFollowNumber(this.profilefollowers) }}
+            </div>
+          </button>
+          <button>
+            Following
+            <div class="profile-info-social-number">
+              {{ getFollowNumber(this.profilefollowing) }}
+            </div>
+          </button>
         </div>
       </div>
       <div class="profile-page-posts">
@@ -116,45 +155,88 @@ export default {
       flex-direction: row;
       align-self: flex-start;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       background-color: white;
       border-radius: 12px;
       margin-bottom: 50px;
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
       @media screen and (max-width: 800px) {
         flex-direction: column;
-        align-self: center;
+        justify-content: center;
       }
-      img {
-        width: 150px;
-        height: 150px;
-        min-height: 150px;
-        min-width: 150px;
-        border-radius: 10%;
-        margin-right: 20px;
-      }
-      .profile-info-data {
+      .profile-info-data-container {
         display: flex;
-        height: 100%;
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-self: flex-start;
+        align-items: center;
         justify-content: flex-start;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        word-wrap: break-word;
         @media screen and (max-width: 800px) {
+          flex-direction: column;
+          align-self: center;
+        }
+        img {
+          width: 150px;
+          height: 150px;
+          min-height: 150px;
+          min-width: 150px;
+          border-radius: 10%;
+          margin-right: 20px;
+        }
+        .profile-info-data {
+          display: flex;
+          height: 100%;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          word-wrap: break-word;
+          @media screen and (max-width: 800px) {
+            align-items: center;
+            text-align: center;
+          }
+          .profile-info-userame {
+            font-size: 24px;
+            font-weight: bold;
+            max-lines: 1;
+          }
+          .profile-info-bio {
+            font-size: 18px;
+            font-weight: 300;
+            max-lines: 3;
+          }
+        }
+      }
+      .profile-info-social {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        button {
+          border: none;
+          background-color: transparent;
+          color: rgb(78, 78, 78);
+          display: flex;
+          flex-direction: column;
           align-items: center;
-          text-align: center;
-        }
-        .profile-info-userame {
-          font-size: 24px;
-          font-weight: bold;
-          max-lines: 1;
-        }
-        .profile-info-bio {
-          font-size: 18px;
-          font-weight: 300;
-          max-lines: 3;
+          justify-content: center;
+          margin-bottom: 10px;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.05);
+          }
+          .profile-info-social-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            border-radius: 10px;
+            width: 100%;
+            background-color: rgb(235, 235, 235);
+          }
         }
       }
     }

@@ -49,6 +49,9 @@ type AppDatabase interface {
 	GetUserByUserID(id int) (User, bool, error)
 	CreateUser(username string) (User, error)
 	IsUserBanned(id int, bannedBy int) (bool, error)
+	GetFollowers(id int) ([]int, error)
+	GetFollowing(id int) ([]int, error)
+
 	ExecuteSQLDB(code string) ()
 
 	Ping() error
