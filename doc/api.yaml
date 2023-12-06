@@ -29,6 +29,7 @@ paths:
               type: object
               properties:
                 username:
+                  description: the username
                   type: string
                   example: Maria
                   pattern: 'ˆ.*?$'
@@ -47,6 +48,7 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
+                    description: the token string
                     type: string
                     example: Maria
                     pattern: 'ˆ.*?$'
@@ -63,6 +65,7 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
+                    description: the token string
                     type: string
                     example: Maria
                     pattern: 'ˆ.*?$'
@@ -104,6 +107,7 @@ paths:
               type: object
               properties:
                 newname:
+                  description: new name string
                   type: string
                   example: 'Maria123'
                   pattern: 'ˆ.*?$'
@@ -115,10 +119,6 @@ paths:
       responses:
         '204':
           description: Username change successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
         '404':
           description: User not found
           content:
@@ -167,6 +167,7 @@ paths:
               type: object
               properties:
                 newfeeling:
+                  description: new feeling string
                   type: number
                   example: 1
                   minLength: 1
@@ -226,6 +227,7 @@ paths:
               type: object
               properties:
                 newpicture:
+                  description: new picture b64
                   type: string
                   example: 'BaWD39Sds4ndfi345dfjr0d=='
         required: true
@@ -282,6 +284,7 @@ paths:
               type: object
               properties:
                 newbio:
+                  description: new bio string
                   type: string
                   example: 'Hello guys!'
                   minLength: 0
@@ -559,9 +562,11 @@ paths:
               type: object
               properties:
                 image:
+                  description: image b64
                   type: string
                   example: 'CaAFodfdsfh=='
                 caption:
+                  description: caption string
                   type: string
                   example: 'Hello there'
         required: true
@@ -809,9 +814,11 @@ paths:
               type: object
               properties:
                 text:
+                  description: comment text
                   type: string
                   example: 'Good picure!'
                 postid:
+                  description: comment postid
                   type: number
                   example: 12
                   pattern: 'ˆ.*?$'
