@@ -25,6 +25,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the username to login
               type: object
               properties:
                 username:
@@ -40,25 +41,33 @@ paths:
           content:
             application/json:
               schema:
+                description: the user and token object
                 type: object
                 properties:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
                     type: string
-                    example: '550e8400-e29b-41d4-a716-446655440000'
+                    example: Maria
+                    pattern: 'ˆ.*?$'
+                    minLength: 3
+                    maxLength: 16
         '201':
           description: User created and log-in successful
           content:
             application/json:
               schema:
+                description: the user and token object
                 type: object
                 properties:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
                     type: string
-                    example: '550e8400-e29b-41d4-a716-446655440000'
+                    example: Maria
+                    pattern: 'ˆ.*?$'
+                    minLength: 3
+                    maxLength: 16
         '500':
           description: Internal server error
           content:
@@ -81,6 +90,7 @@ paths:
           description: id of the current user
           required: true
           schema:
+            description: the userid for which to change username
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -90,6 +100,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the new username
               type: object
               properties:
                 newname:
@@ -142,6 +153,7 @@ paths:
           description: id of the current user
           required: true
           schema:
+            description: the userid of which to change the feeling
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -151,6 +163,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the feeling to set
               type: object
               properties:
                 newfeeling:
@@ -198,6 +211,7 @@ paths:
           description: id of the current user
           required: true
           schema:
+            description: the userid for which to change the profile picture
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -208,6 +222,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the picture data
               type: object
               properties:
                 newpicture:
@@ -253,6 +268,7 @@ paths:
           description: id of the current user
           required: true
           schema:
+            description: the userid for which to change the bio
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -262,6 +278,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the new bio
               type: object
               properties:
                 newbio:
@@ -310,6 +327,7 @@ paths:
           description: id of the user to follow
           required: true
           schema:
+            description: the userid to start following
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -347,6 +365,7 @@ paths:
           description: id of the user to stop following
           required: true
           schema:
+            description: userid to stop following
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -386,6 +405,7 @@ paths:
           description: id of the user to ban
           required: true
           schema:
+            description: userid to ban
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -429,6 +449,7 @@ paths:
           description: id of the user to unban
           required: true
           schema:
+            description: userid to unban
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -473,6 +494,7 @@ paths:
           content:
             application/json:
               schema:
+                description: The post objects
                 type: array
                 items:
                   $ref: '#/components/schemas/Post'
@@ -495,9 +517,10 @@ paths:
       parameters:
         - name: userid
           in: path
-          description: id of the current user
+          description: id of the user
           required: true
           schema:
+            description: id of the user to get the profile of
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -532,6 +555,7 @@ paths:
         content:
           application/json:
             schema:
+              description: the new picture and caption object
               type: object
               properties:
                 image:
@@ -577,6 +601,7 @@ paths:
           description: id of the picture we want to delete
           required: true
           schema:
+            description: postid to be deleted
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -615,6 +640,7 @@ paths:
           description: ID of the picture to get the comments of
           required: true
           schema:
+            description: postid to get the comments of
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -626,6 +652,7 @@ paths:
           content:
             application/json:
               schema:
+                description: array of comments
                 type: array
                 minItems: 0
                 maxItems: 999999
@@ -659,6 +686,7 @@ paths:
           description: ID of the picture to get the likes of
           required: true
           schema:
+            description: id of the post
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -670,6 +698,7 @@ paths:
           content:
             application/json:
               schema:
+                description: users that liked the picture
                 type: array
                 minItems: 0
                 maxItems: 999999
@@ -701,6 +730,7 @@ paths:
           description: id of the picture we want to like
           required: true
           schema:
+            description: postid to like
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -738,6 +768,7 @@ paths:
           description: id of the picture we want to unlike
           required: true
           schema:
+            description: postid to unlike
             type: number
             example: 12
             pattern: 'ˆ.*?$'
@@ -774,6 +805,7 @@ paths:
         content:
           application/json:
             schema:
+              description: comment request object
               type: object
               properties:
                 text:
@@ -822,6 +854,7 @@ paths:
           description: ID of the comment to delete
           required: true
           schema:
+            description: commentid to delete
             type: number
             example: 12
             pattern: 'ˆ.*?$'
