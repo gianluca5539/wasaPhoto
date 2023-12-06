@@ -4,6 +4,9 @@ import PopUpLikeCard from '../components/PopUpLikeCard.vue';
 import { getPictureURL } from '../functions/getPictureURL';
 
 export default {
+  watch: {
+    $route: 'getProfile'
+  },
   data() {
     return {
       profileuserid: null,
@@ -25,7 +28,9 @@ export default {
   },
   methods: {
     getPictureURL,
-    async getProfile(id) {
+    async getProfile() {
+      this.followpopup = null; // close popup (needed when changing profile from follow list)
+      const id = this.$route.params.id;
       const token = localStorage.getItem('token');
       const res = await this.$axios
         .get(`/users/${id}/profile`, {
@@ -80,15 +85,13 @@ export default {
   },
   components: { HeaderComponent, PopUpLikeCard },
   async created() {
-    this.profileuserid = this.$route.params.id;
-
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
 
-    await this.getProfile(this.profileuserid);
+    await this.getProfile();
   }
 };
 </script>
@@ -144,11 +147,21 @@ export default {
     class="profile-page-follow-popup-outer-container"
   >
     <div @click.stop="() => {}" class="profile-page-follow-popup-container">
+      <div
+        v-if="
+          (followpopup == 'followers'
+            ? this.profilefollowers
+            : this.profilefollowing) == null
+        "
+      >
+        No users yet! :(
+      </div>
       <PopUpLikeCard
         v-for="user in followpopup == 'followers'
           ? this.profilefollowers
           : this.profilefollowing"
-        :key="user.id"
+        :key="user.userid"
+        :userid="user.userid"
         :name="user.username"
         :feeling="user.feeling"
         :bio="user.bio"
@@ -332,6 +345,9 @@ export default {
     padding: 20px;
     background-color: white;
     border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
   }
 }
 </style>

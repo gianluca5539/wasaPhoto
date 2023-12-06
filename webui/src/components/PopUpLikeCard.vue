@@ -3,6 +3,10 @@ import { getPictureURL } from '../functions/getPictureURL';
 
 export default {
   props: {
+    userid: {
+      type: Number,
+      required: true
+    },
     name: {
       type: String,
       required: true
@@ -21,13 +25,16 @@ export default {
     }
   },
   methods: {
-    getPictureURL
+    getPictureURL,
+    openUserProfile() {
+      this.$router.push(`/profile/${this.userid}`);
+    }
   }
 };
 </script>
 
 <template>
-  <button class="popup-like-card">
+  <button @click="this.openUserProfile()" class="popup-like-card">
     <div class="popup-like-card-picure">
       <img :src="this.getPictureURL(this.picture)" alt="Profile Picture" />
       <div class="popup-like-card-feeling">
@@ -40,7 +47,7 @@ export default {
     </div>
     <div class="popup-like-card-details">
       <div class="popup-like-card-name">{{ name }}</div>
-      <div class="popup-like-card-bio">{{ bio }}</div>
+      <div class="popup-like-card-bio">{{ bio || 'No bio, yet.' }}</div>
     </div>
   </button>
 </template>
