@@ -96,9 +96,6 @@ paths:
             description: the userid for which to change username
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       requestBody:
         content:
           application/json:
@@ -156,9 +153,6 @@ paths:
             description: the userid of which to change the feeling
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       requestBody:
         content:
           application/json:
@@ -170,8 +164,6 @@ paths:
                   description: new feeling string
                   type: number
                   example: 1
-                  minLength: 1
-                  maxLength: 1
         required: true
       security:
         - bearerAuth: []
@@ -215,9 +207,6 @@ paths:
             description: the userid for which to change the profile picture
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       requestBody:
         description: New picture data, in base64 format
         content:
@@ -273,9 +262,6 @@ paths:
             description: the userid for which to change the bio
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       requestBody:
         content:
           application/json:
@@ -333,9 +319,6 @@ paths:
             description: the userid to start following
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -371,9 +354,6 @@ paths:
             description: userid to stop following
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -411,9 +391,6 @@ paths:
             description: userid to ban
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -455,9 +432,6 @@ paths:
             description: userid to unban
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -499,6 +473,8 @@ paths:
               schema:
                 description: The post objects
                 type: array
+                minItems: 0
+                maxItems: 9999
                 items:
                   $ref: '#/components/schemas/Post'
         '404':
@@ -526,9 +502,6 @@ paths:
             description: id of the user to get the profile of
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -609,9 +582,6 @@ paths:
             description: postid to be deleted
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -648,9 +618,6 @@ paths:
             description: postid to get the comments of
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       responses:
         '200':
           description: Comments found and returned as an array
@@ -660,7 +627,7 @@ paths:
                 description: array of comments
                 type: array
                 minItems: 0
-                maxItems: 999999
+                maxItems: 9999
                 items:
                   $ref: '#/components/schemas/Comment'
         '404':
@@ -694,9 +661,6 @@ paths:
             description: id of the post
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       responses:
         '200':
           description: Users found and returned as an array
@@ -706,7 +670,7 @@ paths:
                 description: users that liked the picture
                 type: array
                 minItems: 0
-                maxItems: 999999
+                maxItems: 9999
                 items:
                   $ref: '#/components/schemas/User'
         '404':
@@ -738,9 +702,6 @@ paths:
             description: postid to like
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -776,9 +737,6 @@ paths:
             description: postid to unlike
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -821,9 +779,6 @@ paths:
                   description: comment postid
                   type: number
                   example: 12
-                  pattern: 'ˆ.*?$'
-                  minLength: 0
-                  maxLength: 30
         required: true
       security:
         - bearerAuth: []
@@ -864,9 +819,6 @@ paths:
             description: commentid to delete
             type: number
             example: 12
-            pattern: 'ˆ.*?$'
-            minLength: 0
-            maxLength: 30
       security:
         - bearerAuth: []
       responses:
@@ -900,9 +852,6 @@ components:
           description: ID of the user
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         username:
           description: username of the user
           type: string
@@ -919,12 +868,14 @@ components:
           example: 'Hello! What a wonderul world'
           pattern: 'ˆ.*?$'
           minLength: 0
-          maxLength: 160
+          maxLength: 9999
         picture:
           description: profile picture of the user
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
+          minLength: 0
+          maxLength: 9999
 
     Comment:
       type: object
@@ -934,16 +885,10 @@ components:
           description: ID of the comment
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         userid:
           description: ID of the author
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         username:
           description: username of the author
           type: string
@@ -959,13 +904,15 @@ components:
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
+          minLenght: 0
+          maxLength: 9999
         text:
           description: text of the comment
           type: string
           example: 'Good one!'
           pattern: 'ˆ.*?$'
           minLength: 0
-          maxLength: 160
+          maxLength: 9999
 
     Post:
       type: object
@@ -975,16 +922,10 @@ components:
           description: ID of the post
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         userid:
           description: ID of the author
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         username:
           description: username of the author
           type: string
@@ -1000,18 +941,22 @@ components:
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
+          minLength: 0
+          maxLength: 9999
         picture:
           description: url of the picture in the post
           type: string
           example: 'api.com/posts/picture123.jpg'
           pattern: 'ˆ.*?$'
+          minLength: 0
+          maxLength: 9999
         caption:
           description: caption of the post
           type: string
           example: 'Hello :) !'
           pattern: 'ˆ.*?$'
           minLength: 0
-          maxLength: 160
+          maxLength: 9999
         createdAt:
           description: date of creation
           type: number
@@ -1029,9 +974,6 @@ components:
           description: ID of the user
           type: number
           example: 12
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 30
         username:
           description: username of the user
           type: string
@@ -1048,31 +990,33 @@ components:
           example: 'Hello! What a wonderul world'
           pattern: 'ˆ.*?$'
           minLength: 0
-          maxLength: 160
+          maxLength: 9999
         picture:
           description: profile picture of the user
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
+          minLength: 0
+          maxLength: 9999
         followers:
           description: followers of the user
           type: array
           minItems: 0
-          maxItems: 999999
+          maxItems: 9999
           items:
             $ref: '#/components/schemas/User'
         following:
           description: followings of the user
           type: array
           minItems: 0
-          maxItems: 999999
+          maxItems: 9999
           items:
             $ref: '#/components/schemas/User'
         posts:
           description: posts of the user
           type: array
           minItems: 0
-          maxItems: 999999
+          maxItems: 9999
           items:
             description: posts array
             type: object
