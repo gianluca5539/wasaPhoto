@@ -59,7 +59,7 @@ export default {
     @click="toggleOptions"
   >
     <div class="user_header_card-picture">
-      <img :src="getPictureURL(-1)" alt="" />
+      <img :src="getPictureURL(picture)" alt="" />
       <div class="user_header_card-feeling">
         <div>
           <span v-if="feeling === 0">😐</span>
@@ -75,7 +75,7 @@ export default {
   <div class="user_header_card-options-container" v-if="optionsOpen">
     <button class="user_header_card-container open" @click="toggleOptions">
       <div class="user_header_card-picture">
-        <img :src="getPictureURL(-1)" alt="" />
+        <img :src="getPictureURL(picture)" alt="" />
         <div class="user_header_card-feeling">
           <div>
             <span v-if="feeling === 0">😐</span>

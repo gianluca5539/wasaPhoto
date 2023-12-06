@@ -1,5 +1,6 @@
 <script>
 import HeaderComponent from '../components/HeaderComponent.vue';
+import PopUpLikeCard from '../components/PopUpLikeCard.vue';
 import { getPictureURL } from '../functions/getPictureURL';
 
 export default {
@@ -17,7 +18,9 @@ export default {
       username: null,
       bio: null,
       feeling: null,
-      picture: null
+      picture: null,
+
+      followpopup: null
     };
   },
   methods: {
@@ -70,9 +73,12 @@ export default {
       } else {
         return length;
       }
+    },
+    setFollowPopup(type) {
+      this.followpopup = type; // either 'followers' or 'following' or null
     }
   },
-  components: { HeaderComponent },
+  components: { HeaderComponent, PopUpLikeCard },
   async created() {
     this.profileuserid = this.$route.params.id;
 
@@ -98,7 +104,7 @@ export default {
     <div class="profile-page-content">
       <div class="profile-info-container">
         <div class="profile-info-data-container">
-          <img :src="getPictureURL(-1)" alt="" />
+          <img :src="getPictureURL(profilepicture)" alt="" />
           <div class="profile-info-data">
             <div class="profile-info-userame">{{ profileusername }}</div>
             <div class="profile-info-bio">
@@ -107,13 +113,13 @@ export default {
           </div>
         </div>
         <div class="profile-info-social">
-          <button>
+          <button @click="setFollowPopup('followers')">
             Followers
             <div class="profile-info-social-number">
               {{ getFollowNumber(this.profilefollowers) }}
             </div>
           </button>
-          <button>
+          <button @click="setFollowPopup('following')">
             Following
             <div class="profile-info-social-number">
               {{ getFollowNumber(this.profilefollowing) }}
@@ -130,6 +136,24 @@ export default {
           <div class="profile-page-newpost-card-title">New Post</div>
         </button>
       </div>
+    </div>
+  </div>
+  <div
+    @click="setFollowPopup(null)"
+    v-if="this.followpopup != null"
+    class="profile-page-follow-popup-outer-container"
+  >
+    <div @click.stop="() => {}" class="profile-page-follow-popup-container">
+      <PopUpLikeCard
+        v-for="user in followpopup == 'followers'
+          ? this.profilefollowers
+          : this.profilefollowing"
+        :key="user.id"
+        :name="user.username"
+        :feeling="user.feeling"
+        :bio="user.bio"
+        :picture="user.picture"
+      />
     </div>
   </div>
 </template>
@@ -289,6 +313,25 @@ export default {
         }
       }
     }
+  }
+}
+.profile-page-follow-popup-outer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-page-follow-popup-container {
+    width: 450px;
+    height: 75%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <script>
-import PostPopUpLikeCard from './PostPopUpLikeCard.vue';
+import PopUpLikeCard from '../PopUpLikeCard.vue';
 import PostPopUpCommentCard from './PostPopUpCommentCard.vue';
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import BrokenHeartIcon from 'vue-material-design-icons/HeartBroken.vue';
@@ -74,7 +74,7 @@ export default {
     document.body.classList.remove('no-scroll');
   },
   components: {
-    PostPopUpLikeCard,
+    PopUpLikeCard,
     PostPopUpCommentCard,
     HeartIcon,
     BrokenHeartIcon,
@@ -128,7 +128,7 @@ export default {
             v-if="this.selectedView == 'likes'"
             class="post-popup-view-section-interactions"
           >
-            <PostPopUpLikeCard
+            <PopUpLikeCard
               v-for="like in [
                 1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1
