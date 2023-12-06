@@ -22,11 +22,11 @@ export default {
       type: Number,
       required: true
     },
-    pictureURL: {
+    picture: {
       type: String,
       required: true
     },
-    profilePictureURL: {
+    profilePicture: {
       type: String,
       required: true
     },
@@ -69,8 +69,8 @@ export default {
     :id="this.id"
     :name="this.name"
     :feeling="this.feeling"
-    :pictureURL="this.pictureURL"
-    :profilePictureURL="this.profilePictureURL"
+    :picture="this.picture"
+    :profilePicture="this.profilePicture"
     :likeCount="this.likeCount"
     :date="this.date"
     :caption="this.caption"
@@ -79,7 +79,7 @@ export default {
   />
   <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">
-      <img :src="pictureURL" class="home-post-card-image" />
+      <img :src="picture" class="home-post-card-image" />
       <button
         @click.stop="this.togglePostLike()"
         class="home-post-card-like-button"
@@ -90,7 +90,7 @@ export default {
     </div>
     <div class="home-post-card-details">
       <div class="home-post-card-user-picture">
-        <img :src="profilePictureURL" alt="" />
+        <img :src="profilePicture" alt="" />
         <div class="home-post-card-user-picture-feeling">
           <span v-if="feeling === 0">😐</span>
           <span v-if="feeling === 1">😀</span>

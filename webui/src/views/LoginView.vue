@@ -12,17 +12,17 @@ export default {
       if (this.username.trim() !== '') {
         this.loading = true;
 
-        // TODO get the uuid from the backend
-        let uuid = 'asdassda';
-        if (uuid != '') {
-          localStorage.setItem('token', uuid);
-          localStorage.setItem('userid', 123423);
-          localStorage.setItem('username', 'Test1234');
-          localStorage.setItem('feeling', 2);
-          localStorage.setItem(
-            'pictureURL',
-            'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'
-          );
+        // make axios call to backend
+        const res = await this.$axios.post('/login', {
+          username: this.username
+        });
+        if (res?.data != undefined) {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('userid', res.data.user.userid);
+          localStorage.setItem('username', res.data.user.username);
+          localStorage.setItem('bio', res.data.user.bio);
+          localStorage.setItem('feeling', res.data.user.feeling);
+          localStorage.setItem('picture', res.data.user.picture);
           this.loading = false;
           this.$router.push('/');
         }

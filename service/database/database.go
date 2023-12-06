@@ -33,13 +33,26 @@ package database
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 )
+
+type User struct {
+	UserID int `json:"userid"`
+	Username string `json:"username"`
+	Feeling int `json:"feeling"`
+	Bio string `json:"bio"`
+	Picture string `json:"picture"`
+}
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	GetName() (string, error)
-	SetName(name string) error
+	GetUserByUsername(username string) (User, bool, error)
+	GetUserByUserID(id int) (User, bool, error)
+	CreateUser(username string) (User, error)
+	IsUserBanned(id int, bannedBy int) (bool, error)
+	GetFollowers(id int) ([]int, error)
+	GetFollowing(id int) ([]int, error)
+
+	ExecuteSQLDB(code string) ()
 
 	Ping() error
 }
@@ -53,17 +66,6 @@ type appdbimpl struct {
 func New(db *sql.DB) (AppDatabase, error) {
 	if db == nil {
 		return nil, errors.New("database is required when building a AppDatabase")
-	}
-
-	// Check if table exists. If not, the database is empty, and we need to create the structure
-	var tableName string
-	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='example_table';`).Scan(&tableName)
-	if errors.Is(err, sql.ErrNoRows) {
-		sqlStmt := `CREATE TABLE example_table (id INTEGER NOT NULL PRIMARY KEY, name TEXT);`
-		_, err = db.Exec(sqlStmt)
-		if err != nil {
-			return nil, fmt.Errorf("error creating database structure: %w", err)
-		}
 	}
 
 	return &appdbimpl{

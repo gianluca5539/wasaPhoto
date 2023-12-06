@@ -38,11 +38,22 @@ package api
 
 import (
 	"errors"
-	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
+	"net/http"
+
+	"github.com/gianluca5539/WASA/service/database"
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
+
+
+type User struct {
+	UserID int `json:"userid"`
+	Username string `json:"username"`
+	Feeling int `json:"feeling"`
+	Bio string `json:"bio"`
+	Picture string `json:"picture"`
+}
+
 
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {

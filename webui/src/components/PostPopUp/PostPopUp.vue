@@ -1,5 +1,5 @@
 <script>
-import PostPopUpLikeCard from './PostPopUpLikeCard.vue';
+import PopUpLikeCard from '../PopUpLikeCard.vue';
 import PostPopUpCommentCard from './PostPopUpCommentCard.vue';
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import BrokenHeartIcon from 'vue-material-design-icons/HeartBroken.vue';
@@ -25,11 +25,11 @@ export default {
       type: Number,
       required: true
     },
-    pictureURL: {
+    picture: {
       type: String,
       required: true
     },
-    profilePictureURL: {
+    profilePicture: {
       type: String,
       required: true
     },
@@ -74,7 +74,7 @@ export default {
     document.body.classList.remove('no-scroll');
   },
   components: {
-    PostPopUpLikeCard,
+    PopUpLikeCard,
     PostPopUpCommentCard,
     HeartIcon,
     BrokenHeartIcon,
@@ -100,7 +100,7 @@ export default {
               show: this.showHeart == 'unlike'
             }"
           />
-          <img v-on:dblclick="toggleLike()" :src="this.pictureURL" alt="" />
+          <img v-on:dblclick="toggleLike()" :src="this.picture" alt="" />
         </div>
         <div class="post-popup-info-section">
           <div class="post-popup-view-options">
@@ -128,7 +128,7 @@ export default {
             v-if="this.selectedView == 'likes'"
             class="post-popup-view-section-interactions"
           >
-            <PostPopUpLikeCard
+            <PopUpLikeCard
               v-for="like in [
                 1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1
@@ -138,7 +138,7 @@ export default {
               name="Frank123"
               :feeling="1"
               bio="I am a happy person because I am happy and have a happy life."
-              pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+              picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
             />
           </div>
           <div
@@ -154,7 +154,7 @@ export default {
                 :date="new Date()"
                 :feeling="1"
                 comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
-                pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
               />
               <PostPopUpCommentCard
                 v-for="like in [
@@ -169,7 +169,7 @@ export default {
                 :feeling="1"
                 :date="new Date()"
                 comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
-                pictureUrl="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
               />
             </div>
             <div class="post-popup-comment-input-section">
