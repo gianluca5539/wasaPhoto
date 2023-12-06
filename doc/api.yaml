@@ -274,7 +274,7 @@ paths:
                   type: string
                   example: 'Hello guys!'
                   minLength: 0
-                  maxLength: 160
+                  maxLength: 9999
         required: true
       security:
         - bearerAuth: []
