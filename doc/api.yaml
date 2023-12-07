@@ -864,12 +864,9 @@ components:
           minLength: 0
           maxLength: 9999
         picture:
-          description: profile picture of the user
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the user
+          type: integer
+          example: 12
 
     Comment:
       type: object
@@ -894,12 +891,9 @@ components:
           description: feeling of the author
           type: number
         picture:
-          description: profile picture of the author
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the author
+          type: integer
+          example: 12
         text:
           description: text of the comment
           type: string
@@ -931,19 +925,13 @@ components:
           description: feeling of the author
           type: number
         userpicture:
-          description: profile picture of the author
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the author
+          type: integer
+          example: 12
         picture:
-          description: url of the picture in the post
-          type: string
-          example: 'api.com/posts/picture123.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: id of the picture in the post
+          type: integer
+          example: 12
         caption:
           description: caption of the post
           type: string
@@ -986,12 +974,9 @@ components:
           minLength: 0
           maxLength: 9999
         picture:
-          description: profile picture of the user
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the user
+          type: integer
+          example: 12
         followers:
           description: followers of the user
           type: array
@@ -1020,10 +1005,9 @@ components:
                 type: number
                 example: 12
               picture:
-                description: url of the picture
-                type: string
-                example: 'api.com/posts/picture123.jpg'
-                pattern: 'ˆ.*?$'
+                description: id of the picture
+                type: integer
+                example: 12
               caption:
                 description: caption of the post
                 type: string

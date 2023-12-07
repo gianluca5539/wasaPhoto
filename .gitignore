@@ -25,3 +25,5 @@ webui/*.ntvs*
 webui/*.njsproj
 webui/*.sln
 webui/*.sw?
+
+data/
