@@ -274,7 +274,7 @@ paths:
                   type: string
                   example: 'Hello guys!'
                   minLength: 0
-                  maxLength: 9999
+                  maxLength: 160
         required: true
       security:
         - bearerAuth: []
@@ -904,7 +904,7 @@ components:
           type: string
           example: 'api.com/Maria/propic.jpg'
           pattern: 'ˆ.*?$'
-          minLenght: 0
+          minLength: 0
           maxLength: 9999
         text:
           description: text of the comment
