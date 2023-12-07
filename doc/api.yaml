@@ -217,8 +217,18 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '204':
+        '201':
           description: Picture change successful
+          content:
+            application/json:
+              schema:
+                description: the picture id
+                type: object
+                properties:
+                  pictureid:
+                    description: new picture id
+                    type: integer
+                    example: 23434242
         '404':
           description: User not found
           content:
