@@ -82,6 +82,62 @@ export default {
     },
     setFollowPopup(type) {
       this.followpopup = type; // either 'followers' or 'following' or null
+    },
+    openFileDialog() {
+      this.$refs.fileInput.click();
+    },
+    handleFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        event.target.value = '';
+        return;
+      }
+      let vuethis = this; // needed to access this inside the onload function
+      // get the base64 string of the image in PNG
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          canvas.width = this.naturalWidth;
+          canvas.height = this.naturalHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(this, 0, 0);
+
+          const pngBase64String = canvas.toDataURL('image/png');
+          const base64image = pngBase64String.split(',')[1];
+          vuethis.updateProfilePicture(base64image);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    async updateProfilePicture(newprofilepicture) {
+      const token = localStorage.getItem('token');
+      const res = await this.$axios
+        .put(
+          `/users/${this.userid}/picture`,
+          {
+            newpicture: newprofilepicture
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .catch((err) => {
+          alert('Error updating profile picture. Please try again later.');
+        });
+      if (res) {
+        // get the picture id from the response
+        const pictureid = res.data.pictureid;
+        localStorage.setItem('picture', pictureid);
+        this.picture = pictureid;
+        this.profilepicture = pictureid;
+      }
     }
   },
   components: { HeaderComponent, PopUpLikeCard },
@@ -108,7 +164,17 @@ export default {
     <div class="profile-page-content">
       <div class="profile-info-container">
         <div class="profile-info-data-container">
-          <img :src="getPictureURL(profilepicture)" alt="" />
+          <img
+            @click="openFileDialog()"
+            :src="getPictureURL(profilepicture)"
+            alt=""
+          />
+          <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileSelected"
+            style="display: none"
+          />
           <div class="profile-info-data">
             <div class="profile-info-userame">{{ profileusername }}</div>
             <div class="profile-info-bio">
@@ -219,6 +285,11 @@ export default {
           min-width: 150px;
           border-radius: 10%;
           margin-right: 20px;
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            transform: scale(1.05);
+          }
         }
         .profile-info-data {
           display: flex;

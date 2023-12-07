@@ -1,8 +1,6 @@
 export const getPictureURL = (id) => {
-  if (id == '') {
-    // todo : change to default picture
-    return 'https://www.adorama.com/alc/wp-content/uploads/2018/11/landscape-photography-tips-yosemite-valley-feature.jpg';
-  } else {
-    return 'http://localhost:3000/images/' + id;
+  if (id == null || id == undefined || id == '') {
+    return 'http://localhost:3000/images/default';
   }
+  return 'http://localhost:3000/images/' + id;
 };

@@ -103,7 +103,9 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	
-	// return 204 no content
+	// return 201 created
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusCreated)
+	// return the pictureid in the response body
+	w.Write([]byte(`{"pictureid": "` + time + `"}`))
 }
