@@ -46,7 +46,7 @@ export default {
   created() {
     window.addEventListener('resize', this.checkOptionsOpen);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.checkOptionsOpen());
   }
 };

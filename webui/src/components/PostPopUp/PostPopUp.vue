@@ -70,7 +70,7 @@ export default {
   created() {
     console.log('TODO download comments for post with id: ' + this.id);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.body.classList.remove('no-scroll');
   },
   components: {
