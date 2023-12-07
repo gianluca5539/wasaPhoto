@@ -48,12 +48,9 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
-                    description: the token string
-                    type: string
-                    example: Maria
-                    pattern: 'ˆ.*?$'
-                    minLength: 3
-                    maxLength: 16
+                    description: ID of the user
+                    type: number
+                    example: 12
         '201':
           description: User created and log-in successful
           content:
@@ -65,12 +62,9 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
-                    description: the token string
-                    type: string
-                    example: Maria
-                    pattern: 'ˆ.*?$'
-                    minLength: 3
-                    maxLength: 16
+                    description: ID of the user
+                    type: number
+                    example: 12
         '500':
           description: Internal server error
           content:
