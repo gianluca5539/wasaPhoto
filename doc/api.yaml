@@ -97,7 +97,7 @@ paths:
               description: the new username
               type: object
               properties:
-                newname:
+                newusername:
                   description: new name string
                   type: string
                   example: 'Maria123'

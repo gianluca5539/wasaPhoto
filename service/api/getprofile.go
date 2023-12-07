@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"github.com/golang-jwt/jwt"
 	"github.com/julienschmidt/httprouter"
 )
 

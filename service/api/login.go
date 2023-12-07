@@ -2,11 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
-
-	"github.com/golang-jwt/jwt"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -25,6 +21,12 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 
 	username := loginReq.Username
+
+	// check username is valid (3 to 16 characters)
+	if len(username) < 3 || len(username) > 16 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	// Check if the username exists
 	user,found, err := rt.db.GetUserByUsername(username)

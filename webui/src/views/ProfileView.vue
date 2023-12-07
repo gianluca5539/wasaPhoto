@@ -61,6 +61,7 @@ export default {
         });
 
       const response = res.data;
+      console.log(res.data);
       this.profileusername = response.username;
       this.profilefeeling = response.feeling;
       this.profilebio = response.bio;
