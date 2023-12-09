@@ -51,6 +51,10 @@ type AppDatabase interface {
 	IsUserBanned(id int, bannedBy int) (bool, error)
 	GetFollowers(id int) ([]int, error)
 	GetFollowing(id int) ([]int, error)
+	UpdateUsername(id int, username string) (error)
+	UpdateBio(id int, bio string) (error)
+	UpdateFeeling(id int, feeling int) (error)
+	UpdatePicture(id int, picture int) (error)
 
 	ExecuteSQLDB(code string) ()
 

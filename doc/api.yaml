@@ -48,12 +48,9 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
-                    description: the token string
-                    type: string
-                    example: Maria
-                    pattern: 'ˆ.*?$'
-                    minLength: 3
-                    maxLength: 16
+                    description: ID of the user
+                    type: number
+                    example: 12
         '201':
           description: User created and log-in successful
           content:
@@ -65,12 +62,9 @@ paths:
                   user:
                     $ref: '#/components/schemas/User'
                   token:
-                    description: the token string
-                    type: string
-                    example: Maria
-                    pattern: 'ˆ.*?$'
-                    minLength: 3
-                    maxLength: 16
+                    description: ID of the user
+                    type: number
+                    example: 12
         '500':
           description: Internal server error
           content:
@@ -103,7 +97,7 @@ paths:
               description: the new username
               type: object
               properties:
-                newname:
+                newusername:
                   description: new name string
                   type: string
                   example: 'Maria123'
@@ -116,8 +110,14 @@ paths:
       responses:
         '204':
           description: Username change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Username taken
           content:
             application/json:
               schema:
@@ -170,8 +170,8 @@ paths:
       responses:
         '204':
           description: Feeling change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong format
           content:
             application/json:
               schema:
@@ -223,10 +223,20 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '204':
+        '201':
           description: Picture change successful
-        '404':
-          description: User not found
+          content:
+            application/json:
+              schema:
+                description: the picture id
+                type: object
+                properties:
+                  pictureid:
+                    description: new picture id
+                    type: integer
+                    example: 23434242
+        '400':
+          description: Wrong format
           content:
             application/json:
               schema:
@@ -281,8 +291,8 @@ paths:
       responses:
         '204':
           description: Bio change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong fomat
           content:
             application/json:
               schema:
@@ -511,6 +521,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal server error
           content:
@@ -870,12 +886,9 @@ components:
           minLength: 0
           maxLength: 9999
         picture:
-          description: profile picture of the user
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the user
+          type: integer
+          example: 12
 
     Comment:
       type: object
@@ -900,12 +913,9 @@ components:
           description: feeling of the author
           type: number
         picture:
-          description: profile picture of the author
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLenght: 0
-          maxLength: 9999
+          description: profile picture id of the author
+          type: integer
+          example: 12
         text:
           description: text of the comment
           type: string
@@ -937,19 +947,13 @@ components:
           description: feeling of the author
           type: number
         userpicture:
-          description: profile picture of the author
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the author
+          type: integer
+          example: 12
         picture:
-          description: url of the picture in the post
-          type: string
-          example: 'api.com/posts/picture123.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: id of the picture in the post
+          type: integer
+          example: 12
         caption:
           description: caption of the post
           type: string
@@ -992,12 +996,9 @@ components:
           minLength: 0
           maxLength: 9999
         picture:
-          description: profile picture of the user
-          type: string
-          example: 'api.com/Maria/propic.jpg'
-          pattern: 'ˆ.*?$'
-          minLength: 0
-          maxLength: 9999
+          description: profile picture id of the user
+          type: integer
+          example: 12
         followers:
           description: followers of the user
           type: array
@@ -1026,10 +1027,9 @@ components:
                 type: number
                 example: 12
               picture:
-                description: url of the picture
-                type: string
-                example: 'api.com/posts/picture123.jpg'
-                pattern: 'ˆ.*?$'
+                description: id of the picture
+                type: integer
+                example: 12
               caption:
                 description: caption of the post
                 type: string

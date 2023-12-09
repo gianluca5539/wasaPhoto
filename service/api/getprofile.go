@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"github.com/golang-jwt/jwt"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -22,28 +21,12 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	// parse the jwt token
-	token, err := jwt.ParseWithClaims(tokenString, &CustomJWTClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("wasaphoto_secret"), nil
-	})
+	// convert the token string to an int
+	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	// check if the token is valid
-	if !token.Valid {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	// get the user id from the jwt claims
-	claims, ok := token.Claims.(*CustomJWTClaims)
-	if !ok {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	userID := claims.UserID
 
 	// get the user profile from the database
 	banned, err := rt.db.IsUserBanned(userID, requestedUserID)
