@@ -156,6 +156,7 @@ export default {
     changeUsername() {
       this.closeEditUsername();
       const newusername = document.getElementById('username-popup-input').value;
+      if (newusername === this.username) return;
       if (newusername.length < 3 || newusername.length > 16) {
         alert('Username must be between 3 and 16 characters long.');
         return;
@@ -196,6 +197,7 @@ export default {
     changeBio() {
       this.closeEditBio();
       const newbio = document.getElementById('bio-popup-input').value;
+      if (newbio === this.bio) return;
       const token = localStorage.getItem('token');
       this.$axios
         .put(
