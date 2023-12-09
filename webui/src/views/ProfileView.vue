@@ -2,6 +2,8 @@
 import HeaderComponent from '../components/HeaderComponent.vue';
 import PopUpLikeCard from '../components/PopUpLikeCard.vue';
 import { getPictureURL } from '../functions/getPictureURL';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import CheckIcon from 'vue-material-design-icons/Check.vue';
 
 export default {
   watch: {
@@ -23,17 +25,18 @@ export default {
       feeling: null,
       picture: null,
 
-      followpopup: null
+      followpopup: null,
+      editUsernamePopup: false,
+      editBioPopup: false
     };
   },
   methods: {
     getPictureURL,
     async getProfile() {
       this.followpopup = null; // close popup (needed when changing profile from follow list)
-      const id = this.$route.params.id;
       const token = localStorage.getItem('token');
       const res = await this.$axios
-        .get(`/users/${id}/profile`, {
+        .get(`/users/${this.profileuserid}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -61,7 +64,6 @@ export default {
         });
 
       const response = res.data;
-      console.log(res.data);
       this.profileusername = response.username;
       this.profilefeeling = response.feeling;
       this.profilebio = response.bio;
@@ -138,15 +140,99 @@ export default {
         this.picture = pictureid;
         this.profilepicture = pictureid;
       }
+    },
+    openEditUsername() {
+      this.editUsernamePopup = true;
+    },
+    closeEditUsername() {
+      this.editUsernamePopup = false;
+    },
+    openEditBio() {
+      this.editBioPopup = true;
+    },
+    closeEditBio() {
+      this.editBioPopup = false;
+    },
+    changeUsername() {
+      this.closeEditUsername();
+      const newusername = document.getElementById('username-popup-input').value;
+      if (newusername.length < 3 || newusername.length > 16) {
+        alert('Username must be between 3 and 16 characters long.');
+        return;
+      }
+      const token = localStorage.getItem('token');
+      this.$axios
+        .put(
+          `/users/${this.userid}/username`,
+          {
+            newusername: newusername
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then((res) => {
+          localStorage.setItem('username', newusername);
+          this.username = newusername;
+          this.profileusername = newusername;
+        })
+        .catch((err) => {
+          switch (err.response.status) {
+            case 400:
+              alert('Username already taken.');
+              break;
+            case 401:
+              alert('Invalid token.');
+              break;
+            case 500:
+              alert('Server error. Please try again later.');
+              break;
+          }
+        });
+    },
+    changeBio() {
+      this.closeEditBio();
+      const newbio = document.getElementById('bio-popup-input').value;
+      const token = localStorage.getItem('token');
+      this.$axios
+        .put(
+          `/users/${this.userid}/bio`,
+          {
+            newbio: newbio
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then((res) => {
+          localStorage.setItem('bio', newbio);
+          this.bio = newbio;
+          this.profilebio = newbio;
+        })
+        .catch((err) => {
+          switch (err.response.status) {
+            case 401:
+              alert('Invalid token.');
+              break;
+            case 500:
+              alert('Server error. Please try again later.');
+              break;
+          }
+        });
     }
   },
-  components: { HeaderComponent, PopUpLikeCard },
+  components: { HeaderComponent, PopUpLikeCard, PencilIcon, CheckIcon },
   async created() {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
+    this.profileuserid = this.$route.params.id;
 
     await this.getProfile();
   }
@@ -176,9 +262,23 @@ export default {
             style="display: none"
           />
           <div class="profile-info-data">
-            <div class="profile-info-userame">{{ profileusername }}</div>
-            <div class="profile-info-bio">
-              {{ profilebio || 'No bio, yet.' }}
+            <div class="profile-info-username-container">
+              <div class="profile-info-userame">{{ profileusername }}</div>
+              <PencilIcon
+                @click="this.openEditUsername()"
+                class="edit-icon"
+                :size="24"
+              />
+            </div>
+            <div class="profile-info-bio-container">
+              <div class="profile-info-bio">
+                {{ profilebio || 'No bio, yet.' }}
+              </div>
+              <PencilIcon
+                @click="this.openEditBio()"
+                class="edit-icon"
+                :size="20"
+              />
             </div>
           </div>
         </div>
@@ -234,6 +334,32 @@ export default {
         :bio="user.bio"
         :picture="user.picture"
       />
+    </div>
+  </div>
+  <div
+    @click="this.closeEditUsername()"
+    v-if="this.editUsernamePopup"
+    class="profile-page-username-popup-outer-container"
+  >
+    <div @click.stop="() => {}" class="profile-page-username-popup-container">
+      <input
+        id="username-popup-input"
+        minlength="3"
+        maxlength="16"
+        type="text"
+        :value="this.username"
+      />
+      <CheckIcon @click="this.changeUsername()" class="done-icon" :size="28" />
+    </div>
+  </div>
+  <div
+    @click="this.closeEditBio()"
+    v-if="this.editBioPopup"
+    class="profile-page-bio-popup-outer-container"
+  >
+    <div @click.stop="() => {}" class="profile-page-bio-popup-container">
+      <textarea id="bio-popup-input" :value="this.bio" />
+      <CheckIcon @click="this.changeBio()" class="done-icon" :size="28" />
     </div>
   </div>
 </template>
@@ -304,15 +430,35 @@ export default {
             align-items: center;
             text-align: center;
           }
-          .profile-info-userame {
-            font-size: 24px;
-            font-weight: bold;
-            max-lines: 1;
+          .edit-icon {
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              transform: scale(1.05);
+              color: orange;
+              cursor: pointer;
+            }
           }
-          .profile-info-bio {
-            font-size: 18px;
-            font-weight: 300;
-            max-lines: 3;
+          .profile-info-username-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .profile-info-userame {
+              font-size: 24px;
+              font-weight: bold;
+              max-lines: 1;
+              margin-right: 5px;
+            }
+          }
+          .profile-info-bio-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .profile-info-bio {
+              font-size: 18px;
+              font-weight: 300;
+              max-lines: 3;
+              margin-right: 5px;
+            }
           }
         }
       }
@@ -420,6 +566,102 @@ export default {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+  }
+}
+.profile-page-username-popup-outer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-page-username-popup-container {
+    padding: 12px 12px;
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+    height: 70px;
+    input {
+      height: 100%;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      margin-right: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      font-size: 22px;
+      outline: none;
+    }
+
+    .done-icon {
+      border-radius: 50%;
+      border: 2px solid rgb(71, 71, 71);
+      padding: 5px;
+      transition: all 0.2s ease-in-out;
+      &:hover {
+        color: white;
+        background-color: orange;
+        border: 2px solid orange;
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
+  }
+}
+.profile-page-bio-popup-outer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-page-bio-popup-container {
+    padding: 12px 12px;
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+    min-height: 70px;
+    textarea {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      margin-right: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      font-size: 18px;
+      resize: none;
+      outline: none;
+    }
+
+    .done-icon {
+      border-radius: 50%;
+      border: 2px solid rgb(71, 71, 71);
+      padding: 5px;
+      transition: all 0.2s ease-in-out;
+      &:hover {
+        color: white;
+        background-color: orange;
+        border: 2px solid orange;
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
   }
 }
 </style>
