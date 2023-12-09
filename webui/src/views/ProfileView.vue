@@ -33,6 +33,7 @@ export default {
   methods: {
     getPictureURL,
     async getProfile() {
+      this.profileuserid = this.$route.params.id;
       this.followpopup = null; // close popup (needed when changing profile from follow list)
       const token = localStorage.getItem('token');
       const res = await this.$axios
@@ -232,7 +233,6 @@ export default {
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.bio = localStorage.getItem('bio');
     this.picture = localStorage.getItem('picture');
-    this.profileuserid = this.$route.params.id;
 
     await this.getProfile();
   }
