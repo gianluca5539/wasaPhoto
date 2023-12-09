@@ -110,8 +110,14 @@ paths:
       responses:
         '204':
           description: Username change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Username taken
           content:
             application/json:
               schema:
@@ -164,8 +170,8 @@ paths:
       responses:
         '204':
           description: Feeling change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong format
           content:
             application/json:
               schema:
@@ -229,8 +235,8 @@ paths:
                     description: new picture id
                     type: integer
                     example: 23434242
-        '404':
-          description: User not found
+        '400':
+          description: Wrong format
           content:
             application/json:
               schema:
@@ -285,8 +291,8 @@ paths:
       responses:
         '204':
           description: Bio change successful
-        '404':
-          description: User not found
+        '400':
+          description: Wrong fomat
           content:
             application/json:
               schema:

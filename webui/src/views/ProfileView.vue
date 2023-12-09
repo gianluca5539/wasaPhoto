@@ -180,11 +180,12 @@ export default {
         })
         .catch((err) => {
           switch (err.response.status) {
-            case 400:
-              alert('Username already taken.');
-              break;
+            // no need to handle 400 because the frontend already checks the length
             case 401:
               alert('Invalid token.');
+              break;
+            case 409:
+              alert('Username already taken.');
               break;
             case 500:
               alert('Server error. Please try again later.');

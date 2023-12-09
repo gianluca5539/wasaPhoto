@@ -42,6 +42,17 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
+	// check if there is another user with the same username
+	_,found, err := rt.db.GetUserByUsername(newUsername)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if found {
+		w.WriteHeader(http.StatusConflict)
+		return
+	}
+
 	if requestedUserID != userID {
 		w.WriteHeader(http.StatusForbidden)
 		return
