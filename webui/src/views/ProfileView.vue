@@ -57,9 +57,6 @@ export default {
               this.profilepicture = '';
               this.profilefeeling = -1;
               break;
-            default:
-              this.$router.push('/serviceunavailable');
-              break;
           }
         });
 
