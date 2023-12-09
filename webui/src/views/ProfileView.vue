@@ -265,6 +265,7 @@ export default {
             <div class="profile-info-username-container">
               <div class="profile-info-userame">{{ profileusername }}</div>
               <PencilIcon
+                v-if="this.profileuserid == this.userid"
                 @click="this.openEditUsername()"
                 class="edit-icon"
                 :size="24"
@@ -275,6 +276,7 @@ export default {
                 {{ profilebio || 'No bio, yet.' }}
               </div>
               <PencilIcon
+                v-if="this.profileuserid == this.userid"
                 @click="this.openEditBio()"
                 class="edit-icon"
                 :size="20"
