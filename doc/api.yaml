@@ -340,6 +340,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '403':
+          description: Action forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal server error
           content:
@@ -371,6 +377,12 @@ paths:
           description: User followed successfully
         '404':
           description: User not found or requesting user banned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Action forbidden
           content:
             application/json:
               schema:
@@ -995,6 +1007,10 @@ components:
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 9999
+        banned:
+          description: whether the current user banned this user
+          type: boolean
+          example: false
         picture:
           description: profile picture id of the user
           type: integer

@@ -55,6 +55,8 @@ type AppDatabase interface {
 	UpdateBio(id int, bio string) (error)
 	UpdateFeeling(id int, feeling int) (error)
 	UpdatePicture(id int, picture int) (error)
+	FollowUser(id int, followedBy int) (error)
+	UnFollowUser(id int, followedBy int) (error)
 
 	ExecuteSQLDB(code string) ()
 

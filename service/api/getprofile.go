@@ -39,6 +39,13 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
+	// do it in reverse to check if the user is banned by the requested user
+	bannedByReqUser, err := rt.db.IsUserBanned(requestedUserID, userID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	// find the user that is requested
 	// get the user profile from the database
 	u, found, err := rt.db.GetUserByUserID(requestedUserID)
@@ -100,6 +107,7 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		Bio string `json:"bio"`
 		Followers []User `json:"followers"`
 		Following []User `json:"following"`
+		Banned bool `json:"banned"`
 	}{
 		ID: u.UserID,
 		Username: u.Username,
@@ -108,6 +116,7 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		Bio: u.Bio,
 		Followers: followers,
 		Following: following,
+		Banned: bannedByReqUser,
 	}
 
 	// return the user

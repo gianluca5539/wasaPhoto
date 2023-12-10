@@ -18,6 +18,8 @@ export default {
       profilefeeling: null,
       profilefollowers: null,
       profilefollowing: null,
+      profilenotfound: false,
+      banned: false,
 
       userid: null,
       username: null,
@@ -50,6 +52,7 @@ export default {
                 'Sorry, we looked everywhere but we could not find this user.';
               this.profilepicture = '';
               this.profilefeeling = -1;
+              this.profilenotfound = true;
               break;
             case 500:
               this.profileusername = 'Server error';
@@ -61,13 +64,16 @@ export default {
           }
         });
 
-      const response = res.data;
-      this.profileusername = response.username;
-      this.profilefeeling = response.feeling;
-      this.profilebio = response.bio;
-      this.profilepicture = response.picture;
-      this.profilefollowers = response.followers;
-      this.profilefollowing = response.following;
+      const response = res?.data;
+      if (response) {
+        this.profileusername = response.username;
+        this.profilefeeling = response.feeling;
+        this.profilebio = response.bio;
+        this.profilepicture = response.picture;
+        this.profilefollowers = response.followers;
+        this.profilefollowing = response.following;
+        this.banned = response.banned;
+      }
     },
     getFollowNumber(x) {
       if (x === null) return 0;
@@ -86,7 +92,7 @@ export default {
     openFileDialog() {
       this.$refs.fileInput.click();
     },
-    handleFileSelected(event) {
+    async handleFileSelected(event) {
       const file = event.target.files[0];
       if (!file.type.startsWith('image/')) {
         alert('Please select an image file.');
@@ -129,7 +135,14 @@ export default {
           }
         )
         .catch((err) => {
-          alert('Error updating profile picture. Please try again later.');
+          switch (err.response.status) {
+            case 403:
+              alert('Invalid credentials. Please try re-logging in.');
+              break;
+            case 500:
+              alert('Server error. Please try again later.');
+              break;
+          }
         });
       if (res) {
         // get the picture id from the response
@@ -151,7 +164,7 @@ export default {
     closeEditBio() {
       this.editBioPopup = false;
     },
-    changeUsername() {
+    async changeUsername() {
       this.closeEditUsername();
       const newusername = document.getElementById('username-popup-input').value;
       if (newusername === this.username) return;
@@ -180,8 +193,8 @@ export default {
         .catch((err) => {
           switch (err.response.status) {
             // no need to handle 400 because the frontend already checks the length
-            case 401:
-              alert('Invalid token.');
+            case 403:
+              alert('Invalid credentials. Please try re-logging in');
               break;
             case 409:
               alert('Username already taken.');
@@ -192,7 +205,7 @@ export default {
           }
         });
     },
-    changeBio() {
+    async changeBio() {
       this.closeEditBio();
       const newbio = document.getElementById('bio-popup-input').value;
       if (newbio === this.bio) return;
@@ -216,14 +229,115 @@ export default {
         })
         .catch((err) => {
           switch (err.response.status) {
-            case 401:
-              alert('Invalid token.');
+            case 403:
+              alert('Invalid credentials. Please try re-logging in.');
               break;
             case 500:
               alert('Server error. Please try again later.');
               break;
           }
         });
+    },
+    async cycleFeeling() {
+      if (this.profileuserid != this.userid) return;
+      // feeling goes from 0 to 4, this function cycles it
+      let newFeeling = (this.feeling + 1) % 5;
+      const token = localStorage.getItem('token');
+      this.$axios
+        .put(
+          `/users/${this.userid}/feeling`,
+          {
+            newfeeling: newFeeling
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then(() => {
+          this.feeling = newFeeling;
+          this.profilefeeling = newFeeling;
+          localStorage.setItem('feeling', this.feeling);
+        })
+        .catch((err) => {
+          switch (err.response.status) {
+            // no need for a 400 because the frontend already handles the feeling
+            case 403:
+              alert('Invalid credentials. Please try re-logging in.');
+              break;
+            case 500:
+              alert('Server error. Please try again later.');
+              break;
+          }
+        });
+    },
+    async toggleFollowUser() {
+      const token = localStorage.getItem('token');
+      this.profilefollowers = this.profilefollowers || [];
+      const alreadyFollowing = this.profilefollowers.some(
+        (user) => user.userid == this.userid
+      );
+      if (!alreadyFollowing) {
+        this.$axios
+          .put(
+            `/users/${this.profileuserid}/follow`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(() => {
+            this.profilefollowers.push({
+              userid: this.userid,
+              username: this.username,
+              feeling: this.feeling,
+              bio: this.bio,
+              picture: this.picture
+            });
+          })
+          .catch((err) => {
+            switch (err.response.status) {
+              case 403:
+                alert('Invalid credentials. Please try re-logging in.');
+                break;
+              case 404:
+                alert('User not found.');
+                break;
+              case 500:
+                alert('Server error. Please try again later.');
+                break;
+            }
+          });
+      } else {
+        this.$axios
+          .delete(`/users/${this.profileuserid}/follow`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            data: {}
+          })
+          .then(() => {
+            this.profilefollowers = this.profilefollowers.filter(
+              (user) => user.userid != this.userid
+            );
+          })
+          .catch((err) => {
+            switch (err.response.status) {
+              case 403:
+                alert('Invalid credentials. Please try re-logging in.');
+                break;
+              case 404:
+                alert('User not found.');
+                break;
+              case 500:
+                alert('Server error. Please try again later.');
+                break;
+            }
+          });
+      }
     }
   },
   components: { HeaderComponent, PopUpLikeCard, PencilIcon, CheckIcon },
@@ -263,6 +377,13 @@ export default {
           />
           <div class="profile-info-data">
             <div class="profile-info-username-container">
+              <button @click="cycleFeeling()" class="profile-info-feeling">
+                <span v-if="this.profilefeeling === 0">😐</span>
+                <span v-if="this.profilefeeling === 1">😀</span>
+                <span v-if="this.profilefeeling === 2">😍</span>
+                <span v-if="this.profilefeeling === 3">😡</span>
+                <span v-if="this.profilefeeling === 4">😭</span>
+              </button>
               <div class="profile-info-userame">{{ profileusername }}</div>
               <PencilIcon
                 v-if="this.profileuserid == this.userid"
@@ -270,6 +391,32 @@ export default {
                 class="edit-icon"
                 :size="24"
               />
+              <button
+                v-if="
+                  this.profileuserid != this.userid && !this.profilenotfound
+                "
+                class="action-button"
+                @click="this.toggleFollowUser()"
+              >
+                {{
+                  this.profilefollowers
+                    ? this.profilefollowers.some(
+                        (user) => user.userid == this.userid
+                      )
+                      ? 'Unfollow'
+                      : 'Follow'
+                    : 'Follow'
+                }}
+              </button>
+              <button
+                v-if="
+                  !this.profilenotfound && this.profileuserid != this.userid
+                "
+                class="action-button"
+                @click="() => {}"
+              >
+                {{ this.banned ? 'Unban' : 'Ban' }}
+              </button>
             </div>
             <div class="profile-info-bio-container">
               <div class="profile-info-bio">
@@ -444,6 +591,30 @@ export default {
             display: flex;
             flex-direction: row;
             align-items: center;
+            .profile-info-feeling {
+              font-size: 30px;
+              border: none;
+              background-color: transparent;
+              margin-right: 3px;
+              transition: all 0.3s ease-in-out;
+              &:hover {
+                transform: scale(1.1);
+              }
+            }
+            .action-button {
+              border: 2px solid rgb(78, 78, 78);
+              border-radius: 8px;
+              background-color: transparent;
+              color: rgb(78, 78, 78);
+              font-size: 15px;
+              font-weight: bold;
+              margin-right: 8px;
+              transition: all 0.2s ease-in-out;
+              &:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+              }
+            }
             .profile-info-userame {
               font-size: 24px;
               font-weight: bold;
