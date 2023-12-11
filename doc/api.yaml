@@ -522,7 +522,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /newphoto:
+  /posts:
     post:
       tags: ['Posts']
       summary: Uploads a new picture

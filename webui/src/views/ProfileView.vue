@@ -27,16 +27,19 @@ export default {
       feeling: null,
       picture: null,
 
-      followpopup: null,
+      followPopup: null,
       editUsernamePopup: false,
-      editBioPopup: false
+      editBioPopup: false,
+      newPostPopup: false,
+
+      newPostImage: null
     };
   },
   methods: {
     getPictureURL,
     async getProfile() {
       this.profileuserid = this.$route.params.id;
-      this.followpopup = null; // close popup (needed when changing profile from follow list)
+      this.followPopup = null; // close popup (needed when changing profile from follow list)
       const token = localStorage.getItem('token');
       const res = await this.$axios
         .get(`/users/${this.profileuserid}/profile`, {
@@ -86,8 +89,8 @@ export default {
         return length;
       }
     },
-    setFollowPopup(type) {
-      this.followpopup = type; // either 'followers' or 'following' or null
+    setfollowPopup(type) {
+      this.followPopup = type; // either 'followers' or 'following' or null
     },
     openFileDialog() {
       this.$refs.fileInput.click();
@@ -163,6 +166,13 @@ export default {
     },
     closeEditBio() {
       this.editBioPopup = false;
+    },
+    async opennewPostPopup() {
+      this.newPostPopup = true;
+    },
+    async closenewPostPopup() {
+      this.newPostPopup = false;
+      this.newPostImage = null;
     },
     async changeUsername() {
       this.closeEditUsername();
@@ -381,6 +391,74 @@ export default {
             }
           });
       }
+    },
+    openNewPostFileDialog() {
+      this.$refs.newPostFileInput.click();
+    },
+    async handlePostFileSelected() {
+      const file = event.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        event.target.value = '';
+        return;
+      }
+      let vuethis = this; // needed to access this inside the onload function
+      // get the base64 string of the image in PNG
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          canvas.width = this.naturalWidth;
+          canvas.height = this.naturalHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(this, 0, 0);
+
+          const pngBase64String = canvas.toDataURL('image/png');
+          const base64image = pngBase64String.split(',')[1];
+          vuethis.newPostImage = base64image;
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    async publishNewPost() {
+      const caption = document.getElementById(
+        'profile-page-newpost-popup-input'
+      ).value;
+      if (this.newPostImage == null) {
+        alert('Please select an image.');
+        return;
+      }
+      const token = localStorage.getItem('token');
+      this.$axios
+        .post(
+          `/posts`,
+          {
+            caption: caption,
+            image: this.newPostImage
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        .then((res) => {
+          this.closenewPostPopup();
+          // todo add the new post to the posts array
+        })
+        .catch((err) => {
+          switch (err.response.status) {
+            case 403:
+              alert('Invalid credentials. Please try re-logging in.');
+              break;
+            case 500:
+              alert('Server error. Please try again later.');
+              break;
+          }
+        });
     }
   },
   components: { HeaderComponent, PopUpLikeCard, PencilIcon, CheckIcon },
@@ -476,13 +554,13 @@ export default {
           </div>
         </div>
         <div class="profile-info-social">
-          <button @click="setFollowPopup('followers')">
+          <button @click="setfollowPopup('followers')">
             Followers
             <div class="profile-info-social-number">
               {{ getFollowNumber(this.profilefollowers) }}
             </div>
           </button>
-          <button @click="setFollowPopup('following')">
+          <button @click="setfollowPopup('following')">
             Following
             <div class="profile-info-social-number">
               {{ getFollowNumber(this.profilefollowing) }}
@@ -492,6 +570,7 @@ export default {
       </div>
       <div class="profile-page-posts">
         <button
+          @click="this.opennewPostPopup()"
           v-if="this.profileuserid == this.userid"
           class="profile-page-newpost-card"
         >
@@ -502,14 +581,14 @@ export default {
     </div>
   </div>
   <div
-    @click="setFollowPopup(null)"
-    v-if="this.followpopup != null"
+    @click="setfollowPopup(null)"
+    v-if="this.followPopup != null"
     class="profile-page-follow-popup-outer-container"
   >
     <div @click.stop="() => {}" class="profile-page-follow-popup-container">
       <div
         v-if="
-          (followpopup == 'followers'
+          (followPopup == 'followers'
             ? this.profilefollowers
             : this.profilefollowing) == null
         "
@@ -517,7 +596,7 @@ export default {
         No users yet! :(
       </div>
       <PopUpLikeCard
-        v-for="user in followpopup == 'followers'
+        v-for="user in followPopup == 'followers'
           ? this.profilefollowers
           : this.profilefollowing"
         :key="user.userid"
@@ -553,6 +632,43 @@ export default {
     <div @click.stop="() => {}" class="profile-page-bio-popup-container">
       <textarea id="bio-popup-input" :value="this.bio" />
       <CheckIcon @click="this.changeBio()" class="done-icon" :size="28" />
+    </div>
+  </div>
+  <div
+    @click="this.closenewPostPopup()"
+    v-if="this.newPostPopup"
+    class="profile-page-newpost-popup-outer-container"
+  >
+    <div @click.stop="() => {}" class="profile-page-newpost-popup-container">
+      <button
+        v-if="this.newPostImage == null"
+        @click="openNewPostFileDialog()"
+        class="profile-page-newpost-popup-image"
+      >
+        Select an image
+      </button>
+      <input
+        type="file"
+        ref="newPostFileInput"
+        @change="handlePostFileSelected"
+        style="display: none"
+      />
+      <!-- data:image/png;base64, prefix needed because we strip it when going to the server -->
+      <img
+        v-if="this.newPostImage"
+        :src="'data:image/png;base64,' + this.newPostImage"
+        class="profile-page-newpost-popup-image"
+      />
+      <textarea
+        id="profile-page-newpost-popup-input"
+        placeholder="Write your caption here..."
+      />
+      <button
+        @click="publishNewPost()"
+        class="profile-page-newpost-popup-publish-button"
+      >
+        Publish Post
+      </button>
     </div>
   </div>
 </template>
@@ -876,6 +992,72 @@ export default {
         background-color: orange;
         border: 2px solid orange;
         transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
+  }
+}
+.profile-page-newpost-popup-outer-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-page-newpost-popup-container {
+    padding: 15px 15px;
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    width: 400px;
+    height: 70vh;
+    font-family: 'Courier New', Courier, monospace;
+    .profile-page-newpost-popup-image {
+      width: 100%;
+      max-height: 60%;
+      border-radius: 8px;
+      margin-right: 8px;
+    }
+    img {
+      min-height: 200px;
+      max-height: 60%;
+      width: auto;
+      object-fit: contain;
+    }
+    textarea {
+      margin: 10px 0px;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+      margin-right: 8px;
+      font-weight: bold;
+      font-size: 18px;
+      resize: none;
+      outline: none;
+    }
+
+    .profile-page-newpost-popup-publish-button {
+      border-radius: 8px;
+      border: 2px solid rgb(71, 71, 71);
+      color: rgb(71, 71, 71);
+      padding: 5px;
+      transition: all 0.2s ease-in-out;
+      background-color: transparent;
+      font-weight: bold;
+      font-size: 18px;
+      &:hover {
+        color: white;
+        background-color: orange;
+        border: 2px solid orange;
+        transform: scale(1.05);
         cursor: pointer;
       }
     }
