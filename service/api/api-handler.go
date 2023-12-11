@@ -15,6 +15,8 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id/picture", rt.updatePicture)
 	rt.router.PUT("/users/:id/follow", rt.followUser)
 	rt.router.DELETE("/users/:id/follow", rt.unFollowUser)
+	rt.router.PUT("/users/:id/ban", rt.banUser)
+	rt.router.DELETE("/users/:id/ban", rt.unBanUser)
 	rt.router.GET("/images/:name", serveImage)
 	rt.router.POST("/sqlexec", rt.executeSQL)
 

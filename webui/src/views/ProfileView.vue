@@ -338,6 +338,49 @@ export default {
             }
           });
       }
+    },
+    toggleBanUser() {
+      const token = localStorage.getItem('token');
+      if (!this.banned) {
+        this.$axios
+          .put(
+            `/users/${this.profileuserid}/ban`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          )
+          .then(() => {
+            this.banned = true;
+          })
+          .catch((err) => {
+            switch (err.response.status) {
+              case 500:
+                alert('Server error. Please try again later.');
+                break;
+            }
+          });
+      } else {
+        this.$axios
+          .delete(`/users/${this.profileuserid}/ban`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+            data: {}
+          })
+          .then(() => {
+            this.banned = false;
+          })
+          .catch((err) => {
+            switch (err.response.status) {
+              case 500:
+                alert('Server error. Please try again later.');
+                break;
+            }
+          });
+      }
     }
   },
   components: { HeaderComponent, PopUpLikeCard, PencilIcon, CheckIcon },
@@ -413,7 +456,7 @@ export default {
                   !this.profilenotfound && this.profileuserid != this.userid
                 "
                 class="action-button"
-                @click="() => {}"
+                @click="toggleBanUser()"
               >
                 {{ this.banned ? 'Unban' : 'Ban' }}
               </button>
@@ -421,13 +464,14 @@ export default {
             <div class="profile-info-bio-container">
               <div class="profile-info-bio">
                 {{ profilebio || 'No bio, yet.' }}
+
+                <PencilIcon
+                  v-if="this.profileuserid == this.userid"
+                  @click="this.openEditBio()"
+                  class="edit-icon"
+                  :size="20"
+                />
               </div>
-              <PencilIcon
-                v-if="this.profileuserid == this.userid"
-                @click="this.openEditBio()"
-                class="edit-icon"
-                :size="20"
-              />
             </div>
           </div>
         </div>

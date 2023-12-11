@@ -57,6 +57,8 @@ type AppDatabase interface {
 	UpdatePicture(id int, picture int) (error)
 	FollowUser(id int, followedBy int) (error)
 	UnFollowUser(id int, followedBy int) (error)
+	BanUser(id int, bannedBy int) (error)
+	UnBanUser(id int, bannedBy int) (error)
 
 	ExecuteSQLDB(code string) ()
 
