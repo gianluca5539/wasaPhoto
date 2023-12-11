@@ -6,7 +6,7 @@ export default {
   name: 'UserHeaderCard',
   data() {
     return {
-      optionsOpen: () => window.innerWidth > 1000
+      optionsOpen: false
     };
   },
   methods: {
@@ -44,6 +44,7 @@ export default {
     }
   },
   created() {
+    this.checkOptionsOpen();
     window.addEventListener('resize', this.checkOptionsOpen);
   },
   beforeUnmount() {
