@@ -27,7 +27,11 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	// get newFeeling from feelingReq
 	newFeeling := feelingReq.NewFeeling	
 
-	// todo check value for feeling
+	// check that newFeeling is valid (between 0 and 4)
+	if newFeeling < 0 || newFeeling > 4 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
