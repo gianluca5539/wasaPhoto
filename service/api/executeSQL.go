@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"github.com/julienschmidt/httprouter"
 	"fmt"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type SQLRequest struct {
@@ -19,6 +20,8 @@ func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, ps httprou
 	err := decoder.Decode(&req)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 

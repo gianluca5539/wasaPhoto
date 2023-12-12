@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type LoginRequest struct {
@@ -17,6 +18,8 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	err := decoder.Decode(&loginReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -25,6 +28,8 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	// check username is valid (3 to 16 characters)
 	if len(username) < 3 || len(username) > 16 {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid username"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -32,6 +37,8 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	user,found, err := rt.db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// If the user doesn't exist, create a new user in the database
@@ -39,6 +46,8 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		user, err = rt.db.CreateUser(username)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			errorobj := types.Error{Message: "Internal server error"}
+			_ = json.NewEncoder(w).Encode(errorobj)
 			return
 		} 
 		token := user.UserID

@@ -27,6 +27,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	err := decoder.Decode(&postReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -35,6 +37,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -42,6 +46,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -53,6 +59,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	imgBytes, err := base64.StdEncoding.DecodeString(image)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid image"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -63,6 +71,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	img, err := png.Decode(imgReader)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid image"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -72,6 +82,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	timeInt, err := strconv.Atoi(time)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// save picture
@@ -79,6 +91,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	outputFile, err := os.Create(filename)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	defer outputFile.Close()
@@ -87,6 +101,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	err = png.Encode(outputFile, img)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -94,6 +110,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	postid,err := rt.db.CreateNewPost(userID, timeInt, caption, timeInt)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -101,6 +119,8 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	u, _, err := rt.db.GetUserByUserID(userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 

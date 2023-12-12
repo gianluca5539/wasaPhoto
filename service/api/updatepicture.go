@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type PictureRequest struct {
@@ -28,6 +29,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	err = decoder.Decode(&pictureReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// get newPicture from pictureReq
@@ -38,6 +41,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -45,11 +50,15 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	if requestedUserID != userID {
 		w.WriteHeader(http.StatusForbidden)
+		errorobj := types.Error{Message: "You cannot update another user's picture"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -57,6 +66,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	imgBytes, err := base64.StdEncoding.DecodeString(newPicture)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid picture"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -67,6 +78,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	img, err := png.Decode(imgReader)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid picture"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -76,6 +89,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	timeInt, err := strconv.Atoi(time)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// save picture
@@ -83,6 +98,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	outputFile, err := os.Create(filename)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	defer outputFile.Close()
@@ -91,6 +108,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	err = png.Encode(outputFile, img)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -99,6 +118,8 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 

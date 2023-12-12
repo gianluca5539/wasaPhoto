@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"encoding/json"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 
@@ -16,8 +18,9 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 	var tokenString string
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
-		fmt.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -25,12 +28,16 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	// check the user is not unfollowing themselves
 	if userID == requestedUserID {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "You cannot unfollow yourself"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -38,6 +45,8 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 	err = rt.db.UnFollowUser(requestedUserID, userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	

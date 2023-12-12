@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"encoding/json"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 
@@ -17,6 +19,8 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -24,6 +28,8 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -31,22 +37,30 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 	banned, err := rt.db.IsUserBanned(userID, requestedUserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	if banned {
 		w.WriteHeader(http.StatusNotFound)
+		errorobj := types.Error{Message: "User not found"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	// check the user is not following themselves
 	if userID == requestedUserID {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "You cannot follow yourself"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	err = rt.db.FollowUser(requestedUserID, userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	

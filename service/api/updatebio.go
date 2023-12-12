@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type BioRequest struct {
@@ -22,6 +23,8 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 	err = decoder.Decode(&bioReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// get newBio from bioReq
@@ -32,6 +35,8 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -39,11 +44,15 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	if requestedUserID != userID {
 		w.WriteHeader(http.StatusForbidden)
+		errorobj := types.Error{Message: "You cannot update another user's bio"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -52,6 +61,8 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 	dberr := rt.db.UpdateBio(userID, newBio)
 	if dberr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	

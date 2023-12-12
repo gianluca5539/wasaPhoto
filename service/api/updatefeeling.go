@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type FeelingRequest struct {
@@ -22,6 +23,8 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	err = decoder.Decode(&feelingReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid request body"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	// get newFeeling from feelingReq
@@ -30,6 +33,8 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	// check that newFeeling is valid (between 0 and 4)
 	if newFeeling < 0 || newFeeling > 4 {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid feeling"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -38,6 +43,8 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -45,11 +52,15 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
 	if requestedUserID != userID {
 		w.WriteHeader(http.StatusForbidden)
+		errorobj := types.Error{Message: "You cannot update another user's feeling"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -57,6 +68,8 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 	dberr := rt.db.UpdateFeeling(userID, newFeeling)
 	if dberr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	

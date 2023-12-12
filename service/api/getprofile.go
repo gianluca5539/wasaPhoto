@@ -19,6 +19,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -26,6 +28,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid token"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -33,10 +37,14 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	banned, err := rt.db.IsUserBanned(userID, requestedUserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	if banned {
 		w.WriteHeader(http.StatusNotFound)
+		errorobj := types.Error{Message: "User not found"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -44,6 +52,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	bannedByReqUser, err := rt.db.IsUserBanned(requestedUserID, userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -52,10 +62,14 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	u, found, err := rt.db.GetUserByUserID(requestedUserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 	if !found {
 		w.WriteHeader(http.StatusNotFound)
+		errorobj := types.Error{Message: "User not found"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -63,6 +77,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	followersIds, err := rt.db.GetFollowers(requestedUserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -72,6 +88,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		u, _, err := rt.db.GetUserByUserID(id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			errorobj := types.Error{Message: "Internal server error"}
+			_ = json.NewEncoder(w).Encode(errorobj)
 			return
 		}
 		followers = append(followers, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
@@ -81,6 +99,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	followingIds, err := rt.db.GetFollowing(requestedUserID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
@@ -90,6 +110,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		u, _, err := rt.db.GetUserByUserID(id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			errorobj := types.Error{Message: "Internal server error"}
+			_ = json.NewEncoder(w).Encode(errorobj)
 			return
 		}
 		following = append(following, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
@@ -101,6 +123,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
