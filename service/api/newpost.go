@@ -1,0 +1,126 @@
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+	"fmt"
+	"strconv"
+	"github.com/julienschmidt/httprouter"
+	"time"
+	"os"
+	"io/ioutil"
+	"bytes"
+	"encoding/base64"
+	"image/png"
+	"github.com/gianluca5539/WASA/service/types"
+)
+
+type postRequest struct {
+	Image string `json:"image"`
+	Caption string `json:"caption"`
+}
+
+
+func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	var postReq postRequest
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&postReq)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// get the user id from the jwt token in the request header (bearer token)
+	var tokenString string
+	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// convert the token string to an int
+	userID, err := strconv.Atoi(tokenString)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	image := postReq.Image
+	caption := postReq.Caption
+
+	// save image locally
+	// Decode the base64 string to []byte
+	imgBytes, err := base64.StdEncoding.DecodeString(image)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// Make a Reader out of the []byte
+	imgReader := ioutil.NopCloser(bytes.NewReader(imgBytes))
+
+	// Decode the []byte to image.Image
+	img, err := png.Decode(imgReader)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// Create the output file with the current timestamp as the filename
+	currentTime := time.Now()
+	time := strconv.FormatInt(currentTime.UnixNano()/int64(time.Millisecond), 10)
+	timeInt, err := strconv.Atoi(time)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	// save picture
+	filename := "data/pictures/" + time + ".png"
+	outputFile, err := os.Create(filename)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	defer outputFile.Close()
+
+	// Encode the image to the output file
+	err = png.Encode(outputFile, img)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// insert the post into the database (userid,imageid,caption,timestamp)
+	postid,err := rt.db.CreateNewPost(userID, timeInt, caption, timeInt)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// if everything is successful, get the user object to return to the client together with the post
+	u, _, err := rt.db.GetUserByUserID(userID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	res := types.Post{
+		PostID: postid,
+		UserID: u.UserID,
+		Username: u.Username,
+		Feeling: u.Feeling,
+		UserPicture: u.Picture,
+		Picture: timeInt,
+		Caption: caption,
+		CreatedAt: timeInt,
+		LikeCount: 0,
+	}
+
+
+	
+
+	w.WriteHeader(http.StatusCreated)
+	// return the user object to the client
+	json.NewEncoder(w).Encode(res)
+
+}; 

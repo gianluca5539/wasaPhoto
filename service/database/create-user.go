@@ -1,9 +1,13 @@
 package database
 
-// GetName is an example that shows you how to query data
-func (db *appdbimpl) CreateUser(username string) (User, error) {
+import (
+	"github.com/gianluca5539/WASA/service/types"
+)
 
-	var u User
+// GetName is an example that shows you how to query data
+func (db *appdbimpl) CreateUser(username string) (types.User, error) {
+
+	var u types.User
 
 	query_str := "INSERT INTO user (username) VALUES (?);"
 	result, err := db.c.Exec(query_str, username)
@@ -19,7 +23,7 @@ func (db *appdbimpl) CreateUser(username string) (User, error) {
 	}
 
 	// create user
-	u = User{
+	u = types.User{
 		UserID:     int(lastInsertedID),
 		Username:   username,
 		Feeling:    0,

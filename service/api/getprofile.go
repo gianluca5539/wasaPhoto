@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/julienschmidt/httprouter"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 
@@ -66,14 +67,14 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	// get the user objects of the followers
-	var followers []User
+	var followers []types.User
 	for _, id := range followersIds {
 		u, _, err := rt.db.GetUserByUserID(id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		followers = append(followers, User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
+		followers = append(followers, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
 	}
 
 	// find the following ids of the user that is requested
@@ -84,39 +85,38 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	// get the user objects of the following
-	var following []User
+	var following []types.User
 	for _, id := range followingIds {
 		u, _, err := rt.db.GetUserByUserID(id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		following = append(following, User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
+		following = append(following, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
 	}
 
 
+	// get the user's posts
+	posts, err := rt.db.GetPostsByUserID(requestedUserID)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	
 
 	// create the response
-	res := struct {
-		ID int `json:"id"`
-		Username string `json:"username"`
-		Picture string `json:"picture"`
-		Feeling int `json:"feeling"`
-		Bio string `json:"bio"`
-		Followers []User `json:"followers"`
-		Following []User `json:"following"`
-		Banned bool `json:"banned"`
-	}{
-		ID: u.UserID,
-		Username: u.Username,
-		Picture: u.Picture,
-		Feeling: u.Feeling,
-		Bio: u.Bio,
+	res := types.UserProfile{
+		ID:        u.UserID,
+		Username:  u.Username,
+		Picture:   u.Picture,
+		Feeling:   u.Feeling,
+		Bio:       u.Bio,
 		Followers: followers,
 		Following: following,
-		Banned: bannedByReqUser,
+		Banned:    bannedByReqUser,
+		Posts:     posts,
 	}
 
 	// return the user

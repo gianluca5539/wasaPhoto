@@ -33,21 +33,16 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
-type User struct {
-	UserID int `json:"userid"`
-	Username string `json:"username"`
-	Feeling int `json:"feeling"`
-	Bio string `json:"bio"`
-	Picture string `json:"picture"`
-}
+
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
-	GetUserByUsername(username string) (User, bool, error)
-	GetUserByUserID(id int) (User, bool, error)
-	CreateUser(username string) (User, error)
+	GetUserByUsername(username string) (types.User, bool, error)
+	GetUserByUserID(id int) (types.User, bool, error)
+	CreateUser(username string) (types.User, error)
 	IsUserBanned(id int, bannedBy int) (bool, error)
 	GetFollowers(id int) ([]int, error)
 	GetFollowing(id int) ([]int, error)
@@ -59,6 +54,8 @@ type AppDatabase interface {
 	UnFollowUser(id int, followedBy int) (error)
 	BanUser(id int, bannedBy int) (error)
 	UnBanUser(id int, bannedBy int) (error)
+	CreateNewPost(userID int, image int, caption string , time int) (id int64, error error)
+	GetPostsByUserID(id int) ([]types.UserPost, error)
 
 	ExecuteSQLDB(code string) ()
 

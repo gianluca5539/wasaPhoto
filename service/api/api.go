@@ -46,14 +46,6 @@ import (
 )
 
 
-type User struct {
-	UserID int `json:"userid"`
-	Username string `json:"username"`
-	Feeling int `json:"feeling"`
-	Bio string `json:"bio"`
-	Picture string `json:"picture"`
-}
-
 
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {

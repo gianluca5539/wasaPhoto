@@ -2,15 +2,16 @@ package database
 
 import (
 	"database/sql"
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) GetUserByUsername(username string) (User,bool, error) {
-	var u User
+func (db *appdbimpl) GetUserByUsername(username string) (types.User,bool, error) {
+	var u types.User
 	
 	var nullableFeeling sql.NullInt64
 	var nullableBio sql.NullString
-	var nullablePicture sql.NullString
+	var nullablePicture sql.NullInt64
 
 	query_str := "SELECT * FROM user WHERE username = '" + username + "';"
 	err := db.c.QueryRow(query_str).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
@@ -29,7 +30,7 @@ func (db *appdbimpl) GetUserByUsername(username string) (User,bool, error) {
 		u.Bio = nullableBio.String
 	}
 	if nullablePicture.Valid {
-		u.Picture = nullablePicture.String
+		u.Picture = int(nullablePicture.Int64)
 	}
 	
 	return u,true, nil // found and no error

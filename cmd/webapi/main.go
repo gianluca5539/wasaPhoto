@@ -42,6 +42,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+
 // main is the program entry point. The only purpose of this function is to call run() and set the exit code if there is
 // any error
 func main() {

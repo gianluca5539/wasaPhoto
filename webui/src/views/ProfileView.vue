@@ -68,6 +68,7 @@ export default {
         });
 
       const response = res?.data;
+      console.log(res);
       if (response) {
         this.profileusername = response.username;
         this.profilefeeling = response.feeling;
@@ -447,6 +448,7 @@ export default {
         )
         .then((res) => {
           this.closenewPostPopup();
+          console.log(res);
           // todo add the new post to the posts array
         })
         .catch((err) => {
