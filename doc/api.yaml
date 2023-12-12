@@ -218,6 +218,9 @@ paths:
                 newpicture:
                   description: new picture b64
                   type: string
+                  pattern: 'ˆ.*?$'
+                  minLength: 0
+                  maxLength: 9999999
                   example: 'BaWD39Sds4ndfi345dfjr0d=='
         required: true
       security:
@@ -282,7 +285,8 @@ paths:
                 newbio:
                   description: new bio string
                   type: string
-                  example: 'Hello guys!'
+                  example: 'Hello guys'
+                  pattern: 'ˆ.*?$'
                   minLength: 0
                   maxLength: 9999
         required: true
@@ -469,12 +473,16 @@ paths:
           content:
             application/json:
               schema:
-                description: The post objects
-                type: array
-                minItems: 0
-                maxItems: 9999
-                items:
-                  $ref: '#/components/schemas/Post'
+                type: object
+                description: the posts returned
+                properties:
+                  posts:
+                    description: The post objects
+                    type: array
+                    minItems: 0
+                    maxItems: 9999
+                    items:
+                      $ref: '#/components/schemas/Post'
         '404':
           description: User not found
           content:
@@ -541,10 +549,16 @@ paths:
                 image:
                   description: image b64
                   type: string
+                  pattern: 'ˆ.*?$'
+                  minLength: 0
+                  maxLength: 9999999
                   example: 'CaAFodfdsfh=='
                 caption:
                   description: caption string
                   type: string
+                  pattern: 'ˆ.*?$'
+                  minLength: 0
+                  maxLength: 9999999
                   example: 'Hello there'
         required: true
       security:
@@ -628,12 +642,16 @@ paths:
           content:
             application/json:
               schema:
-                description: array of comments
-                type: array
-                minItems: 0
-                maxItems: 9999
-                items:
-                  $ref: '#/components/schemas/Comment'
+                type: object
+                description: the comments returned
+                properties:
+                  posts:
+                    description: The comment objects
+                    type: array
+                    minItems: 0
+                    maxItems: 9999
+                    items:
+                      $ref: '#/components/schemas/Comment'
         '404':
           description: Picture not found
           content:
@@ -671,12 +689,16 @@ paths:
           content:
             application/json:
               schema:
-                description: users that liked the picture
-                type: array
-                minItems: 0
-                maxItems: 9999
-                items:
-                  $ref: '#/components/schemas/User'
+                type: object
+                description: the users returned
+                properties:
+                  users:
+                    description: The post objects
+                    type: array
+                    minItems: 0
+                    maxItems: 9999
+                    items:
+                      $ref: '#/components/schemas/User'
         '404':
           description: Picture not found
           content:
@@ -778,7 +800,10 @@ paths:
                 text:
                   description: comment text
                   type: string
-                  example: 'Good picure!'
+                  pattern: 'ˆ.*?$'
+                  minLength: 0
+                  maxLength: 9999999
+                  example: 'Good.'
                 postid:
                   description: comment postid
                   type: number
@@ -869,7 +894,7 @@ components:
         bio:
           description: bio of the user
           type: string
-          example: 'Hello! What a wonderul world'
+          example: 'Hello. What a wonderul world'
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 9999
@@ -907,7 +932,7 @@ components:
         text:
           description: text of the comment
           type: string
-          example: 'Good one!'
+          example: 'Good one.'
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 9999
@@ -945,7 +970,7 @@ components:
         caption:
           description: caption of the post
           type: string
-          example: 'Hello :) !'
+          example: 'Hello'
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 9999
@@ -979,7 +1004,7 @@ components:
         bio:
           description: bio of the user
           type: string
-          example: 'Hello! What a wonderul world'
+          example: 'Hello. What a wonderul world'
           pattern: 'ˆ.*?$'
           minLength: 0
           maxLength: 9999
@@ -1025,7 +1050,10 @@ components:
               caption:
                 description: caption of the post
                 type: string
-                example: 'Hello :) !'
+                pattern: 'ˆ.*?$'
+                minLength: 0
+                maxLength: 9999999
+                example: 'Hello'
               createdAt:
                 description: creation date of the post
                 type: number
