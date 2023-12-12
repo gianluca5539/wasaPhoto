@@ -13,7 +13,7 @@ func (db *appdbimpl) GetPostsByUserID(id int) ([]types.UserPost, error) {
 	var nullableLikeCount sql.NullInt64
 
 	// create a new sql statement
-	stmt, err := db.c.Prepare("SELECT * FROM post WHERE userid = ?")
+	stmt, err := db.c.Prepare("SELECT * FROM post WHERE userid = ? ORDER BY createdAt DESC")
 	if err != nil {
 		return []types.UserPost{}, err
 	}

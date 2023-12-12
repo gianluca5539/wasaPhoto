@@ -59,6 +59,9 @@ export default {
   components: {
     HeartIcon,
     PostPopUp
+  },
+  beforeUnmount() {
+    document.body.classList.remove('no-scroll'); // enable scrolling on page
   }
 };
 </script>

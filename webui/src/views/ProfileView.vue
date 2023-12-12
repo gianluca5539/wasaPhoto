@@ -7,7 +7,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue';
 
 export default {
   watch: {
-    $route: 'getProfile'
+    $route: 'routeUpdated'
   },
   data() {
     return {
@@ -20,6 +20,7 @@ export default {
       profilefollowing: null,
       profilenotfound: false,
       banned: false,
+      profileposts: null,
 
       userid: null,
       username: null,
@@ -37,6 +38,10 @@ export default {
   },
   methods: {
     getPictureURL,
+    routeUpdated() {
+      document.body.classList.remove('no-scroll');
+      this.getProfile();
+    },
     async getProfile() {
       this.profileuserid = this.$route.params.id;
       this.followPopup = null; // close popup (needed when changing profile from follow list)
@@ -68,8 +73,8 @@ export default {
         });
 
       const response = res?.data;
-      console.log(res);
       if (response) {
+        console.log(response);
         this.profileusername = response.username;
         this.profilefeeling = response.feeling;
         this.profilebio = response.bio;
@@ -77,6 +82,7 @@ export default {
         this.profilefollowers = response.followers;
         this.profilefollowing = response.following;
         this.banned = response.banned;
+        this.profileposts = response.posts;
       }
     },
     getFollowNumber(x) {
@@ -91,6 +97,14 @@ export default {
       }
     },
     setfollowPopup(type) {
+      if (type == null) document.body.classList.remove('no-scroll');
+      else {
+        document.body.classList.add('no-scroll');
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
       this.followPopup = type; // either 'followers' or 'following' or null
     },
     openFileDialog() {
@@ -157,21 +171,39 @@ export default {
       }
     },
     openEditUsername() {
+      document.body.classList.add('no-scroll'); // disable scrolling on page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
       this.editUsernamePopup = true;
     },
     closeEditUsername() {
+      document.body.classList.remove('no-scroll'); // enable scrolling on page
       this.editUsernamePopup = false;
     },
     openEditBio() {
+      document.body.classList.add('no-scroll'); // disable scrolling on page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
       this.editBioPopup = true;
     },
     closeEditBio() {
+      document.body.classList.remove('no-scroll'); // enable scrolling on page
       this.editBioPopup = false;
     },
     async opennewPostPopup() {
+      document.body.classList.add('no-scroll'); // disable scrolling on page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
       this.newPostPopup = true;
     },
     async closenewPostPopup() {
+      document.body.classList.remove('no-scroll'); // enable scrolling on page
       this.newPostPopup = false;
       this.newPostImage = null;
     },
@@ -448,8 +480,17 @@ export default {
         )
         .then((res) => {
           this.closenewPostPopup();
-          console.log(res);
-          // todo add the new post to the posts array
+          document.body.classList.remove('no-scroll');
+          this.newPostImage = null;
+          let newPost = {
+            postid: res.data.postid,
+            caption: caption,
+            picture: res.data.picture,
+            createdat: res.data.createdAt,
+            likecount: res.data.likecount
+          };
+
+          this.profileposts = [newPost, ...this.profileposts];
         })
         .catch((err) => {
           switch (err.response.status) {
@@ -472,6 +513,9 @@ export default {
     this.picture = localStorage.getItem('picture');
 
     await this.getProfile();
+  },
+  beforeUnmount() {
+    document.body.classList.remove('no-scroll');
   }
 };
 </script>
@@ -579,6 +623,16 @@ export default {
           <div class="profile-page-newpost-card-plus">+</div>
           <div class="profile-page-newpost-card-title">New Post</div>
         </button>
+        <div
+          v-for="post in this.profileposts"
+          :key="post.postid"
+          class="profile-page-post-card"
+        >
+          <img :src="getPictureURL(post.picture)" alt="" />
+          <div class="profile-page-post-card-text">
+            {{ post.caption || 'No caption' }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -676,6 +730,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+body.no-scroll {
+  overflow: hidden;
+}
 .profile-page-container {
   width: 100vw;
   min-height: 100vh;
@@ -876,6 +933,43 @@ export default {
           font-size: 26px;
           font-family: 'Courier New', Courier, monospace;
           font-weight: bold;
+        }
+      }
+      .profile-page-post-card {
+        width: 300px;
+        height: 400px;
+        margin-right: 30px;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease-in-out;
+        padding: 10px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 12px;
+          margin-bottom: 10px;
+        }
+        .profile-page-post-card-text {
+          width: 100%;
+          max-height: 58px;
+          padding: 10px;
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 16px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-wrap: break-word;
+        }
+        &:hover {
+          transform: scale(1.01);
+          cursor: pointer;
         }
       }
     }
