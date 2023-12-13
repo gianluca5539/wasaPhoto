@@ -32,7 +32,7 @@ paths:
                   description: the username
                   type: string
                   example: Maria
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 3
                   maxLength: 16
         required: true
@@ -101,7 +101,7 @@ paths:
                   description: new name string
                   type: string
                   example: 'Maria123'
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 3
                   maxLength: 16
         required: true
@@ -218,7 +218,7 @@ paths:
                 newpicture:
                   description: new picture b64
                   type: string
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 0
                   maxLength: 9999999
                   example: 'BaWD39Sds4ndfi345dfjr0d=='
@@ -286,7 +286,7 @@ paths:
                   description: new bio string
                   type: string
                   example: 'Hello guys'
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 0
                   maxLength: 9999
         required: true
@@ -549,14 +549,14 @@ paths:
                 image:
                   description: image b64
                   type: string
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 0
                   maxLength: 9999999
                   example: 'CaAFodfdsfh=='
                 caption:
                   description: caption string
                   type: string
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 0
                   maxLength: 9999999
                   example: 'Hello there'
@@ -800,7 +800,7 @@ paths:
                 text:
                   description: comment text
                   type: string
-                  pattern: 'ˆ.*?$'
+                  pattern: '^.*$'
                   minLength: 0
                   maxLength: 9999999
                   example: 'Good.'
@@ -885,7 +885,7 @@ components:
           description: username of the user
           type: string
           example: 'Maria'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 3
           maxLength: 16
         feeling:
@@ -895,7 +895,7 @@ components:
           description: bio of the user
           type: string
           example: 'Hello. What a wonderul world'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 0
           maxLength: 9999
         picture:
@@ -919,7 +919,7 @@ components:
           description: username of the author
           type: string
           example: 'Maria'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 3
           maxLength: 16
         feeling:
@@ -933,7 +933,7 @@ components:
           description: text of the comment
           type: string
           example: 'Good one.'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 0
           maxLength: 9999
 
@@ -953,7 +953,7 @@ components:
           description: username of the author
           type: string
           example: 'Maria'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 3
           maxLength: 16
         feeling:
@@ -971,7 +971,7 @@ components:
           description: caption of the post
           type: string
           example: 'Hello'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 0
           maxLength: 9999
         createdAt:
@@ -995,7 +995,7 @@ components:
           description: username of the user
           type: string
           example: 'Maria'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 3
           maxLength: 16
         feeling:
@@ -1005,7 +1005,7 @@ components:
           description: bio of the user
           type: string
           example: 'Hello. What a wonderul world'
-          pattern: 'ˆ.*?$'
+          pattern: '^.*$'
           minLength: 0
           maxLength: 9999
         banned:
@@ -1050,7 +1050,7 @@ components:
               caption:
                 description: caption of the post
                 type: string
-                pattern: 'ˆ.*?$'
+                pattern: '^.*$'
                 minLength: 0
                 maxLength: 9999999
                 example: 'Hello'
