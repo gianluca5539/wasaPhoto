@@ -145,7 +145,7 @@ export default {
               name="Frank123"
               :feeling="1"
               bio="I am a happy person because I am happy and have a happy life."
-              picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+              :picture="null"
             />
           </div>
           <div
@@ -157,11 +157,11 @@ export default {
                 :userid="1"
                 :authorcomment="true"
                 :caption="true"
-                name="Lorentz27"
+                :name="this.name"
                 :date="new Date(this.date)"
                 :feeling="1"
-                comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
-                picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                :comment="this.caption"
+                :picture="this.profilePicture"
               />
               <PostPopUpCommentCard
                 v-for="like in [
@@ -176,7 +176,7 @@ export default {
                 :feeling="1"
                 :date="new Date()"
                 comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
-                picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+                :picture="null"
               />
             </div>
             <div class="post-popup-comment-input-section">
