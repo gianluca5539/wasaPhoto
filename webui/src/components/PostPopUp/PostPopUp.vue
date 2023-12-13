@@ -4,6 +4,7 @@ import PostPopUpCommentCard from './PostPopUpCommentCard.vue';
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import BrokenHeartIcon from 'vue-material-design-icons/HeartBroken.vue';
 import SendIcon from 'vue-material-design-icons/Send.vue';
+import { getPictureURL } from '../../functions/getPictureURL';
 
 export default {
   data() {
@@ -26,11 +27,11 @@ export default {
       required: true
     },
     picture: {
-      type: String,
+      type: Number,
       required: true
     },
     profilePicture: {
-      type: String,
+      type: Number,
       required: true
     },
     likeCount: {
@@ -38,7 +39,7 @@ export default {
       required: true
     },
     date: {
-      type: Date,
+      type: Number,
       required: true
     },
     caption: {
@@ -55,6 +56,7 @@ export default {
     }
   },
   methods: {
+    getPictureURL,
     toggleLike() {
       // todo choose correct heart to show (broken or not)
       this.showHeart = 'like'; // temporarily hard coded
@@ -100,7 +102,11 @@ export default {
               show: this.showHeart == 'unlike'
             }"
           />
-          <img v-on:dblclick="toggleLike()" :src="this.picture" alt="" />
+          <img
+            v-on:dblclick="toggleLike()"
+            :src="this.getPictureURL(this.picture)"
+            alt=""
+          />
         </div>
         <div class="post-popup-info-section">
           <div class="post-popup-view-options">

@@ -1,6 +1,7 @@
 <script>
 import HeaderComponent from '../components/HeaderComponent.vue';
 import PopUpLikeCard from '../components/PopUpLikeCard.vue';
+import PostPopUp from '../components/PostPopUp/PostPopUp.vue';
 import { getPictureURL } from '../functions/getPictureURL';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import CheckIcon from 'vue-material-design-icons/Check.vue';
@@ -32,6 +33,7 @@ export default {
       editUsernamePopup: false,
       editBioPopup: false,
       newPostPopup: false,
+      openedPost: null,
 
       newPostImage: null
     };
@@ -502,9 +504,24 @@ export default {
               break;
           }
         });
+    },
+    openPost(post) {
+      this.openedPost = post;
+    },
+    closePost() {
+      this.openedPost = null;
+    },
+    togglePostLike() {
+      console.log('todo toggle post like');
     }
   },
-  components: { HeaderComponent, PopUpLikeCard, PencilIcon, CheckIcon },
+  components: {
+    HeaderComponent,
+    PopUpLikeCard,
+    PostPopUp,
+    PencilIcon,
+    CheckIcon
+  },
   async created() {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
@@ -623,8 +640,9 @@ export default {
           <div class="profile-page-newpost-card-plus">+</div>
           <div class="profile-page-newpost-card-title">New Post</div>
         </button>
-        <div
+        <button
           v-for="post in this.profileposts"
+          @click="openPost(post)"
           :key="post.postid"
           class="profile-page-post-card"
         >
@@ -632,7 +650,7 @@ export default {
           <div class="profile-page-post-card-text">
             {{ post.caption || 'No caption' }}
           </div>
-        </div>
+        </button>
       </div>
     </div>
   </div>
@@ -727,6 +745,19 @@ export default {
       </button>
     </div>
   </div>
+  <PostPopUp
+    v-if="this.openedPost"
+    :id="this.openedPost.postid"
+    :name="this.profileusername"
+    :feeling="this.profilefeeling"
+    :picture="this.openedPost.picture"
+    :profilePicture="this.profilepicture"
+    :likeCount="this.openedPost.likecount"
+    :date="this.openedPost.createdat"
+    :caption="this.openedPost.caption"
+    :closePost="this.closePost"
+    :togglePostLike="this.togglePostLike"
+  />
 </template>
 
 <style lang="scss" scoped>
