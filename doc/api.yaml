@@ -401,7 +401,7 @@ paths:
   /users/{userid}/ban:
     put:
       tags: ['Social']
-      summary: Blocks a user from viewing a profile
+      summary: Blocks a user from viewing a profile. It also deletes the follow if the banned user was following the request user.
       description: |-
         If the user does not exist, it will return an error (404).
         If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
