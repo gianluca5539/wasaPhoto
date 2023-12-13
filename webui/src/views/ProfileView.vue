@@ -110,6 +110,7 @@ export default {
       this.followPopup = type; // either 'followers' or 'following' or null
     },
     openFileDialog() {
+      if (this.profileuserid != this.userid) return;
       this.$refs.fileInput.click();
     },
     async handleFileSelected(event) {
