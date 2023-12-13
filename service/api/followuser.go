@@ -58,6 +58,12 @@ func (rt *_router) followUser(w http.ResponseWriter, r *http.Request, ps httprou
 
 	err = rt.db.FollowUser(requestedUserID, userID)
 	if err != nil {
+		if err.Error() == "User is already followed" {
+			w.WriteHeader(http.StatusBadRequest)
+			errorobj := types.Error{Message: "User is already followed"}
+			_ = json.NewEncoder(w).Encode(errorobj)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

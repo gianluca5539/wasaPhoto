@@ -43,6 +43,12 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	err = rt.db.BanUser(requestedUserID, userID)
 	if err != nil {
+		if err.Error() == "User is already banned" {
+			w.WriteHeader(http.StatusBadRequest)
+			errorobj := types.Error{Message: "User is already banned"}
+			_ = json.NewEncoder(w).Encode(errorobj)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

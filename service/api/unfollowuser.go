@@ -33,15 +33,6 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// check the user is not unfollowing themselves
-	if userID == requestedUserID {
-		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "You cannot unfollow yourself"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
-
-
 	err = rt.db.UnFollowUser(requestedUserID, userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
