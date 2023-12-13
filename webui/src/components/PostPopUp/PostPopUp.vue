@@ -66,7 +66,8 @@ export default {
       this.togglePostLike();
     },
     sendComment() {
-      console.log('send comment');
+      const newcomment = document.getElementById('comment-input').value;
+      console.log('send comment: ' + newcomment);
     }
   },
   created() {
@@ -180,10 +181,9 @@ export default {
             </div>
             <div class="post-popup-comment-input-section">
               <textarea
-                v-model="inputValue"
+                id="comment-input"
                 type="text"
                 name="comment-input"
-                id="1"
                 autogrow="true"
                 placeholder="Your comment..."
               />
