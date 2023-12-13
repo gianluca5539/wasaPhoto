@@ -157,7 +157,7 @@ export default {
                 :authorcomment="true"
                 :caption="true"
                 name="Lorentz27"
-                :date="new Date()"
+                :date="new Date(this.date)"
                 :feeling="1"
                 comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae ex auctor, aliquet nisl sed, consequat mi."
                 picture="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
@@ -192,7 +192,7 @@ export default {
                 style="cursor: pointer"
                 @click="sendComment()"
                 color="rgb(86, 86, 86)"
-                size="30"
+                :size="30"
               />
             </div>
           </div>
