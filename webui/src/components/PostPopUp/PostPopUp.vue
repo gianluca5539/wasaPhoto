@@ -12,7 +12,9 @@ export default {
       selectedView: 'comments',
       showHeart: null,
       currentUserID: null,
-      token: null
+      token: null,
+
+      comments: []
     };
   },
   props: {
@@ -71,13 +73,64 @@ export default {
       }, 1000);
       this.togglePostLike();
     },
-    sendComment() {
+    async sendComment() {
       const newcomment = document.getElementById('comment-input').value;
-      console.log('send comment: ' + newcomment);
+      if (newcomment.length > 0) {
+        this.$axios
+          .put(
+            `/comments/${this.postid}`,
+            {
+              text: newcomment
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${this.token}`
+              }
+            }
+          )
+          .then((response) => {
+            let comment = response.data;
+            if (!this.comments) this.comments = [];
+            this.comments.push(comment);
+            // clear comment input
+            document.getElementById('comment-input').value = '';
+          })
+          .catch((err) => {
+            alert("Couldn't send comment. Please try again");
+          });
+      }
+    },
+    async downloadComments() {
+      await this.$axios
+        .get(`/comments/${this.postid}`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+        .then((response) => {
+          this.comments = response.data.comments;
+        })
+        .catch((error) => {
+          alert('Could not download comments. Please try again.');
+        });
+    },
+    deleteComment(id) {
+      this.$axios
+        .delete(`/comments/${id}`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+        .then((response) => {
+          this.comments = this.comments.filter((comment) => comment.id != id);
+        })
+        .catch((error) => {
+          alert('Could not delete comment. Please try again.');
+        });
     }
   },
-  created() {
-    console.log('TODO download comments for post with id: ' + this.postid);
+  mounted() {
+    this.downloadComments();
   },
   beforeUnmount() {
     document.body.classList.remove('no-scroll');
@@ -174,30 +227,28 @@ export default {
                 :feeling="1"
                 :comment="this.caption"
                 :picture="this.userPicture"
+                :deleteComment="() => {}"
               />
               <PostPopUpCommentCard
-                v-for="cmt in [
-                  1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                  1, 1, 1, 1, 1, 1, 1, 1
-                ]"
-                :commentid="0"
-                :userid="2"
+                v-if="this.comments?.length > 0"
+                v-for="comment in this.comments"
+                :commentid="comment.id"
+                :userid="comment.userid"
                 :currentUserID="this.currentUserID"
-                :authorcomment="this.userid == 2"
-                :key="cmt"
+                :authorcomment="this.userid == comment.userid"
+                :key="comment.id"
                 :caption="false"
-                name="John Doe"
-                :feeling="1"
-                :date="new Date()"
-                comment="I am an AI programming assistant."
-                :picture="0"
+                :name="comment.username"
+                :feeling="comment.feeling"
+                :date="new Date(comment.createdat)"
+                :comment="comment.text"
+                :picture="comment.picture"
+                :deleteComment="this.deleteComment"
               />
             </div>
             <div class="post-popup-comment-input-section">
               <textarea
                 id="comment-input"
-                type="text"
-                name="comment-input"
                 autogrow="true"
                 placeholder="Your comment..."
               />
@@ -237,7 +288,6 @@ export default {
     background: whitesmoke;
     border-radius: 10px;
     padding: 20px 20px;
-    z-index: 3;
     cursor: default;
     .post-popup-content {
       height: 100%;
@@ -326,6 +376,7 @@ export default {
           align-items: center;
           width: 100%;
           padding: 0px 20px;
+          min-height: 100%;
           overflow-y: scroll;
           .post-popup-comment-input-section {
             display: flex;

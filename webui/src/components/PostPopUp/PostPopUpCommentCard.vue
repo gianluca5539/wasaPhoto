@@ -42,6 +42,10 @@ export default {
     picture: {
       type: Number,
       required: true
+    },
+    deleteComment: {
+      type: Function,
+      required: true
     }
   },
   components: {
@@ -109,7 +113,7 @@ export default {
         {{ this.comment
         }}<button
           v-if="this.userid == this.currentUserID && !this.caption"
-          @click.stop="console.log('delete comment')"
+          @click.stop="this.deleteComment(this.commentid)"
           class="post-popup-comment-card-delete-button"
         >
           <TrashCanIcon />

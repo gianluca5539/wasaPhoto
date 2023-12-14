@@ -42,13 +42,14 @@ export default {
     getPictureURL,
     routeUpdated() {
       document.body.classList.remove('no-scroll');
+      this.openedPost = null;
       if (this.$route.params.id) {
         // check if we're still in the profile route
         this.getProfile();
       }
     },
     async getProfile() {
-      this.profileuserid = this.$route.params.id;
+      this.profileuserid = parseInt(this.$route.params.id);
       this.followPopup = null; // close popup (needed when changing profile from follow list)
       const token = localStorage.getItem('token');
       const res = await this.$axios
@@ -79,7 +80,6 @@ export default {
 
       const response = res?.data;
       if (response) {
-        console.log(response);
         this.profileusername = response.username;
         this.profilefeeling = response.feeling;
         this.profilebio = response.bio;

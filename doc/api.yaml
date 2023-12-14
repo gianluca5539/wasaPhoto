@@ -919,6 +919,10 @@ components:
           description: ID of the author
           type: number
           example: 12
+        postid:
+          description: ID of the post
+          type: number
+          example: 12
         username:
           description: username of the author
           type: string
@@ -933,6 +937,10 @@ components:
           description: profile picture id of the author
           type: integer
           example: 12
+        createdat:
+          description: the timestamp of the comment
+          type: integer
+          example: 234328493208
         text:
           description: text of the comment
           type: string

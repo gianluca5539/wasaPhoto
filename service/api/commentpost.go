@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -54,7 +55,9 @@ func (rt *_router) commentPost(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
-	err = rt.db.CreateComment(postID, userID, text)
+	currentTime := time.Now()
+	time := strconv.FormatInt(currentTime.UnixNano()/int64(time.Millisecond), 10)
+	timeInt, err := strconv.Atoi(time)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -62,7 +65,36 @@ func (rt *_router) commentPost(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 
+	commentID, err := rt.db.CreateComment(postID, userID, text, timeInt)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+
+	// add user and create response
+	u, _, err := rt.db.GetUserByUserID(userID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+
+	comment := types.Comment{
+		ID:        commentID,
+		UserID:    u.UserID,
+		PostID:    postID,
+		Username:  u.Username,
+		Picture:   u.Picture,
+		Feeling:   u.Feeling,
+		Text:      text,
+		CreatedAt: timeInt,
+	}
+
 	// return the user
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(comment)
 }
