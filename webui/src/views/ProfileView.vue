@@ -472,7 +472,7 @@ export default {
       }
       const token = localStorage.getItem('token');
       this.$axios
-        .post(
+        .put(
           `/posts`,
           {
             caption: caption,
