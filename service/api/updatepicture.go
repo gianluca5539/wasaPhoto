@@ -12,8 +12,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gianluca5539/WASA/service/types"
 	"github.com/julienschmidt/httprouter"
+
+	"github.com/gianluca5539/WASA/service/types"
 )
 
 type PictureRequest struct {

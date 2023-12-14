@@ -2,9 +2,9 @@ package database
 
 import (
 	"database/sql"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
-
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) GetPostsByUserID(id int) ([]types.UserPost, error) {

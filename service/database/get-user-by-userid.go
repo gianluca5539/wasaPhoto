@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 

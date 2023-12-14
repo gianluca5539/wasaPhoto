@@ -1,17 +1,19 @@
 package api
 
 import (
-	"encoding/json"
-	"net/http"
-	"fmt"
-	"strconv"
-	"github.com/julienschmidt/httprouter"
-	"time"
-	"os"
-	"io/ioutil"
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"image/png"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+
+	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 

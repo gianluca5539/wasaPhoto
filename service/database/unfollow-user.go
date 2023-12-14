@@ -1,6 +1,5 @@
 package database
 
-
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) UnFollowUser(id int, followedBy int) ( error) {
 	// create a new sql statement

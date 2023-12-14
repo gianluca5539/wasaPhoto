@@ -33,10 +33,9 @@ package database
 import (
 	"database/sql"
 	"errors"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
-
-
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {

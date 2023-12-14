@@ -2,9 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"net/http"
-	"github.com/julienschmidt/httprouter"
 	"fmt"
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 
