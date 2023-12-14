@@ -11,10 +11,8 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-
-
 func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID , err := strconv.Atoi(ps.ByName("id"))
+	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid user id"}
@@ -125,7 +123,6 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		following = append(following, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
 	}
 
-
 	// get the user's posts
 	posts, err := rt.db.GetPostsByUserID(requestedUserID)
 	if err != nil {
@@ -135,8 +132,6 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-
-	
 
 	// create the response
 	res := types.UserProfile{

@@ -8,5 +8,5 @@ import (
 
 func serveImage(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	imageName := ps.ByName("name")
-	http.ServeFile(w, r, "data/pictures/" + imageName + ".png")
+	http.ServeFile(w, r, "data/pictures/"+imageName+".png")
 }

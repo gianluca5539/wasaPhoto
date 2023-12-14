@@ -11,10 +11,8 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-
-
 func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID , err := strconv.Atoi(ps.ByName("id"))
+	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid user id"}
@@ -62,7 +60,7 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
+
 	// return the user
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)

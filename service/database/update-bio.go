@@ -1,7 +1,6 @@
 package database
 
-
-func (db *appdbimpl) UpdateBio(id int, bio string) (error) {
+func (db *appdbimpl) UpdateBio(id int, bio string) error {
 
 	// create a new sql statement
 	stmt, err := db.c.Prepare("UPDATE user SET bio = ? WHERE id = ?")

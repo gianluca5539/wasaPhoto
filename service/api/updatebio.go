@@ -15,7 +15,6 @@ type BioRequest struct {
 	NewBio string `json:"newbio"`
 }
 
-
 func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -36,7 +35,7 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 	// get newBio from bioReq
-	newBio := bioReq.NewBio	
+	newBio := bioReq.NewBio
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
@@ -64,7 +63,6 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-
 	// update the user in the database
 	dberr := rt.db.UpdateBio(userID, newBio)
 	if dberr != nil {
@@ -73,7 +71,7 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
+
 	// return 204 no content
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)

@@ -7,23 +7,23 @@ import (
 )
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) GetUserByUserID(id int) (types.User,bool, error) {
+func (db *appdbimpl) GetUserByUserID(id int) (types.User, bool, error) {
 	var u types.User
-	
+
 	var nullableFeeling sql.NullInt64
 	var nullableBio sql.NullString
 	var nullablePicture sql.NullInt64
 
 	query_str := "SELECT * FROM user WHERE id = ?"
 	err := db.c.QueryRow(query_str, id).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
-	
+
 	if err == sql.ErrNoRows {
-		return u,false, nil // not found but no error
+		return u, false, nil // not found but no error
 	}
 	if err != nil {
-		return u,false, err // error
+		return u, false, err // error
 	}
-	
+
 	if nullableFeeling.Valid {
 		u.Feeling = int(nullableFeeling.Int64)
 	}
@@ -33,6 +33,6 @@ func (db *appdbimpl) GetUserByUserID(id int) (types.User,bool, error) {
 	if nullablePicture.Valid {
 		u.Picture = int(nullablePicture.Int64)
 	}
-	
-	return u,true, nil // found and no error
+
+	return u, true, nil // found and no error
 }

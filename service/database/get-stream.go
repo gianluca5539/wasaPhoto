@@ -9,7 +9,7 @@ import (
 )
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) GetStream(ids []int) ([]types.Post,error) {
+func (db *appdbimpl) GetStream(ids []int) ([]types.Post, error) {
 	// get the "stream" by querying the database for the post table in which "userid" is in the ids array.
 	// inner join the user table to get the user's name and profile picture
 	// order by the post's timestamp
@@ -24,7 +24,7 @@ func (db *appdbimpl) GetStream(ids []int) ([]types.Post,error) {
 	// Join the placeholders with commas and insert them into the query string
 	placeholderStr := strings.Join(placeholders, ",")
 	query := fmt.Sprintf("SELECT post.id, post.userid, user.username, user.feeling, user.picture, post.picture, post.caption, post.createdAt, post.likeCount FROM post INNER JOIN user ON post.userid = user.id WHERE post.userid IN (%s) ORDER BY post.createdAt DESC", placeholderStr)
-	
+
 	rows, err := db.c.Query(query, args...)
 	if err != nil {
 		return nil, err

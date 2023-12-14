@@ -5,7 +5,7 @@ import (
 )
 
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) FollowUser(id int, followedBy int) ( error) {
+func (db *appdbimpl) FollowUser(id int, followedBy int) error {
 
 	follow_statement := "insert into follow (follow, followedBy) values (?, ?)"
 	check_follow_statement := "SELECT EXISTS(SELECT 1 FROM follow WHERE follow = ? AND followedBy = ?)"

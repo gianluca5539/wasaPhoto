@@ -18,10 +18,9 @@ import (
 )
 
 type postRequest struct {
-	Image string `json:"image"`
+	Image   string `json:"image"`
 	Caption string `json:"caption"`
 }
-
 
 func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var postReq postRequest
@@ -109,7 +108,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	// insert the post into the database (userid,imageid,caption,timestamp)
-	postid,err := rt.db.CreateNewPost(userID, timeInt, caption, timeInt)
+	postid, err := rt.db.CreateNewPost(userID, timeInt, caption, timeInt)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -127,22 +126,19 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	res := types.Post{
-		PostID: postid,
-		UserID: u.UserID,
-		Username: u.Username,
-		Feeling: u.Feeling,
+		PostID:      postid,
+		UserID:      u.UserID,
+		Username:    u.Username,
+		Feeling:     u.Feeling,
 		UserPicture: u.Picture,
-		Picture: timeInt,
-		Caption: caption,
-		CreatedAt: timeInt,
-		LikeCount: 0,
+		Picture:     timeInt,
+		Caption:     caption,
+		CreatedAt:   timeInt,
+		LikeCount:   0,
 	}
-
-
-	
 
 	w.WriteHeader(http.StatusCreated)
 	// return the user object to the client
 	json.NewEncoder(w).Encode(res)
 
-}; 
+}

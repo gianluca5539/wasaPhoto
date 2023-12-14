@@ -15,7 +15,6 @@ type FeelingRequest struct {
 	NewFeeling int `json:"newfeeling"`
 }
 
-
 func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -36,7 +35,7 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 	// get newFeeling from feelingReq
-	newFeeling := feelingReq.NewFeeling	
+	newFeeling := feelingReq.NewFeeling
 
 	// check that newFeeling is valid (between 0 and 4)
 	if newFeeling < 0 || newFeeling > 4 {
@@ -80,7 +79,7 @@ func (rt *_router) updateFeeling(w http.ResponseWriter, r *http.Request, ps http
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
+
 	// return 204 no content
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)

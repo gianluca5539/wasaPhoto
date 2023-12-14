@@ -11,8 +11,6 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-
-
 func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
@@ -42,7 +40,6 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-
 	// get stream from db
 	var stream []types.Post
 	stream, err = rt.db.GetStream(followingIds)
@@ -58,7 +55,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, ps httprout
 	res := struct {
 		Posts []types.Post `json:"posts"`
 	}{Posts: stream}
-	
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(res)
 

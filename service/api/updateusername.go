@@ -15,7 +15,6 @@ type UsernameRequest struct {
 	NewUsername string `json:"newusername"`
 }
 
-
 func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -24,7 +23,6 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
 
 	// get the new username from the request body
 	var usernameReq UsernameRequest
@@ -37,7 +35,7 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 	// get newUsername from usernameReq
-	newUsername := usernameReq.NewUsername	
+	newUsername := usernameReq.NewUsername
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
@@ -59,7 +57,7 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 	}
 
 	// check if there is another user with the same username
-	_,found, err := rt.db.GetUserByUsername(newUsername)
+	_, found, err := rt.db.GetUserByUsername(newUsername)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -97,7 +95,6 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	
 	// return 204 no content
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)

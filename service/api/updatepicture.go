@@ -21,7 +21,6 @@ type PictureRequest struct {
 	NewPicture string `json:"newpicture"`
 }
 
-
 func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
@@ -30,7 +29,6 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
 
 	// get the new picture from the request body
 	var pictureReq PictureRequest
@@ -43,7 +41,7 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 	// get newPicture from pictureReq
-	newPicture := pictureReq.NewPicture	
+	newPicture := pictureReq.NewPicture
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
@@ -132,7 +130,6 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-	
 	// return 201 created
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
