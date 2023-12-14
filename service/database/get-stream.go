@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
-
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) GetStream(ids []int) ([]types.Post,error) {

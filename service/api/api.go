@@ -45,8 +45,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-
-
 // Config is used to provide dependencies and configuration to the New function.
 type Config struct {
 	// Logger where log entries are sent

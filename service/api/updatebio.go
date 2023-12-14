@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
+	"github.com/julienschmidt/httprouter"
 )
 
 type BioRequest struct {
@@ -16,6 +17,12 @@ type BioRequest struct {
 
 func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid user id"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
 
 	// get the new bio from the request body
 	var bioReq BioRequest

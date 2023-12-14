@@ -1,18 +1,19 @@
 package api
 
 import (
-	"encoding/base64"
-	"image/png"
 	"bytes"
-	"os"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"time"
+	"image/png"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
-	"github.com/julienschmidt/httprouter"
+	"time"
+
 	"github.com/gianluca5539/WASA/service/types"
+	"github.com/julienschmidt/httprouter"
 )
 
 type PictureRequest struct {
@@ -22,6 +23,13 @@ type PictureRequest struct {
 
 func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid user id"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+	
 
 	// get the new picture from the request body
 	var pictureReq PictureRequest

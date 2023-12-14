@@ -5,14 +5,21 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
+	"github.com/julienschmidt/httprouter"
 )
 
 
 
 func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID , err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid user id"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
