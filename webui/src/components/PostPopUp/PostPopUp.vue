@@ -14,7 +14,11 @@ export default {
     };
   },
   props: {
-    id: {
+    postid: {
+      type: Number,
+      required: true
+    },
+    userid: {
       type: Number,
       required: true
     },
@@ -71,7 +75,7 @@ export default {
     }
   },
   created() {
-    console.log('TODO download comments for post with id: ' + this.id);
+    console.log('TODO download comments for post with id: ' + this.postid);
   },
   beforeUnmount() {
     document.body.classList.remove('no-scroll');
@@ -154,7 +158,7 @@ export default {
           >
             <div class="post-popup-view-section-interactions">
               <PostPopUpCommentCard
-                :userid="1"
+                :userid="this.userid"
                 :authorcomment="true"
                 :caption="true"
                 :name="this.name"
@@ -164,19 +168,19 @@ export default {
                 :picture="this.userPicture"
               />
               <PostPopUpCommentCard
-                v-for="like in [
+                v-for="cmt in [
                   1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                   1, 1, 1, 1, 1, 1, 1, 1
                 ]"
                 :userid="2"
-                :authorcomment="false"
-                :key="like"
+                :authorcomment="this.userid == 2"
+                :key="cmt"
                 :caption="false"
                 name="John Doe"
                 :feeling="1"
                 :date="new Date()"
                 comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
-                :picture="null"
+                :picture="0"
               />
             </div>
             <div class="post-popup-comment-input-section">

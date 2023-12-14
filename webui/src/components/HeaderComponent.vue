@@ -21,13 +21,20 @@ export default {
       required: true
     }
   },
+  methods: {
+    goToHomePage() {
+      this.$router.push('/');
+    }
+  },
   components: { UserHeaderCard }
 };
 </script>
 
 <template>
   <div class="homepage-header-container">
-    <div class="homepage-header-title">WASAPhoto</div>
+    <button @click="goToHomePage()" class="homepage-header-title">
+      WASAPhoto
+    </button>
     <UserHeaderCard
       :userid="userid"
       :username="username"
@@ -54,6 +61,15 @@ export default {
     font-size: 45px;
     font-weight: bold;
     color: white;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      color: orange;
+      transform: scale(1.01);
+    }
   }
 }
 </style>

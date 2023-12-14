@@ -576,6 +576,9 @@ export default {
                 class="edit-icon"
                 :size="24"
               />
+              <div class="posts-count">
+                {{ this.profileposts.length }} Posts
+              </div>
               <button
                 v-if="
                   this.profileuserid != this.userid && !this.profilenotfound
@@ -748,7 +751,8 @@ export default {
   </div>
   <PostPopUp
     v-if="this.openedPost"
-    :id="this.openedPost.postid"
+    :postid="this.openedPost.postid"
+    :userid="this.profileuserid"
     :name="this.profileusername"
     :feeling="this.profilefeeling"
     :picture="this.openedPost.picture"
@@ -800,7 +804,7 @@ body.no-scroll {
         align-self: flex-start;
         align-items: center;
         justify-content: flex-start;
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 1000px) {
           flex-direction: column;
           align-self: center;
         }
@@ -832,6 +836,7 @@ body.no-scroll {
           }
           .edit-icon {
             transition: all 0.3s ease-in-out;
+            margin-right: 10px;
             &:hover {
               transform: scale(1.05);
               color: orange;
@@ -851,6 +856,18 @@ body.no-scroll {
               &:hover {
                 transform: scale(1.1);
               }
+            }
+            .posts-count {
+              border: 2px solid orange;
+              border-radius: 8px;
+              background-color: transparent;
+              color: rgb(78, 78, 78);
+              font-size: 15px;
+              font-weight: bold;
+              margin-right: 8px;
+              padding: 1px 5px;
+              transition: all 0.2s ease-in-out;
+              color: orange;
             }
             .action-button {
               border: 2px solid rgb(78, 78, 78);

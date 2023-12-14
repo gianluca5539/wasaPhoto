@@ -23,11 +23,10 @@ export default {
         })
         .then((response) => {
           let posts = response.data.posts;
-          console.log(posts);
           this.posts = posts;
         })
         .catch((error) => {
-          console.log(error);
+          alert("Couldn't get stream. Please try again later.");
         });
     }
   },
@@ -60,7 +59,8 @@ export default {
       <div class="homepage-feed-spacer"></div>
       <HomePostComponent
         v-for="post in posts"
-        :id="post.postid"
+        :postid="post.postid"
+        :userid="post.userid"
         :picture="post.picture"
         :name="post.username"
         :feeling="post.feeling"

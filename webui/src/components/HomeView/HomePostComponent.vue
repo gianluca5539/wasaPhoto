@@ -11,7 +11,11 @@ export default {
     };
   },
   props: {
-    id: {
+    postid: {
+      type: Number,
+      required: true
+    },
+    userid: {
       type: Number,
       required: true
     },
@@ -71,7 +75,8 @@ export default {
 <template>
   <PostPopUp
     v-if="this.postOpen"
-    :id="this.id"
+    :postid="this.postid"
+    :userid="this.userid"
     :name="this.name"
     :feeling="this.feeling"
     :picture="this.picture"

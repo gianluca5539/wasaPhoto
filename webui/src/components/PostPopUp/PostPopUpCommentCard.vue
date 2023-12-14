@@ -36,13 +36,17 @@ export default {
     }
   },
   methods: {
-    getPictureURL
+    getPictureURL,
+    openUserProfile() {
+      this.$router.push('/profile/' + this.userid);
+    }
   }
 };
 </script>
 
 <template>
   <button
+    @click="this.openUserProfile()"
     :class="{
       'post-popup-comment-card': true,
       authorcomment: authorcomment,
