@@ -8,19 +8,40 @@ export default {
       username: null,
       feeling: null,
       bio: null,
-      picture: null
+      picture: null,
+
+      posts: [],
+
+      token: null
     };
+  },
+  methods: {
+    getStream() {
+      this.$axios
+        .get('/stream', {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
   components: {
     HeaderComponent: HeaderComponent,
     HomePostComponent
   },
-  async created() {
+  created() {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.bio = localStorage.getItem('bio');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.picture = localStorage.getItem('picture');
+    this.token = localStorage.getItem('token');
+
+    this.getStream();
   }
 };
 </script>
