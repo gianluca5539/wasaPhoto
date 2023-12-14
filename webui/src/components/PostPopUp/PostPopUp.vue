@@ -94,6 +94,14 @@ export default {
             this.comments.push(comment);
             // clear comment input
             document.getElementById('comment-input').value = '';
+            // scroll to bottom of comments
+            setTimeout(() => {
+              document.getElementById('end-of-comments').scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest'
+              });
+            }, 100);
           })
           .catch((err) => {
             alert("Couldn't send comment. Please try again");
@@ -182,7 +190,7 @@ export default {
               }"
             >
               <!-- todo change this to comment count -->
-              {{ '14 ' }}Comments
+              {{ (this.comments?.length ?? 'No') + ' ' }}Comments
             </button>
             <button
               @click="this.selectedView = 'likes'"
@@ -245,6 +253,7 @@ export default {
                 :picture="comment.picture"
                 :deleteComment="this.deleteComment"
               />
+              <div id="end-of-comments" />
             </div>
             <div class="post-popup-comment-input-section">
               <textarea
@@ -376,8 +385,8 @@ export default {
           align-items: center;
           width: 100%;
           padding: 0px 20px;
-          min-height: 100%;
           overflow-y: scroll;
+          height: 100%;
           .post-popup-comment-input-section {
             display: flex;
             flex-direction: row;
