@@ -42,7 +42,10 @@ export default {
     getPictureURL,
     routeUpdated() {
       document.body.classList.remove('no-scroll');
-      this.getProfile();
+      if (this.$route.params.id) {
+        // check if we're still in the profile route
+        this.getProfile();
+      }
     },
     async getProfile() {
       this.profileuserid = this.$route.params.id;
@@ -528,7 +531,7 @@ export default {
     this.username = localStorage.getItem('username');
     this.feeling = parseInt(localStorage.getItem('feeling'));
     this.bio = localStorage.getItem('bio');
-    this.picture = localStorage.getItem('picture');
+    this.picture = parseInt(localStorage.getItem('picture'));
 
     await this.getProfile();
   },
@@ -577,7 +580,7 @@ export default {
                 :size="24"
               />
               <div class="posts-count">
-                {{ this.profileposts.length }} Posts
+                {{ this.profileposts?.length || 0 }} Posts
               </div>
               <button
                 v-if="
@@ -645,6 +648,7 @@ export default {
           <div class="profile-page-newpost-card-title">New Post</div>
         </button>
         <button
+          v-if="this.profileposts"
           v-for="post in this.profileposts"
           @click="openPost(post)"
           :key="post.postid"

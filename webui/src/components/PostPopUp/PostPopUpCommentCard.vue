@@ -6,6 +6,10 @@ export default {
       type: Number,
       required: true
     },
+    currentUserID: {
+      type: Number,
+      required: true
+    },
     name: {
       type: String,
       required: true

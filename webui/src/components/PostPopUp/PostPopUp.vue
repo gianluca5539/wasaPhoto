@@ -10,7 +10,9 @@ export default {
   data() {
     return {
       selectedView: 'comments',
-      showHeart: null
+      showHeart: null,
+      currentUserID: null,
+      token: null
     };
   },
   props: {
@@ -86,6 +88,10 @@ export default {
     HeartIcon,
     BrokenHeartIcon,
     SendIcon
+  },
+  created() {
+    this.currentUserID = parseInt(localStorage.getItem('userid'));
+    this.token = localStorage.getItem('token');
   }
 };
 </script>
@@ -149,7 +155,7 @@ export default {
               name="Frank123"
               :feeling="1"
               bio="I am a happy person because I am happy and have a happy life."
-              :picture="null"
+              :picture="0"
             />
           </div>
           <div
@@ -159,6 +165,7 @@ export default {
             <div class="post-popup-view-section-interactions">
               <PostPopUpCommentCard
                 :userid="this.userid"
+                :currentUserID="this.currentUserID"
                 :authorcomment="true"
                 :caption="true"
                 :name="this.name"
@@ -173,13 +180,14 @@ export default {
                   1, 1, 1, 1, 1, 1, 1, 1
                 ]"
                 :userid="2"
+                :currentUserID="this.currentUserID"
                 :authorcomment="this.userid == 2"
                 :key="cmt"
                 :caption="false"
                 name="John Doe"
                 :feeling="1"
                 :date="new Date()"
-                comment="I am an AI programming assistant. I can help you with your coding needs. Just ask me anything related to software development."
+                comment="I am an AI programming assistant."
                 :picture="0"
               />
             </div>
