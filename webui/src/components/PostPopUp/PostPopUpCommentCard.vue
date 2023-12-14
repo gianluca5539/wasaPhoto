@@ -1,7 +1,12 @@
 <script>
 import { getPictureURL } from '../../functions/getPictureURL';
+import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue';
 export default {
   props: {
+    commentid: {
+      type: Number,
+      required: true
+    },
     userid: {
       type: Number,
       required: true
@@ -38,6 +43,9 @@ export default {
       type: Number,
       required: true
     }
+  },
+  components: {
+    TrashCanIcon
   },
   methods: {
     getPictureURL,
@@ -85,7 +93,9 @@ export default {
           authorcomment: authorcomment
         }"
       >
-        {{ this.name }}
+        <div>
+          {{ this.userid == this.currentUserID ? 'You' : this.name }}
+        </div>
         <div class="post-popup-comment-card-date">
           {{ this.getDate() }}
         </div>
@@ -96,7 +106,14 @@ export default {
           authorcomment: authorcomment
         }"
       >
-        {{ this.comment }}
+        {{ this.comment
+        }}<button
+          v-if="this.userid == this.currentUserID && !this.caption"
+          @click.stop="console.log('delete comment')"
+          class="post-popup-comment-card-delete-button"
+        >
+          <TrashCanIcon />
+        </button>
       </div>
     </div>
   </button>
@@ -168,6 +185,7 @@ export default {
         text-align: left;
         color: orange;
       }
+
       .post-popup-comment-card-date {
         font-size: 12px;
         font-weight: 100;
@@ -191,6 +209,17 @@ export default {
       min-height: fit-content;
       &.authorcomment {
         text-align: left;
+      }
+      .post-popup-comment-card-delete-button {
+        color: gray;
+        border: none;
+        width: 30px;
+        outline: none;
+        background-color: transparent;
+        transition: all 0.2s ease-in-out;
+        &:hover {
+          color: red;
+        }
       }
     }
   }

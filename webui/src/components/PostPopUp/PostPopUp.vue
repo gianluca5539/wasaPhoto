@@ -164,6 +164,7 @@ export default {
           >
             <div class="post-popup-view-section-interactions">
               <PostPopUpCommentCard
+                :commentid="-1"
                 :userid="this.userid"
                 :currentUserID="this.currentUserID"
                 :authorcomment="true"
@@ -179,6 +180,7 @@ export default {
                   1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                   1, 1, 1, 1, 1, 1, 1, 1
                 ]"
+                :commentid="0"
                 :userid="2"
                 :currentUserID="this.currentUserID"
                 :authorcomment="this.userid == 2"
