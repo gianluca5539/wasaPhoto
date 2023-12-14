@@ -40,8 +40,6 @@ func (db *appdbimpl) FollowUser(id int, followedBy int) ( error) {
 		return err
 	}
 
-
-
 	return nil
 
 }
