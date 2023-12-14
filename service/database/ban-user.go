@@ -4,7 +4,6 @@ import (
 	"errors"
 )
 
-
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) BanUser(id int, bannedBy int) ( error) {
 	ban_statement := "insert into bannedUsers (banned, bannedBy) values (?, ?)"
@@ -26,7 +25,7 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) ( error) {
 	}
 
 	if exists {
-		return errors.New("User is already banned")
+		return errors.New("user is already banned")
 	}
 
 	// Remove follow

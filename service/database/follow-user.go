@@ -25,7 +25,7 @@ func (db *appdbimpl) FollowUser(id int, followedBy int) ( error) {
 	}
 
 	if exists {
-		return errors.New("User is already followed")
+		return errors.New("user is already followed")
 	}
 
 	// follow user
