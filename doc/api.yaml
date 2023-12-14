@@ -531,7 +531,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /posts:
-    post:
+    put:
       tags: ['Posts']
       summary: Uploads a new picture
       description: |-
@@ -607,53 +607,6 @@ paths:
           description: Picture deleted successfully
         '403':
           description: Operation not permitted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /posts/{postid}/comments:
-    get:
-      tags: ['Posts']
-      summary: Gets the comments of a given picture
-      description: |-
-        If the picture does not exist, it will return an error (404).
-        If the picture exists and the requesting user is not banned, it will return the user object.
-        If the requesting user is banned, it will also return 404.
-      operationId: getComments
-      parameters:
-        - name: postid
-          in: path
-          description: ID of the picture to get the comments of
-          required: true
-          schema:
-            description: postid to get the comments of
-            type: number
-            example: 12
-      responses:
-        '200':
-          description: Comments found and returned as an array
-          content:
-            application/json:
-              schema:
-                type: object
-                description: the comments returned
-                properties:
-                  posts:
-                    description: The comment objects
-                    type: array
-                    minItems: 0
-                    maxItems: 9999
-                    items:
-                      $ref: '#/components/schemas/Comment'
-        '404':
-          description: Picture not found
           content:
             application/json:
               schema:
@@ -781,14 +734,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /comments:
-    post:
+  /comments/{postid}:
+    get:
+      tags: ['Posts']
+      summary: Gets the comments of a given picture
+      description: |-
+        If the picture does not exist, it will return an error (404).
+        If the picture exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getComments
+      parameters:
+        - name: postid
+          in: path
+          description: ID of the picture to get the comments of
+          required: true
+          schema:
+            description: postid to get the comments of
+            type: number
+            example: 12
+      responses:
+        '200':
+          description: Comments found and returned as an array
+          content:
+            application/json:
+              schema:
+                type: object
+                description: the comments returned
+                properties:
+                  posts:
+                    description: The comment objects
+                    type: array
+                    minItems: 0
+                    maxItems: 9999
+                    items:
+                      $ref: '#/components/schemas/Comment'
+        '404':
+          description: Picture not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
       tags: ['Posts']
       summary: Comments a picture
       description: |-
         If the token is incorrect, it will return an error stating that the action is not permitted.
         If everything goes fine it will return code 200.
       operationId: commentPhoto
+      parameters:
+        - name: postid
+          in: path
+          description: ID of the picture to get the comments of
+          required: true
+          schema:
+            description: postid to get the comments of
+            type: number
+            example: 12
       requestBody:
         description: comment's post id and text
         content:
@@ -804,10 +812,6 @@ paths:
                   minLength: 0
                   maxLength: 9999999
                   example: 'Good.'
-                postid:
-                  description: comment postid
-                  type: number
-                  example: 12
         required: true
       security:
         - bearerAuth: []
