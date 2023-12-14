@@ -43,6 +43,12 @@ export default {
     getPictureURL,
     openUserProfile() {
       this.$router.push('/profile/' + this.userid);
+    },
+    getDate() {
+      return `${this.date.getDate()}/${this.date.getMonth()}/${this.date.getFullYear()}
+          ${this.date.getHours()}:${
+        this.date.getMinutes() < 10 ? '0' : ''
+      }${this.date.getMinutes()}`;
     }
   }
 };
@@ -81,8 +87,7 @@ export default {
       >
         {{ this.name }}
         <div class="post-popup-comment-card-date">
-          {{ date.getDate() }}/{{ date.getMonth() }}/{{ date.getFullYear() }}
-          {{ date.getHours() }}:{{ date.getMinutes() }}
+          {{ this.getDate() }}
         </div>
       </div>
       <div
