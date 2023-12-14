@@ -30,7 +30,7 @@ export default {
       type: Number,
       required: true
     },
-    profilePicture: {
+    userPicture: {
       type: Number,
       required: true
     },
@@ -161,7 +161,7 @@ export default {
                 :date="new Date(this.date)"
                 :feeling="1"
                 :comment="this.caption"
-                :picture="this.profilePicture"
+                :picture="this.userPicture"
               />
               <PostPopUpCommentCard
                 v-for="like in [

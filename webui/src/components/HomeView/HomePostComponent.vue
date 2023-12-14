@@ -1,6 +1,7 @@
 <script>
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import PostPopUp from '../PostPopUp/PostPopUp.vue';
+import { getPictureURL } from '../../functions/getPictureURL';
 
 export default {
   name: 'HomePostComponent',
@@ -23,11 +24,11 @@ export default {
       required: true
     },
     picture: {
-      type: String,
+      type: Number,
       required: true
     },
-    profilePicture: {
-      type: String,
+    userPicture: {
+      type: Number,
       required: true
     },
     likeCount: {
@@ -35,7 +36,7 @@ export default {
       required: true
     },
     date: {
-      type: Date,
+      type: Number,
       required: true
     },
     caption: {
@@ -44,6 +45,7 @@ export default {
     }
   },
   methods: {
+    getPictureURL,
     openPost() {
       document.body.classList.add('no-scroll'); // disable scrolling on page
       this.postOpen = true;
@@ -73,7 +75,7 @@ export default {
     :name="this.name"
     :feeling="this.feeling"
     :picture="this.picture"
-    :profilePicture="this.profilePicture"
+    :userPicture="this.userPicture"
     :likeCount="this.likeCount"
     :date="this.date"
     :caption="this.caption"
@@ -82,7 +84,10 @@ export default {
   />
   <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">
-      <img :src="picture" class="home-post-card-image" />
+      <img
+        :src="this.getPictureURL(this.picture)"
+        class="home-post-card-image"
+      />
       <button
         @click.stop="this.togglePostLike()"
         class="home-post-card-like-button"
@@ -93,7 +98,7 @@ export default {
     </div>
     <div class="home-post-card-details">
       <div class="home-post-card-user-picture">
-        <img :src="profilePicture" alt="" />
+        <img :src="this.getPictureURL(this.userPicture)" alt="" />
         <div class="home-post-card-user-picture-feeling">
           <span v-if="feeling === 0">😐</span>
           <span v-if="feeling === 1">😀</span>

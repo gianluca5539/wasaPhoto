@@ -15,7 +15,7 @@ export default {
       profileuserid: null,
       profileusername: null,
       profilebio: null,
-      profilepicture: null,
+      userpicture: null,
       profilefeeling: null,
       profilefollowers: null,
       profilefollowing: null,
@@ -60,7 +60,7 @@ export default {
               this.profileusername = 'User not found';
               this.profilebio =
                 'Sorry, we looked everywhere but we could not find this user.';
-              this.profilepicture = '';
+              this.userpicture = '';
               this.profilefeeling = -1;
               this.profilenotfound = true;
               break;
@@ -68,7 +68,7 @@ export default {
               this.profileusername = 'Server error';
               this.profilebio =
                 'Sorry, we are having some problems with our servers. Please try again later.';
-              this.profilepicture = '';
+              this.userpicture = '';
               this.profilefeeling = -1;
               break;
           }
@@ -80,7 +80,7 @@ export default {
         this.profileusername = response.username;
         this.profilefeeling = response.feeling;
         this.profilebio = response.bio;
-        this.profilepicture = response.picture;
+        this.userpicture = response.picture;
         this.profilefollowers = response.followers;
         this.profilefollowing = response.following;
         this.banned = response.banned;
@@ -141,13 +141,13 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    async updateProfilePicture(newprofilepicture) {
+    async updateProfilePicture(newuserpicture) {
       const token = localStorage.getItem('token');
       const res = await this.$axios
         .put(
           `/users/${this.userid}/picture`,
           {
-            newpicture: newprofilepicture
+            newpicture: newuserpicture
           },
           {
             headers: {
@@ -170,7 +170,7 @@ export default {
         const pictureid = res.data.pictureid;
         localStorage.setItem('picture', pictureid);
         this.picture = pictureid;
-        this.profilepicture = pictureid;
+        this.userpicture = pictureid;
       }
     },
     openEditUsername() {
@@ -551,7 +551,7 @@ export default {
         <div class="profile-info-data-container">
           <img
             @click="openFileDialog()"
-            :src="getPictureURL(profilepicture)"
+            :src="getPictureURL(userpicture)"
             alt=""
           />
           <input
@@ -752,7 +752,7 @@ export default {
     :name="this.profileusername"
     :feeling="this.profilefeeling"
     :picture="this.openedPost.picture"
-    :profilePicture="this.profilepicture"
+    :userPicture="this.userpicture"
     :likeCount="this.openedPost.likecount"
     :date="this.openedPost.createdat"
     :caption="this.openedPost.caption"

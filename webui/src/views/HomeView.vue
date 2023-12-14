@@ -22,7 +22,9 @@ export default {
           headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
         })
         .then((response) => {
-          console.log(response);
+          let posts = response.data.posts;
+          console.log(posts);
+          this.posts = posts;
         })
         .catch((error) => {
           console.log(error);
@@ -38,7 +40,7 @@ export default {
     this.username = localStorage.getItem('username');
     this.bio = localStorage.getItem('bio');
     this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.picture = localStorage.getItem('picture');
+    this.picture = parseInt(localStorage.getItem('picture'));
     this.token = localStorage.getItem('token');
 
     this.getStream();
@@ -62,7 +64,7 @@ export default {
         :picture="post.picture"
         :name="post.username"
         :feeling="post.feeling"
-        :profilePicture="post.profilePicture"
+        :userPicture="post.userpicture"
         :date="post.createdat"
         :caption="post.caption"
         :likeCount="post.likecount"
@@ -87,6 +89,7 @@ body.no-scroll {
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 100vh;
     height: fit-content;
     align-items: center;
     .homepage-feed-spacer {

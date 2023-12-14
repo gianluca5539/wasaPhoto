@@ -17,7 +17,7 @@ export default {
       required: true
     },
     picture: {
-      type: String,
+      type: Number,
       required: true
     }
   },
