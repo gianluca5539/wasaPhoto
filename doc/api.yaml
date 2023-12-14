@@ -761,7 +761,7 @@ paths:
                 type: object
                 description: the comments returned
                 properties:
-                  posts:
+                  comments:
                     description: The comment objects
                     type: array
                     minItems: 0

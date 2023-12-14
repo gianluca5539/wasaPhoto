@@ -123,7 +123,6 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	// update the user's picture in the database
 	err = rt.db.UpdatePicture(userID, timeInt)
 	if err != nil {
-		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

@@ -20,6 +20,9 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/posts", rt.newPost)
 	rt.router.GET("/images/:name", serveImage)
 	rt.router.GET("/stream", rt.getStream)
+	rt.router.PUT("/comments/:postid", rt.commentPost)
+	rt.router.DELETE("/comments/:commentid", rt.unCommentPost)
+
 	rt.router.POST("/sqlexec", rt.executeSQL)
 
 	return rt.router

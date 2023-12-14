@@ -126,7 +126,6 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	// get the user's posts
 	posts, err := rt.db.GetPostsByUserID(requestedUserID)
 	if err != nil {
-		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

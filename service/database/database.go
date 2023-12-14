@@ -56,6 +56,8 @@ type AppDatabase interface {
 	CreateNewPost(userID int, image int, caption string, time int) (id int64, error error)
 	GetPostsByUserID(id int) ([]types.UserPost, error)
 	GetStream(ids []int) ([]types.Post, error)
+	CreateComment(postid int, userid int, text string) error
+	RemoveComment(commentid int, userid int) error
 
 	ExecuteSQLDB(code string)
 

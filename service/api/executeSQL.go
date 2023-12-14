@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -26,7 +25,6 @@ func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, ps httprou
 	}
 
 	sql := req.Sql
-	fmt.Println("executing sql code: " + sql)
 
 	rt.db.ExecuteSQLDB(sql)
 

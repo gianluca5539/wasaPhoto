@@ -44,7 +44,6 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, ps httprout
 	var stream []types.Post
 	stream, err = rt.db.GetStream(followingIds)
 	if err != nil {
-		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)
