@@ -8,19 +8,42 @@ export default {
       username: null,
       feeling: null,
       bio: null,
-      picture: null
+      picture: null,
+
+      posts: [],
+
+      token: null
     };
+  },
+  methods: {
+    getStream() {
+      this.$axios
+        .get('/stream', {
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+        })
+        .then((response) => {
+          let posts = response.data.posts;
+          console.log(posts);
+          this.posts = posts;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
   components: {
     HeaderComponent: HeaderComponent,
     HomePostComponent
   },
-  async created() {
+  created() {
     this.userid = parseInt(localStorage.getItem('userid'));
     this.username = localStorage.getItem('username');
     this.bio = localStorage.getItem('bio');
     this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.picture = localStorage.getItem('picture');
+    this.picture = parseInt(localStorage.getItem('picture'));
+    this.token = localStorage.getItem('token');
+
+    this.getStream();
   }
 };
 </script>
@@ -36,94 +59,15 @@ export default {
     <div class="homepage-feed-container">
       <div class="homepage-feed-spacer"></div>
       <HomePostComponent
-        :id="1"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="123"
-      />
-      <HomePostComponent
-        :id="2"
-        :picture="'https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1643250070/ac5eymqcqcggmafxzljc.jpg'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="125"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
-      />
-      <HomePostComponent
-        :id="3"
-        :picture="'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcRWKkXebtXjMBK3LeRFVhysBnAJB2tVGufs6qZU1Ugw57VoHFu0jPSoukoppxArWzDIJXVyzBNVPDRsU809F_U'"
-        :name="'Test123'"
-        :feeling="1"
-        :profilePicture="'https://wallpapers.com/images/hd/cool-profile-picture-87h46gcobjl5e4xu.jpg'"
-        :date="new Date()"
-        :caption="'Hello world, this is a test.'"
-        :likeCount="10000"
+        v-for="post in posts"
+        :id="post.postid"
+        :picture="post.picture"
+        :name="post.username"
+        :feeling="post.feeling"
+        :userPicture="post.userpicture"
+        :date="post.createdat"
+        :caption="post.caption"
+        :likeCount="post.likecount"
       />
     </div>
   </div>
@@ -145,6 +89,7 @@ body.no-scroll {
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 100vh;
     height: fit-content;
     align-items: center;
     .homepage-feed-spacer {

@@ -56,6 +56,7 @@ type AppDatabase interface {
 	UnBanUser(id int, bannedBy int) (error)
 	CreateNewPost(userID int, image int, caption string , time int) (id int64, error error)
 	GetPostsByUserID(id int) ([]types.UserPost, error)
+	GetStream(ids []int) ([]types.Post, error)
 
 	ExecuteSQLDB(code string) ()
 

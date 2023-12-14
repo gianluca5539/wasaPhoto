@@ -1,4 +1,5 @@
 <script>
+import { getPictureURL } from '../../functions/getPictureURL';
 export default {
   props: {
     userid: {
@@ -30,9 +31,12 @@ export default {
       required: true
     },
     picture: {
-      type: String,
+      type: Number,
       required: true
     }
+  },
+  methods: {
+    getPictureURL
   }
 };
 </script>
@@ -46,7 +50,7 @@ export default {
     }"
   >
     <div class="post-popup-comment-card-picure">
-      <img :src="this.picture" alt="Profile Picture" />
+      <img :src="this.getPictureURL(this.picture)" alt="Profile Picture" />
       <div class="post-popup-comment-card-feeling">
         <span v-if="this.feeling === 0">😐</span>
         <span v-if="this.feeling === 1">😀</span>

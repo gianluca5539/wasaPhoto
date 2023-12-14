@@ -8,6 +8,6 @@ type Post struct {
 	UserPicture int `json:"userpicture"`
 	Picture int `json:"picture"`
 	Caption string `json:"caption"`
-	CreatedAt int `json:"createdAt"`
+	CreatedAt int `json:"createdat"`
 	LikeCount int `json:"likecount"`
 }

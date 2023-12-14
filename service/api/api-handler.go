@@ -19,6 +19,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:id/ban", rt.unBanUser)
 	rt.router.POST("/posts", rt.newPost)
 	rt.router.GET("/images/:name", serveImage)
+	rt.router.GET("/stream", rt.getStream)
 	rt.router.POST("/sqlexec", rt.executeSQL)
 
 	return rt.router
