@@ -150,7 +150,7 @@ export default {
 </script>
 
 <template>
-  <button @click="this.closePost()" class="post-popup-outer-container">
+  <div @click="this.closePost()" class="post-popup-outer-container">
     <div @click.stop="() => {}" class="post-popup-container">
       <div class="post-popup-content">
         <div class="post-popup-image-container">
@@ -264,7 +264,7 @@ export default {
         </div>
       </div>
     </div>
-  </button>
+  </div>
 </template>
 
 <style lang="scss">
