@@ -14,7 +14,7 @@ func (db *appdbimpl) GetUserByUserID(id int) (types.User, bool, error) {
 	var nullableBio sql.NullString
 	var nullablePicture sql.NullInt64
 
-	query_str := "SELECT * FROM user WHERE id = ?"
+	query_str := "SELECT id, username, feeling, bio, picture FROM user WHERE id = ?"
 	err := db.c.QueryRow(query_str, id).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
 
 	if err == sql.ErrNoRows {

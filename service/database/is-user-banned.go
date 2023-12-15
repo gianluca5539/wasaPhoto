@@ -4,7 +4,7 @@ package database
 func (db *appdbimpl) IsUserBanned(id int, bannedBy int) (bool, error) {
 
 	// create a new sql statement
-	stmt, err := db.c.Prepare("SELECT * FROM bannedUsers WHERE banned = ? AND bannedBy = ?")
+	stmt, err := db.c.Prepare("SELECT id FROM bannedUsers WHERE banned = ? AND bannedBy = ?")
 	if err != nil {
 		return false, err
 	}
