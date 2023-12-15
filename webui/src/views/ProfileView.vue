@@ -78,7 +78,7 @@ export default {
               this.profileusername = 'User not found';
               this.profilebio =
                 'Sorry, we looked everywhere but we could not find this user.';
-              this.userpicture = '';
+              this.userpicture = 'defaultsnoopy';
               this.profilefeeling = -1;
               this.profilenotfound = true;
               break;
@@ -557,7 +557,7 @@ export default {
         <div class="profile-info-data-container">
           <img
             @click="openFileDialog()"
-            :src="getPictureURL(userpicture)"
+            :src="getPictureURL(this.userpicture)"
             alt=""
           />
           <input
