@@ -60,7 +60,8 @@ export default {
           .catch((error) => {
             switch (error.response.status) {
               case 404:
-                alert('User not found.');
+                this.toggleSearchOpen();
+                this.$router.push(`/profile/0`);
                 break;
               case 500:
                 alert('We are having some problems, try again later.');

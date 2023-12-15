@@ -6,47 +6,61 @@ import { getPictureURL } from '../functions/getPictureURL';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import CheckIcon from 'vue-material-design-icons/Check.vue';
 
+const initialData = () => ({
+  profileuserid: null,
+  profileusername: null,
+  profilebio: null,
+  userpicture: null,
+  profilefeeling: null,
+  profilefollowers: null,
+  profilefollowing: null,
+  profilenotfound: false,
+  banned: false,
+  profileposts: null,
+
+  userid: null,
+  username: null,
+  bio: null,
+  feeling: null,
+  picture: null,
+
+  followPopup: null,
+  editUsernamePopup: false,
+  editBioPopup: false,
+  newPostPopup: false,
+  openedPost: null,
+
+  newPostImage: null
+});
+
 export default {
   watch: {
     $route: 'routeUpdated'
   },
   data() {
-    return {
-      profileuserid: null,
-      profileusername: null,
-      profilebio: null,
-      userpicture: null,
-      profilefeeling: null,
-      profilefollowers: null,
-      profilefollowing: null,
-      profilenotfound: false,
-      banned: false,
-      profileposts: null,
-
-      userid: null,
-      username: null,
-      bio: null,
-      feeling: null,
-      picture: null,
-
-      followPopup: null,
-      editUsernamePopup: false,
-      editBioPopup: false,
-      newPostPopup: false,
-      openedPost: null,
-
-      newPostImage: null
-    };
+    return initialData();
+  },
+  async created() {
+    await this.loadPage();
+  },
+  beforeUnmount() {
+    document.body.classList.remove('no-scroll');
   },
   methods: {
     getPictureURL,
-    routeUpdated() {
-      document.body.classList.remove('no-scroll');
-      this.openedPost = null;
-      if (this.$route.params.id) {
-        // check if we're still in the profile route
-        this.getProfile();
-      }
+    async routeUpdated() {
+      await this.loadPage();
+    },
+    async loadPage() {
+      Object.assign(this.$data, initialData()); // restore initial state
+      this.userid = parseInt(localStorage.getItem('userid'));
+      this.username = localStorage.getItem('username');
+      this.feeling = parseInt(localStorage.getItem('feeling'));
+      this.bio = localStorage.getItem('bio');
+      this.picture = parseInt(localStorage.getItem('picture'));
+      document.body.classList.remove('no-scroll'); // unlock scrolling if it was locked before
+
+      await this.getProfile();
     },
     async getProfile() {
       this.profileuserid = parseInt(this.$route.params.id);
@@ -525,18 +539,6 @@ export default {
     PostPopUp,
     PencilIcon,
     CheckIcon
-  },
-  async created() {
-    this.userid = parseInt(localStorage.getItem('userid'));
-    this.username = localStorage.getItem('username');
-    this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.bio = localStorage.getItem('bio');
-    this.picture = parseInt(localStorage.getItem('picture'));
-
-    await this.getProfile();
-  },
-  beforeUnmount() {
-    document.body.classList.remove('no-scroll');
   }
 };
 </script>
