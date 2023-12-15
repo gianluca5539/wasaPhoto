@@ -510,9 +510,10 @@ export default {
             likecount: res.data.likecount
           };
 
-          this.profileposts = [newPost, ...this.profileposts];
+          this.profileposts = [newPost, ...(this.profileposts ?? [])];
         })
         .catch((err) => {
+          console.log(err);
           switch (err.response.status) {
             case 403:
               alert('Invalid credentials. Please try re-logging in.');
