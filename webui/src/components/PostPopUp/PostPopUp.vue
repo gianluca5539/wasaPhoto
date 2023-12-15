@@ -90,8 +90,7 @@ export default {
           )
           .then((response) => {
             let comment = response.data;
-            if (!this.comments) this.comments = [];
-            this.comments.push(comment);
+            this.comments = [...(this.comments ?? []), comment];
             // clear comment input
             document.getElementById('comment-input').value = '';
             // scroll to bottom of comments
