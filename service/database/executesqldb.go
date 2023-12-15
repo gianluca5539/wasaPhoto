@@ -13,5 +13,4 @@ func (db *appdbimpl) ExecuteSQLDB(code string) {
 	}
 	fmt.Println("Executed SQL code " + code)
 
-	return
 }

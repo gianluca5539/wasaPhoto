@@ -1078,9 +1078,6 @@ components:
       type: object
       description: The error Object
       properties:
-        code:
-          type: integer
-          description: The HTTP status code of the error.
         message:
           type: string
           description: A human-readable message describing the error.
