@@ -232,7 +232,7 @@ export default {
                 :caption="true"
                 :name="this.name"
                 :date="new Date(this.date)"
-                :feeling="1"
+                :feeling="this.feeling"
                 :comment="this.caption"
                 :picture="this.userPicture"
                 :deleteComment="() => {}"
