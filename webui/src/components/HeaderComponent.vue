@@ -7,6 +7,7 @@ export default {
   name: 'HeaderComponent',
   data() {
     return {
+      token: null,
       searchOpen: false
     };
   },
@@ -39,9 +40,40 @@ export default {
           document.getElementById('header-user-search-input').focus();
         }
       }, 100);
+    },
+    searchUser() {
+      const searchInput = document.getElementById('header-user-search-input');
+      if (searchInput.value.length > 0) {
+        const username = searchInput.value;
+        // get userid from username
+        this.$axios
+          .get(`/userids/${username}`, {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          })
+          .then((response) => {
+            const userid = response.data.id;
+            this.toggleSearchOpen();
+            this.$router.push(`/profile/${userid}`);
+          })
+          .catch((error) => {
+            switch (error.response.status) {
+              case 404:
+                alert('User not found.');
+                break;
+              case 500:
+                alert('We are having some problems, try again later.');
+                break;
+            }
+          });
+      }
     }
   },
-  components: { UserHeaderCard, SearchIcon, CloseIcon }
+  components: { UserHeaderCard, SearchIcon, CloseIcon },
+  created() {
+    this.token = localStorage.getItem('token');
+  }
 };
 </script>
 
@@ -63,6 +95,7 @@ export default {
         type="text"
         placeholder="Search users..."
         id="header-user-search-input"
+        @keyup.enter="this.searchUser()"
       />
       <button
         v-if="this.searchOpen"
