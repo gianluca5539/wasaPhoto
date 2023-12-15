@@ -24,7 +24,7 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 	var tokenString string
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
@@ -33,7 +33,7 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 	// convert the token string to an int
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
