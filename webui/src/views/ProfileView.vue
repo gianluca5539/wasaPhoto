@@ -506,7 +506,7 @@ export default {
             postid: res.data.postid,
             caption: caption,
             picture: res.data.picture,
-            createdat: res.data.createdAt,
+            createdat: res.data.createdat,
             likecount: res.data.likecount
           };
 
