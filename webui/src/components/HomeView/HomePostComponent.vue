@@ -51,6 +51,7 @@ export default {
   methods: {
     getPictureURL,
     openPost() {
+      if (this.postid == 0) return;
       document.body.classList.add('no-scroll'); // disable scrolling on page
       this.postOpen = true;
     },

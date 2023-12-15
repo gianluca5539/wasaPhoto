@@ -58,7 +58,19 @@ export default {
     <div class="homepage-feed-container">
       <div class="homepage-feed-spacer"></div>
       <HomePostComponent
-        v-for="post in posts"
+        v-if="!this.posts"
+        :postid="0"
+        :userid="0"
+        :picture="-2"
+        name="No posts yet!"
+        :feeling="4"
+        :userPicture="-2"
+        :date="0"
+        caption="Start following people to see their posts here!"
+        :likeCount="999"
+      />
+      <HomePostComponent
+        v-for="post in this.posts"
         :postid="post.postid"
         :userid="post.userid"
         :picture="post.picture"
@@ -96,7 +108,7 @@ body.no-scroll {
       width: 100%;
       height: 0px;
       transition: height 0.3s ease;
-      @media screen and (max-width: 1150px) {
+      @media screen and (max-width: 1250px) {
         height: 30px;
       }
     }
