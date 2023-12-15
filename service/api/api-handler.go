@@ -13,6 +13,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id/bio", rt.updateBio)
 	rt.router.PUT("/users/:id/feeling", rt.updateFeeling)
 	rt.router.PUT("/users/:id/picture", rt.updatePicture)
+	rt.router.GET("/usersids/:username", rt.getUserIDByUsername)
 	rt.router.PUT("/users/:id/follow", rt.followUser)
 	rt.router.DELETE("/users/:id/follow", rt.unFollowUser)
 	rt.router.PUT("/users/:id/ban", rt.banUser)

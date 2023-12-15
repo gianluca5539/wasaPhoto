@@ -490,6 +490,62 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /userids/{username}:
+    get:
+      tags: ['Profiles']
+      summary: Gets the user id by username
+      description: |-
+        If the user does not exist, it will return an error (404).
+        If the user exists but the token is incorrect, it will also return an error stating that the action is not permitted.
+        If everything goes fine it will return code 200.
+        If the user has banned the requesting user, it will also return a 404 error.
+      operationId: searchUserByUsername
+      parameters:
+        - name: username
+          in: path
+          description: the username to search for
+          required: true
+          schema:
+            description: the username
+            type: string
+            example: 'Maria'
+            pattern: '^.*$'
+            minLength: 3
+            maxLength: 16
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User found and id returned
+          content:
+            application/json:
+              schema:
+                type: object
+                description: the user id response
+                properties:
+                  id:
+                    description: The user id
+                    type: number
+                    example: 12
+        '404':
+          description: User not found or requesting user banned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Action forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /users/{userid}/profile:
     get:
       tags: ['Profiles']

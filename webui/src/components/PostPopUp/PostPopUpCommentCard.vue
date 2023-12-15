@@ -204,8 +204,8 @@ export default {
       }
     }
     .post-popup-comment-card-comment {
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 16px;
+      font-weight: 600;
       color: rgb(100, 100, 100);
       max-width: 100%;
       word-wrap: break-word;
@@ -215,7 +215,7 @@ export default {
         text-align: left;
       }
       .post-popup-comment-card-delete-button {
-        color: gray;
+        color: rgb(208, 208, 208);
         border: none;
         width: 30px;
         outline: none;
