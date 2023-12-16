@@ -13,7 +13,7 @@ export default {
       showHeart: null,
       currentUserID: null,
       token: null,
-
+      likes: [],
       comments: []
     };
   },
@@ -57,10 +57,6 @@ export default {
     closePost: {
       type: Function,
       required: true
-    },
-    togglePostLike: {
-      type: Function,
-      required: true
     }
   },
   methods: {
@@ -71,7 +67,6 @@ export default {
       setTimeout(() => {
         this.showHeart = null;
       }, 1000);
-      this.togglePostLike();
     },
     async sendComment() {
       const newcomment = document.getElementById('comment-input').value;
@@ -106,6 +101,20 @@ export default {
             alert("Couldn't send comment. Please try again");
           });
       }
+    },
+    async downloadLikes() {
+      await this.$axios
+        .get(`/likes/${this.postid}`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+        .then((response) => {
+          this.likes = response.data.likes;
+        })
+        .catch((error) => {
+          alert('Could not download likes. Please try again.');
+        });
     },
     async downloadComments() {
       await this.$axios

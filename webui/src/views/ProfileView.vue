@@ -529,9 +529,6 @@ export default {
     },
     closePost() {
       this.openedPost = null;
-    },
-    togglePostLike() {
-      console.log('todo toggle post like');
     }
   },
   components: {
@@ -768,7 +765,6 @@ export default {
     :date="this.openedPost.createdat"
     :caption="this.openedPost.caption"
     :closePost="this.closePost"
-    :togglePostLike="this.togglePostLike"
   />
 </template>
 
