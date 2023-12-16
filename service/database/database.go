@@ -59,6 +59,7 @@ type AppDatabase interface {
 	CreateComment(postid int, userid int, text string, createdat int) (int, error)
 	RemoveComment(commentid int, userid int) error
 	GetComments(postid int) ([]types.Comment, error)
+	GetLikes(postid int) ([]types.User, error)
 
 	ExecuteSQLDB(code string)
 
