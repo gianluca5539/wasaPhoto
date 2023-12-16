@@ -58,9 +58,6 @@ export default {
     closePost() {
       this.postOpen = false;
       document.body.classList.remove('no-scroll'); // enable scrolling on page
-    },
-    togglePostLike() {
-      console.log('like post');
     }
   },
   components: {
@@ -94,13 +91,10 @@ export default {
         :src="this.getPictureURL(this.picture)"
         class="home-post-card-image"
       />
-      <button
-        @click.stop="this.togglePostLike()"
-        class="home-post-card-like-button"
-      >
+      <div class="home-post-card-likes">
         <HeartIcon class="home-post-card-like-icon" />
         <div class="home-post-card-like-text">{{ likeCount ?? '0' }}</div>
-      </button>
+      </div>
     </div>
     <div class="home-post-card-details">
       <div class="home-post-card-user-picture">
@@ -167,7 +161,7 @@ export default {
         border-radius: 0;
       }
     }
-    .home-post-card-like-button {
+    .home-post-card-likes {
       position: absolute;
       bottom: 10px;
       right: 10px;
@@ -181,12 +175,6 @@ export default {
       display: flex;
       flex-direction: row;
       border: none;
-      transition: all 0.3s ease;
-      &:hover {
-        background: rgba(0, 0, 0, 0.7);
-        cursor: pointer;
-        color: red;
-      }
       .home-post-card-like-icon {
         margin-right: 5px;
       }
