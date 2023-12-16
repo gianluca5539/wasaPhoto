@@ -586,6 +586,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /images/{id}:
+    get:
+      tags: ['Posts']
+      summary: Serve an image
+      description: This endpoint serves an image file
+      operationId: serveImage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the image
+          schema:
+            type: number
+            example: 12
+      responses:
+        '200':
+          description: Image found and served
+          content:
+            image/png:
+              schema:
+                description: The image
+                type: string
+                format: binary
+        '404':
+          description: Image not found
+
   /posts:
     put:
       tags: ['Posts']
