@@ -11,11 +11,11 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+func (rt *_router) likePost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	postID, err := strconv.Atoi(ps.ByName("postid"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid user id"}
+		errorobj := types.Error{Message: "Invalid post id"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
@@ -39,8 +39,13 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	err = rt.db.UnFollowUser(requestedUserID, userID)
+	err = rt.db.LikePost(postID, userID)
 	if err != nil {
+		if err.Error() == "like already exists" {
+			// return 204 (idempotent)
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

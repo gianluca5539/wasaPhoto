@@ -33,10 +33,9 @@ package database
 import (
 	"database/sql"
 	"errors"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
-
-
 
 // AppDatabase is the high level interface for the DB
 type AppDatabase interface {
@@ -46,19 +45,25 @@ type AppDatabase interface {
 	IsUserBanned(id int, bannedBy int) (bool, error)
 	GetFollowers(id int) ([]int, error)
 	GetFollowing(id int) ([]int, error)
-	UpdateUsername(id int, username string) (error)
-	UpdateBio(id int, bio string) (error)
-	UpdateFeeling(id int, feeling int) (error)
-	UpdatePicture(id int, picture int) (error)
-	FollowUser(id int, followedBy int) (error)
-	UnFollowUser(id int, followedBy int) (error)
-	BanUser(id int, bannedBy int) (error)
-	UnBanUser(id int, bannedBy int) (error)
-	CreateNewPost(userID int, image int, caption string , time int) (id int64, error error)
+	UpdateUsername(id int, username string) error
+	UpdateBio(id int, bio string) error
+	UpdateFeeling(id int, feeling int) error
+	UpdatePicture(id int, picture int) error
+	FollowUser(id int, followedBy int) error
+	UnFollowUser(id int, followedBy int) error
+	BanUser(id int, bannedBy int) error
+	UnBanUser(id int, bannedBy int) error
+	CreateNewPost(userID int, image int, caption string, time int) (id int64, error error)
 	GetPostsByUserID(id int) ([]types.UserPost, error)
 	GetStream(ids []int) ([]types.Post, error)
+	CreateComment(postid int, userid int, text string, createdat int) (int, error)
+	RemoveComment(commentid int, userid int) error
+	GetComments(postid int) ([]types.Comment, error)
+	GetLikes(postid int) ([]types.User, error)
+	LikePost(postid int, userid int) error
+	UnLikePost(postid int, userid int) error
 
-	ExecuteSQLDB(code string) ()
+	ExecuteSQLDB(code string)
 
 	Ping() error
 }

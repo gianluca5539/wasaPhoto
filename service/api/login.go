@@ -3,14 +3,15 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+
 	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 
 type LoginRequest struct {
 	Username string `json:"username"`
 }
-
 
 func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var loginReq LoginRequest
@@ -34,7 +35,7 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	}
 
 	// Check if the username exists
-	user,found, err := rt.db.GetUserByUsername(username)
+	user, found, err := rt.db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -49,11 +50,11 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 			errorobj := types.Error{Message: "Internal server error"}
 			_ = json.NewEncoder(w).Encode(errorobj)
 			return
-		} 
+		}
 		token := user.UserID
 
 		res := map[string]interface{}{
-			"user": user,
+			"user":  user,
 			"token": token,
 		}
 		// Return the user and the token
@@ -64,7 +65,7 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		token := user.UserID
 
 		res := map[string]interface{}{
-			"user": user,
+			"user":  user,
 			"token": token,
 		}
 		// Return the user and the token
@@ -72,4 +73,4 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(res)
 	}
-}; 
+}

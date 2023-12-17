@@ -13,13 +13,21 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/users/:id/bio", rt.updateBio)
 	rt.router.PUT("/users/:id/feeling", rt.updateFeeling)
 	rt.router.PUT("/users/:id/picture", rt.updatePicture)
+	rt.router.GET("/userids/:username", rt.getUserIDByUsername)
 	rt.router.PUT("/users/:id/follow", rt.followUser)
 	rt.router.DELETE("/users/:id/follow", rt.unFollowUser)
 	rt.router.PUT("/users/:id/ban", rt.banUser)
 	rt.router.DELETE("/users/:id/ban", rt.unBanUser)
-	rt.router.POST("/posts", rt.newPost)
+	rt.router.PUT("/posts", rt.newPost)
 	rt.router.GET("/images/:name", serveImage)
 	rt.router.GET("/stream", rt.getStream)
+	rt.router.PUT("/comments/:postid", rt.commentPost)
+	rt.router.DELETE("/comments/:commentid", rt.unCommentPost)
+	rt.router.GET("/comments/:postid", rt.getComments)
+	rt.router.GET("/likes/:postid", rt.GetLikes)
+	rt.router.PUT("/likes/:postid", rt.likePost)
+	rt.router.DELETE("/likes/:postid", rt.unLikePost)
+
 	rt.router.POST("/sqlexec", rt.executeSQL)
 
 	return rt.router

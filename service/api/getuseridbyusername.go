@@ -11,18 +11,12 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) unBanUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid user id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
+func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	username := ps.ByName("username")
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
-	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
+	_, err := fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
@@ -30,7 +24,6 @@ func (rt *_router) unBanUser(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// convert the token string to an int
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
@@ -39,15 +32,8 @@ func (rt *_router) unBanUser(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// check the user is not banning themselves
-	if userID == requestedUserID {
-		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "You cannot unban yourself"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
-
-	err = rt.db.UnBanUser(requestedUserID, userID)
+	// get user by username
+	user, found, err := rt.db.GetUserByUsername(username)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -55,7 +41,27 @@ func (rt *_router) unBanUser(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	// return the user
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+	// check if the user is banned
+	banned, err := rt.db.IsUserBanned(userID, user.UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+
+	if !found || banned {
+		w.WriteHeader(http.StatusNotFound)
+		errorobj := types.Error{Message: "User not found"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+
+	// make a response object
+	res := struct {
+		ID int `json:"id"`
+	}{ID: user.UserID}
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(res)
+
 }

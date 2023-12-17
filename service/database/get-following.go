@@ -1,6 +1,5 @@
 package database
 
-
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) GetFollowing(id int) ([]int, error) {
 	var ids []int
@@ -8,7 +7,7 @@ func (db *appdbimpl) GetFollowing(id int) ([]int, error) {
 	// create a new sql statement
 	stmt, err := db.c.Prepare("SELECT follow FROM follow WHERE followedBy = ?")
 	if err != nil {
-		return ids,err
+		return ids, err
 	}
 
 	// execute the sql statement

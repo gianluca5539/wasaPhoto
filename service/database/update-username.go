@@ -1,7 +1,6 @@
 package database
 
-
-func (db *appdbimpl) UpdateUsername(id int, username string) (error) {
+func (db *appdbimpl) UpdateUsername(id int, username string) error {
 
 	// create a new sql statement
 	stmt, err := db.c.Prepare("UPDATE user SET username = ? WHERE id = ?")

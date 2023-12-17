@@ -4,9 +4,8 @@ import (
 	"errors"
 )
 
-
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) BanUser(id int, bannedBy int) ( error) {
+func (db *appdbimpl) BanUser(id int, bannedBy int) error {
 	ban_statement := "insert into bannedUsers (banned, bannedBy) values (?, ?)"
 	remove_follow_statement := "DELETE FROM follow WHERE follow = ? AND followedBy = ?"
 	check_ban_statement := "SELECT EXISTS(SELECT 1 FROM bannedUsers WHERE banned = ? AND bannedBy = ?)"
@@ -26,7 +25,7 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) ( error) {
 	}
 
 	if exists {
-		return errors.New("User is already banned")
+		return errors.New("user is already banned")
 	}
 
 	// Remove follow
@@ -45,7 +44,6 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) ( error) {
 	if err != nil {
 		return err
 	}
-
 
 	return nil
 

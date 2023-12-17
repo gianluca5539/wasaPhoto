@@ -1,7 +1,6 @@
 package database
 
-
-func (db *appdbimpl) UpdateFeeling(id int, feeling int) (error) {
+func (db *appdbimpl) UpdateFeeling(id int, feeling int) error {
 
 	// create a new sql statement
 	stmt, err := db.c.Prepare("UPDATE user SET feeling = ? WHERE id = ?")

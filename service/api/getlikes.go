@@ -11,11 +11,12 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+func (rt *_router) GetLikes(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// get the postid from path
+	postID, err := strconv.Atoi(ps.ByName("postid"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid user id"}
+		errorobj := types.Error{Message: "Invalid postid"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
@@ -30,8 +31,10 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// convert the token string to an int
-	userID, err := strconv.Atoi(tokenString)
+	// here we should check if the user is allowed to see the post
+	// but for now we just check if the token is valid since this is a toy project
+	// and we don't want to make it too heavy
+	_, err = strconv.Atoi(tokenString)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
@@ -39,7 +42,7 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	err = rt.db.UnFollowUser(requestedUserID, userID)
+	likes, err := rt.db.GetLikes(postID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
@@ -47,7 +50,12 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	// return the user
+	// create the response body
+	res := struct {
+		Users []types.User `json:"users"`
+	}{Users: likes}
+
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(res)
 }

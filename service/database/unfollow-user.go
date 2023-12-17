@@ -1,8 +1,7 @@
 package database
 
-
 // GetName is an example that shows you how to query data
-func (db *appdbimpl) UnFollowUser(id int, followedBy int) ( error) {
+func (db *appdbimpl) UnFollowUser(id int, followedBy int) error {
 	// create a new sql statement
 	stmt, err := db.c.Prepare("delete from follow where follow = ? and followedBy = ?")
 	if err != nil {

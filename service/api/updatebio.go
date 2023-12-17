@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
 	"github.com/julienschmidt/httprouter"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 
@@ -13,9 +15,14 @@ type BioRequest struct {
 	NewBio string `json:"newbio"`
 }
 
-
 func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		errorobj := types.Error{Message: "Invalid user id"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
 
 	// get the new bio from the request body
 	var bioReq BioRequest
@@ -28,13 +35,13 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 	// get newBio from bioReq
-	newBio := bioReq.NewBio	
+	newBio := bioReq.NewBio
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
 	_, err = fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
@@ -43,7 +50,7 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 	// convert the token string to an int
 	userID, err := strconv.Atoi(tokenString)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
@@ -56,7 +63,6 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-
 	// update the user in the database
 	dberr := rt.db.UpdateBio(userID, newBio)
 	if dberr != nil {
@@ -65,7 +71,7 @@ func (rt *_router) updateBio(w http.ResponseWriter, r *http.Request, ps httprout
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	
+
 	// return 204 no content
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)

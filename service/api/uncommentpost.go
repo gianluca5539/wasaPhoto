@@ -11,11 +11,11 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	commentID, err := strconv.Atoi(ps.ByName("commentid"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid user id"}
+		errorobj := types.Error{Message: "Invalid post id"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
@@ -39,8 +39,14 @@ func (rt *_router) unFollowUser(w http.ResponseWriter, r *http.Request, ps httpr
 		return
 	}
 
-	err = rt.db.UnFollowUser(requestedUserID, userID)
+	err = rt.db.RemoveComment(commentID, userID)
 	if err != nil {
+		if err.Error() == "comment does not exist" {
+			w.WriteHeader(http.StatusNotFound)
+			errorobj := types.Error{Message: "Comment does not exist or you are not the owner"}
+			_ = json.NewEncoder(w).Encode(errorobj)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)

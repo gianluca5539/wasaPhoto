@@ -5,37 +5,36 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-type UsernameRequest struct {
-	NewUsername string `json:"newusername"`
+type CommentRequest struct {
+	Text string `json:"text"`
 }
 
-func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	requestedUserID, err := strconv.Atoi(ps.ByName("id"))
+func (rt *_router) commentPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	postID, err := strconv.Atoi(ps.ByName("postid"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid user id"}
+		errorobj := types.Error{Message: "Invalid post id"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
-	// get the new username from the request body
-	var usernameReq UsernameRequest
-	decoder := json.NewDecoder(r.Body)
-	err = decoder.Decode(&usernameReq)
+	// get the text from the request body
+	var commentRequest CommentRequest
+	err = json.NewDecoder(r.Body).Decode(&commentRequest)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid request body"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	// get newUsername from usernameReq
-	newUsername := usernameReq.NewUsername
+	text := commentRequest.Text
 
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
@@ -56,46 +55,46 @@ func (rt *_router) updateUsername(w http.ResponseWriter, r *http.Request, ps htt
 		return
 	}
 
-	// check if there is another user with the same username
-	_, found, err := rt.db.GetUserByUsername(newUsername)
+	currentTime := time.Now()
+	time := strconv.FormatInt(currentTime.UnixNano()/int64(time.Millisecond), 10)
+	timeInt, err := strconv.Atoi(time)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
-	if found {
-		w.WriteHeader(http.StatusConflict)
-		errorobj := types.Error{Message: "Username already taken"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
 
-	if requestedUserID != userID {
-		w.WriteHeader(http.StatusForbidden)
-		errorobj := types.Error{Message: "You cannot update another user's username"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
-
-	// check new username is valid (3 to 16 characters)
-	if len(newUsername) < 3 || len(newUsername) > 16 {
-		w.WriteHeader(http.StatusBadRequest)
-		errorobj := types.Error{Message: "Invalid username"}
-		_ = json.NewEncoder(w).Encode(errorobj)
-		return
-	}
-
-	// update the user in the database
-	dberr := rt.db.UpdateUsername(userID, newUsername)
-	if dberr != nil {
+	commentID, err := rt.db.CreateComment(postID, userID, text, timeInt)
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)
 		return
 	}
 
-	// return 204 no content
+	// add user and create response
+	u, _, err := rt.db.GetUserByUserID(userID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errorobj := types.Error{Message: "Internal server error"}
+		_ = json.NewEncoder(w).Encode(errorobj)
+		return
+	}
+
+	comment := types.Comment{
+		ID:        commentID,
+		UserID:    u.UserID,
+		PostID:    postID,
+		Username:  u.Username,
+		Picture:   u.Picture,
+		Feeling:   u.Feeling,
+		Text:      text,
+		CreatedAt: timeInt,
+	}
+
+	// return the user
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(comment)
 }

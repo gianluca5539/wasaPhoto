@@ -6,46 +6,64 @@ import { getPictureURL } from '../functions/getPictureURL';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import CheckIcon from 'vue-material-design-icons/Check.vue';
 
+const initialData = () => ({
+  profileuserid: null,
+  profileusername: null,
+  profilebio: null,
+  userpicture: null,
+  profilefeeling: null,
+  profilefollowers: null,
+  profilefollowing: null,
+  profilenotfound: false,
+  banned: false,
+  profileposts: null,
+
+  userid: null,
+  username: null,
+  bio: null,
+  feeling: null,
+  picture: null,
+
+  followPopup: null,
+  editUsernamePopup: false,
+  editBioPopup: false,
+  newPostPopup: false,
+  openedPost: null,
+
+  newPostImage: null
+});
+
 export default {
   watch: {
     $route: 'routeUpdated'
   },
   data() {
-    return {
-      profileuserid: null,
-      profileusername: null,
-      profilebio: null,
-      userpicture: null,
-      profilefeeling: null,
-      profilefollowers: null,
-      profilefollowing: null,
-      profilenotfound: false,
-      banned: false,
-      profileposts: null,
-
-      userid: null,
-      username: null,
-      bio: null,
-      feeling: null,
-      picture: null,
-
-      followPopup: null,
-      editUsernamePopup: false,
-      editBioPopup: false,
-      newPostPopup: false,
-      openedPost: null,
-
-      newPostImage: null
-    };
+    return initialData();
+  },
+  async created() {
+    await this.loadPage();
+  },
+  beforeUnmount() {
+    document.body.classList.remove('no-scroll');
   },
   methods: {
     getPictureURL,
-    routeUpdated() {
-      document.body.classList.remove('no-scroll');
-      this.getProfile();
+    async routeUpdated() {
+      await this.loadPage();
+    },
+    async loadPage() {
+      Object.assign(this.$data, initialData()); // restore initial state
+      this.userid = parseInt(localStorage.getItem('userid'));
+      this.username = localStorage.getItem('username');
+      this.feeling = parseInt(localStorage.getItem('feeling'));
+      this.bio = localStorage.getItem('bio');
+      this.picture = parseInt(localStorage.getItem('picture'));
+      document.body.classList.remove('no-scroll'); // unlock scrolling if it was locked before
+
+      await this.getProfile();
     },
     async getProfile() {
-      this.profileuserid = this.$route.params.id;
+      this.profileuserid = parseInt(this.$route.params.id);
       this.followPopup = null; // close popup (needed when changing profile from follow list)
       const token = localStorage.getItem('token');
       const res = await this.$axios
@@ -60,7 +78,7 @@ export default {
               this.profileusername = 'User not found';
               this.profilebio =
                 'Sorry, we looked everywhere but we could not find this user.';
-              this.userpicture = '';
+              this.userpicture = 'defaultsnoopy';
               this.profilefeeling = -1;
               this.profilenotfound = true;
               break;
@@ -76,7 +94,6 @@ export default {
 
       const response = res?.data;
       if (response) {
-        console.log(response);
         this.profileusername = response.username;
         this.profilefeeling = response.feeling;
         this.profilebio = response.bio;
@@ -469,7 +486,7 @@ export default {
       }
       const token = localStorage.getItem('token');
       this.$axios
-        .post(
+        .put(
           `/posts`,
           {
             caption: caption,
@@ -489,13 +506,14 @@ export default {
             postid: res.data.postid,
             caption: caption,
             picture: res.data.picture,
-            createdat: res.data.createdAt,
+            createdat: res.data.createdat,
             likecount: res.data.likecount
           };
 
-          this.profileposts = [newPost, ...this.profileposts];
+          this.profileposts = [newPost, ...(this.profileposts ?? [])];
         })
         .catch((err) => {
+          console.log(err);
           switch (err.response.status) {
             case 403:
               alert('Invalid credentials. Please try re-logging in.');
@@ -512,8 +530,13 @@ export default {
     closePost() {
       this.openedPost = null;
     },
-    togglePostLike() {
-      console.log('todo toggle post like');
+    updatePost(postid, key, value) {
+      this.profileposts = this.profileposts.map((post) => {
+        if (post.postid == postid) {
+          post[key] = value;
+        }
+        return post;
+      });
     }
   },
   components: {
@@ -522,18 +545,6 @@ export default {
     PostPopUp,
     PencilIcon,
     CheckIcon
-  },
-  async created() {
-    this.userid = parseInt(localStorage.getItem('userid'));
-    this.username = localStorage.getItem('username');
-    this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.bio = localStorage.getItem('bio');
-    this.picture = localStorage.getItem('picture');
-
-    await this.getProfile();
-  },
-  beforeUnmount() {
-    document.body.classList.remove('no-scroll');
   }
 };
 </script>
@@ -551,7 +562,7 @@ export default {
         <div class="profile-info-data-container">
           <img
             @click="openFileDialog()"
-            :src="getPictureURL(userpicture)"
+            :src="getPictureURL(this.userpicture)"
             alt=""
           />
           <input
@@ -576,6 +587,9 @@ export default {
                 class="edit-icon"
                 :size="24"
               />
+              <div class="posts-count">
+                {{ this.profileposts?.length || 0 }} Posts
+              </div>
               <button
                 v-if="
                   this.profileuserid != this.userid && !this.profilenotfound
@@ -642,6 +656,7 @@ export default {
           <div class="profile-page-newpost-card-title">New Post</div>
         </button>
         <button
+          v-if="this.profileposts"
           v-for="post in this.profileposts"
           @click="openPost(post)"
           :key="post.postid"
@@ -748,7 +763,8 @@ export default {
   </div>
   <PostPopUp
     v-if="this.openedPost"
-    :id="this.openedPost.postid"
+    :postid="this.openedPost.postid"
+    :userid="this.profileuserid"
     :name="this.profileusername"
     :feeling="this.profilefeeling"
     :picture="this.openedPost.picture"
@@ -757,7 +773,7 @@ export default {
     :date="this.openedPost.createdat"
     :caption="this.openedPost.caption"
     :closePost="this.closePost"
-    :togglePostLike="this.togglePostLike"
+    :updatePost="this.updatePost"
   />
 </template>
 
@@ -800,7 +816,7 @@ body.no-scroll {
         align-self: flex-start;
         align-items: center;
         justify-content: flex-start;
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 1000px) {
           flex-direction: column;
           align-self: center;
         }
@@ -832,6 +848,7 @@ body.no-scroll {
           }
           .edit-icon {
             transition: all 0.3s ease-in-out;
+            margin-right: 10px;
             &:hover {
               transform: scale(1.05);
               color: orange;
@@ -851,6 +868,18 @@ body.no-scroll {
               &:hover {
                 transform: scale(1.1);
               }
+            }
+            .posts-count {
+              border: 2px solid orange;
+              border-radius: 8px;
+              background-color: transparent;
+              color: rgb(78, 78, 78);
+              font-size: 15px;
+              font-weight: bold;
+              margin-right: 8px;
+              padding: 1px 5px;
+              transition: all 0.2s ease-in-out;
+              color: orange;
             }
             .action-button {
               border: 2px solid rgb(78, 78, 78);

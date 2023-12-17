@@ -1,8 +1,17 @@
 <script>
 import { getPictureURL } from '../../functions/getPictureURL';
+import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue';
 export default {
   props: {
+    commentid: {
+      type: Number,
+      required: true
+    },
     userid: {
+      type: Number,
+      required: true
+    },
+    currentUserID: {
       type: Number,
       required: true
     },
@@ -33,6 +42,25 @@ export default {
     picture: {
       type: Number,
       required: true
+    },
+    deleteComment: {
+      type: Function,
+      required: true
+    }
+  },
+  components: {
+    TrashCanIcon
+  },
+  methods: {
+    getPictureURL,
+    openUserProfile() {
+      this.$router.push('/profile/' + this.userid);
+    },
+    getDate() {
+      return `${this.date.getDate()}/${this.date.getMonth()}/${this.date.getFullYear()}
+          ${this.date.getHours()}:${
+        this.date.getMinutes() < 10 ? '0' : ''
+      }${this.date.getMinutes()}`;
     }
   },
   methods: {
@@ -43,6 +71,7 @@ export default {
 
 <template>
   <button
+    @click="this.openUserProfile()"
     :class="{
       'post-popup-comment-card': true,
       authorcomment: authorcomment,
@@ -71,10 +100,11 @@ export default {
           authorcomment: authorcomment
         }"
       >
-        {{ this.name }}
+        <div>
+          {{ this.userid == this.currentUserID ? 'You' : this.name }}
+        </div>
         <div class="post-popup-comment-card-date">
-          {{ date.getDate() }}/{{ date.getMonth() }}/{{ date.getFullYear() }}
-          {{ date.getHours() }}:{{ date.getMinutes() }}
+          {{ this.getDate() }}
         </div>
       </div>
       <div
@@ -83,7 +113,14 @@ export default {
           authorcomment: authorcomment
         }"
       >
-        {{ this.comment }}
+        {{ this.comment
+        }}<button
+          v-if="this.userid == this.currentUserID && !this.caption"
+          @click.stop="this.deleteComment(this.commentid)"
+          class="post-popup-comment-card-delete-button"
+        >
+          <TrashCanIcon />
+        </button>
       </div>
     </div>
   </button>
@@ -155,6 +192,7 @@ export default {
         text-align: left;
         color: orange;
       }
+
       .post-popup-comment-card-date {
         font-size: 12px;
         font-weight: 100;
@@ -169,8 +207,8 @@ export default {
       }
     }
     .post-popup-comment-card-comment {
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 16px;
+      font-weight: 600;
       color: rgb(100, 100, 100);
       max-width: 100%;
       word-wrap: break-word;
@@ -178,6 +216,17 @@ export default {
       min-height: fit-content;
       &.authorcomment {
         text-align: left;
+      }
+      .post-popup-comment-card-delete-button {
+        color: rgb(208, 208, 208);
+        border: none;
+        width: 30px;
+        outline: none;
+        background-color: transparent;
+        transition: all 0.2s ease-in-out;
+        &:hover {
+          color: red;
+        }
       }
     }
   }

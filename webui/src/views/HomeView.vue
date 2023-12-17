@@ -23,12 +23,19 @@ export default {
         })
         .then((response) => {
           let posts = response.data.posts;
-          console.log(posts);
           this.posts = posts;
         })
         .catch((error) => {
-          console.log(error);
+          alert("Couldn't get stream. Please try again later.");
         });
+    },
+    updatePost(postid, key, value) {
+      this.posts = this.posts.map((post) => {
+        if (post.postid == postid) {
+          post[key] = value;
+        }
+        return post;
+      });
     }
   },
   components: {
@@ -59,8 +66,21 @@ export default {
     <div class="homepage-feed-container">
       <div class="homepage-feed-spacer"></div>
       <HomePostComponent
-        v-for="post in posts"
-        :id="post.postid"
+        v-if="!this.posts"
+        :postid="0"
+        :userid="0"
+        :picture="-2"
+        name="No posts yet!"
+        :feeling="4"
+        :userPicture="-2"
+        :date="0"
+        caption="Start following people to see their posts here!"
+        :likeCount="999"
+      />
+      <HomePostComponent
+        v-for="post in this.posts"
+        :postid="post.postid"
+        :userid="post.userid"
         :picture="post.picture"
         :name="post.username"
         :feeling="post.feeling"
@@ -68,6 +88,7 @@ export default {
         :date="post.createdat"
         :caption="post.caption"
         :likeCount="post.likecount"
+        :updatePost="this.updatePost"
       />
     </div>
   </div>
@@ -96,7 +117,7 @@ body.no-scroll {
       width: 100%;
       height: 0px;
       transition: height 0.3s ease;
-      @media screen and (max-width: 1150px) {
+      @media screen and (max-width: 1250px) {
         height: 30px;
       }
     }
