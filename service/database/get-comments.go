@@ -25,6 +25,10 @@ func (db *appdbimpl) GetComments(postid int) ([]types.Comment, error) {
 		comments = append(comments, comment)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	// return the list of posts
 	return comments, nil
 }

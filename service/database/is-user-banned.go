@@ -23,6 +23,10 @@ func (db *appdbimpl) IsUserBanned(id int, bannedBy int) (bool, error) {
 		return true, nil
 	}
 
+	if err := rows.Err(); err != nil {
+		return false, err
+	}
+
 	// return the result
 	return false, nil
 }

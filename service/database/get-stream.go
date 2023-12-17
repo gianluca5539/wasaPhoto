@@ -63,6 +63,10 @@ func (db *appdbimpl) GetStream(ids []int) ([]types.Post, error) {
 		stream = append(stream, post)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	// return the list of posts
 	return stream, nil
 }

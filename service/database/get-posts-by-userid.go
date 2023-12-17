@@ -44,6 +44,10 @@ func (db *appdbimpl) GetPostsByUserID(id int) ([]types.UserPost, error) {
 		posts = append(posts, p)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return posts, nil
 
 }

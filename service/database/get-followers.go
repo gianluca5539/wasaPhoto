@@ -30,6 +30,10 @@ func (db *appdbimpl) GetFollowers(id int) ([]int, error) {
 		ids = append(ids, id)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	// return the list of ids
 	return ids, nil
 
