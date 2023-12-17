@@ -12,6 +12,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// CommentRequest represents the structure of a comment request.
 type CommentRequest struct {
 	Text string `json:"text"`
 }

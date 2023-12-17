@@ -9,6 +9,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// LoginRequest represents the request structure for the login API.
 type LoginRequest struct {
 	Username string `json:"username"`
 }

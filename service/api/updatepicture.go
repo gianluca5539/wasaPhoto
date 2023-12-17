@@ -17,6 +17,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// PictureRequest represents the request body for updating the user's picture.
 type PictureRequest struct {
 	NewPicture string `json:"newpicture"`
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// FeelingRequest represents the request body for updating the user's feeling.
 type FeelingRequest struct {
 	NewFeeling int `json:"newfeeling"`
 }

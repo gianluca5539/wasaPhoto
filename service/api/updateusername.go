@@ -11,6 +11,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// UsernameRequest represents the request body for updating the user's username.
 type UsernameRequest struct {
 	NewUsername string `json:"newusername"`
 }

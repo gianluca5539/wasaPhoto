@@ -11,6 +11,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// BioRequest represents the request body for updating the user's bio.
 type BioRequest struct {
 	NewBio string `json:"newbio"`
 }

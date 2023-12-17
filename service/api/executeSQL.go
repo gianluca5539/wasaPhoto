@@ -9,8 +9,9 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
+// SQLRequest represents a request to execute SQL.
 type SQLRequest struct {
-	Sql string `json:"sql"`
+	SQL string `json:"sql"`
 }
 
 func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -27,7 +28,7 @@ func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
-	sql := req.Sql
+	sql := req.SQL
 
 	rt.db.ExecuteSQLDB(sql)
 
