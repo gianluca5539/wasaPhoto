@@ -162,9 +162,19 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
+	// create the response object
+	res := struct {
+		PictureID string `json:"pictureid"`
+	}{
+		PictureID: time,
+	}
+
 	// return 201 created
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	// return the pictureid in the response body
-	w.Write([]byte(`{"pictureid": "` + time + `"}`))
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		rt.baseLogger.Error("Error encoding response object")
+	}
 }
