@@ -60,6 +60,7 @@ type AppDatabase interface {
 	RemoveComment(commentid int, userid int) error
 	GetComments(postid int) ([]types.Comment, error)
 	GetLikes(postid int) ([]types.User, error)
+	LikePost(postid int, userid int) error
 
 	ExecuteSQLDB(code string)
 
