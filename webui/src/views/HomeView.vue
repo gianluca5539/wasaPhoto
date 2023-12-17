@@ -12,6 +12,8 @@ export default {
 
       posts: [],
 
+      postOpen: -1,
+
       token: null
     };
   },
@@ -36,6 +38,18 @@ export default {
         }
         return post;
       });
+    },
+    removePost(postid) {
+      this.posts = this.posts.filter((post) => post.postid != postid);
+      this.closePost();
+    },
+    openPost(id) {
+      document.body.classList.add('no-scroll'); // disable scrolling on page
+      this.postOpen = id;
+    },
+    closePost() {
+      this.postOpen = -1;
+      document.body.classList.remove('no-scroll'); // enable scrolling on page
     }
   },
   components: {
@@ -76,6 +90,11 @@ export default {
         :date="0"
         caption="Start following people to see their posts here!"
         :likeCount="999"
+        :updatePost="() => {}"
+        :removePost="() => {}"
+        :openPost="() => {}"
+        :closePost="() => {}"
+        :postOpen="false"
       />
       <HomePostComponent
         v-for="post in this.posts"
@@ -89,6 +108,10 @@ export default {
         :caption="post.caption"
         :likeCount="post.likecount"
         :updatePost="this.updatePost"
+        :removePost="() => this.removePost(post.postid)"
+        :openPost="() => this.openPost(post.postid)"
+        :closePost="this.closePost"
+        :postOpen="this.postOpen === post.postid"
       />
     </div>
   </div>

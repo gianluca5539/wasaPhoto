@@ -537,6 +537,12 @@ export default {
         }
         return post;
       });
+    },
+    removePost(postid) {
+      this.closePost();
+      this.profileposts = this.profileposts.filter(
+        (post) => post.postid != postid
+      );
     }
   },
   components: {
@@ -774,6 +780,7 @@ export default {
     :caption="this.openedPost.caption"
     :closePost="this.closePost"
     :updatePost="this.updatePost"
+    :removePost="() => this.removePost(this.openedPost.postid)"
   />
 </template>
 

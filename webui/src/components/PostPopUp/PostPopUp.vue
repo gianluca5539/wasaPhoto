@@ -4,6 +4,7 @@ import PostPopUpCommentCard from './PostPopUpCommentCard.vue';
 import HeartIcon from 'vue-material-design-icons/Heart.vue';
 import BrokenHeartIcon from 'vue-material-design-icons/HeartBroken.vue';
 import SendIcon from 'vue-material-design-icons/Send.vue';
+import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue';
 import { getPictureURL } from '../../functions/getPictureURL';
 
 export default {
@@ -59,6 +60,10 @@ export default {
       required: true
     },
     updatePost: {
+      type: Function,
+      required: false
+    },
+    removePost: {
       type: Function,
       required: false
     }
@@ -196,6 +201,22 @@ export default {
         .catch((error) => {
           alert('Could not delete comment. Please try again.');
         });
+    },
+    async deletePost() {
+      if (confirm('Are you sure you want to delete this post?')) {
+        this.$axios
+          .delete(`/posts/${this.postid}`, {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          })
+          .then((response) => {
+            this.removePost(this.postid);
+          })
+          .catch((error) => {
+            alert('Could not delete post. Please try again later.');
+          });
+      }
     }
   },
   mounted() {
@@ -210,7 +231,8 @@ export default {
     PostPopUpCommentCard,
     HeartIcon,
     BrokenHeartIcon,
-    SendIcon
+    SendIcon,
+    TrashCanIcon
   },
   created() {
     this.currentUserID = parseInt(localStorage.getItem('userid'));
@@ -262,6 +284,13 @@ export default {
               }"
             >
               {{ likeCount + ' ' }} Likes
+            </button>
+            <button
+              v-if="this.userid == this.currentUserID"
+              @click="this.deletePost()"
+              class="post-popup-view-option-button"
+            >
+              <TrashCanIcon />
             </button>
           </div>
           <div

@@ -5,11 +5,6 @@ import { getPictureURL } from '../../functions/getPictureURL';
 
 export default {
   name: 'HomePostComponent',
-  data() {
-    return {
-      postOpen: false
-    };
-  },
   props: {
     postid: {
       type: Number,
@@ -47,22 +42,37 @@ export default {
       type: String,
       required: true
     },
+    postOpen: {
+      type: Boolean,
+      required: true
+    },
     updatePost: {
       type: Function,
       required: false
+    },
+    removePost: {
+      type: Function,
+      required: true
+    },
+    openPost: {
+      type: Function,
+      required: true
+    },
+    closePost: {
+      type: Function,
+      required: true
+    },
+    postOpen: {
+      type: Boolean,
+      required: true
+    },
+    removePost: {
+      type: Function,
+      required: true
     }
   },
   methods: {
-    getPictureURL,
-    openPost() {
-      if (this.postid == 0) return;
-      document.body.classList.add('no-scroll'); // disable scrolling on page
-      this.postOpen = true;
-    },
-    closePost() {
-      this.postOpen = false;
-      document.body.classList.remove('no-scroll'); // enable scrolling on page
-    }
+    getPictureURL
   },
   components: {
     HeartIcon,
@@ -88,6 +98,7 @@ export default {
     :caption="this.caption"
     :closePost="this.closePost"
     :updatePost="this.updatePost"
+    :removePost="this.removePost"
   />
   <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">
