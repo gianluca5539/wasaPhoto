@@ -9,8 +9,8 @@ func (db *appdbimpl) CreateUser(username string) (types.User, error) {
 
 	var u types.User
 
-	query_str := "INSERT INTO user (username) VALUES (?);"
-	result, err := db.c.Exec(query_str, username)
+	query := "INSERT INTO user (username) VALUES (?);"
+	result, err := db.c.Exec(query, username)
 	if err != nil {
 		return u, err
 	}

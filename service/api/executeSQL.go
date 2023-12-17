@@ -14,7 +14,7 @@ type SQLRequest struct {
 	SQL string `json:"sql"`
 }
 
-func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (rt *_router) executeSQL(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var req SQLRequest
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&req)

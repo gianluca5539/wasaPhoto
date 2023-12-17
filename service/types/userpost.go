@@ -1,5 +1,6 @@
 package types
 
+// UserPost represents a user post.
 type UserPost struct {
 	PostID    int    `json:"postid"`
 	Caption   string `json:"caption"`

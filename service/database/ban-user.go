@@ -6,9 +6,9 @@ import (
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) BanUser(id int, bannedBy int) error {
-	ban_statement := "insert into bannedUsers (banned, bannedBy) values (?, ?)"
-	remove_follow_statement := "DELETE FROM follow WHERE follow = ? AND followedBy = ?"
-	check_ban_statement := "SELECT EXISTS(SELECT 1 FROM bannedUsers WHERE banned = ? AND bannedBy = ?)"
+	banStatement := "insert into bannedUsers (banned, bannedBy) values (?, ?)"
+	removeFollowStatement := "DELETE FROM follow WHERE follow = ? AND followedBy = ?"
+	checkBanStatement := "SELECT EXISTS(SELECT 1 FROM bannedUsers WHERE banned = ? AND bannedBy = ?)"
 
 	// Check if user is already banned and if not ban the user. Do everything in a transaction
 	tx, err := db.c.Begin()
@@ -22,7 +22,7 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) error {
 
 	// Check if user is already banned
 	var exists bool
-	err = tx.QueryRow(check_ban_statement, id, bannedBy).Scan(&exists)
+	err = tx.QueryRow(checkBanStatement, id, bannedBy).Scan(&exists)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -40,7 +40,7 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) error {
 	}
 
 	// Remove follow
-	_, err = tx.Exec(remove_follow_statement, bannedBy, id)
+	_, err = tx.Exec(removeFollowStatement, bannedBy, id)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -50,7 +50,7 @@ func (db *appdbimpl) BanUser(id int, bannedBy int) error {
 	}
 
 	// Ban user
-	_, err = tx.Exec(ban_statement, id, bannedBy)
+	_, err = tx.Exec(banStatement, id, bannedBy)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {

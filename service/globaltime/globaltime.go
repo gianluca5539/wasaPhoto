@@ -1,3 +1,4 @@
+// Package globaltime provides functionality for managing global time in the application.
 package globaltime
 
 import "time"

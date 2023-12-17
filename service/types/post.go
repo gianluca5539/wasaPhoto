@@ -1,5 +1,6 @@
 package types
 
+// Post represents a post.
 type Post struct {
 	PostID      int64  `json:"postid"`
 	UserID      int    `json:"userid"`

@@ -14,7 +14,7 @@ type LoginRequest struct {
 	Username string `json:"username"`
 }
 
-func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (rt *_router) login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var loginReq LoginRequest
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&loginReq)

@@ -22,7 +22,7 @@ type postRequest struct {
 	Caption string `json:"caption"`
 }
 
-func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var postReq postRequest
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&postReq)

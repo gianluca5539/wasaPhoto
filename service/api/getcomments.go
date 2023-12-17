@@ -10,7 +10,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (rt *_router) getComments(w http.ResponseWriter, _ *http.Request, ps httprouter.Params) {
 	requestedPostID, err := strconv.Atoi(ps.ByName("postid"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

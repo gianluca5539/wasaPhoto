@@ -1,5 +1,6 @@
 package types
 
+// UserProfile represents a user profile.
 type UserProfile struct {
 	ID        int        `json:"id"`
 	Username  string     `json:"username"`

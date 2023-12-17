@@ -6,9 +6,9 @@ import "errors"
 func (db *appdbimpl) RemoveComment(commentid int, userid int) error {
 
 	// check if comment exists (select 1)
-	comment_exists_statement := "SELECT 1 FROM comment WHERE id = ? AND userid = ?"
+	commentExistsStatement := "SELECT 1 FROM comment WHERE id = ? AND userid = ?"
 	var exists int
-	err := db.c.QueryRow(comment_exists_statement, commentid, userid).Scan(&exists)
+	err := db.c.QueryRow(commentExistsStatement, commentid, userid).Scan(&exists)
 	if err != nil {
 		return err
 	}
@@ -17,10 +17,10 @@ func (db *appdbimpl) RemoveComment(commentid int, userid int) error {
 	}
 
 	// remove comment
-	comment_remove_statement := "DELETE FROM comment WHERE id = ? AND userid = ?"
+	commentRemoveStatement := "DELETE FROM comment WHERE id = ? AND userid = ?"
 
 	// follow user
-	_, err = db.c.Exec(comment_remove_statement, commentid, userid)
+	_, err = db.c.Exec(commentRemoveStatement, commentid, userid)
 	if err != nil {
 		return err
 	}

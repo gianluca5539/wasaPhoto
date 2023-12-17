@@ -7,8 +7,8 @@ import (
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) FollowUser(id int, followedBy int) error {
 
-	follow_statement := "insert into follow (follow, followedBy) values (?, ?)"
-	check_follow_statement := "SELECT EXISTS(SELECT 1 FROM follow WHERE follow = ? AND followedBy = ?)"
+	followStatement := "insert into follow (follow, followedBy) values (?, ?)"
+	checkFollowStatement := "SELECT EXISTS(SELECT 1 FROM follow WHERE follow = ? AND followedBy = ?)"
 
 	// Check if user is already followed and if not follow the user. Do everything in a transaction
 	tx, err := db.c.Begin()
@@ -22,7 +22,7 @@ func (db *appdbimpl) FollowUser(id int, followedBy int) error {
 
 	// check if user is already followed
 	var exists bool
-	err = tx.QueryRow(check_follow_statement, id, followedBy).Scan(&exists)
+	err = tx.QueryRow(checkFollowStatement, id, followedBy).Scan(&exists)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -40,7 +40,7 @@ func (db *appdbimpl) FollowUser(id int, followedBy int) error {
 	}
 
 	// follow user
-	_, err = tx.Exec(follow_statement, id, followedBy)
+	_, err = tx.Exec(followStatement, id, followedBy)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {

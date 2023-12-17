@@ -1,5 +1,7 @@
+// Package types provides the data types for the service.
 package types
 
+// Comment represents a comment on a post.
 type Comment struct {
 	ID        int    `json:"id"`
 	UserID    int    `json:"userid"`

@@ -1,5 +1,6 @@
 package types
 
+// User represents a user.
 type User struct {
 	UserID   int    `json:"userid"`
 	Username string `json:"username"`

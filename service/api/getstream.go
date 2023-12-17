@@ -11,7 +11,7 @@ import (
 	"github.com/gianluca5539/WASA/service/types"
 )
 
-func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	// get the user id from the jwt token in the request header (bearer token)
 	var tokenString string
 	_, err := fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &tokenString)

@@ -13,8 +13,8 @@ func (db *appdbimpl) DeletePostCascading(userid int, postid int) error {
 		return err
 	}
 
-	check_post_owner_statement := "SELECT userid FROM post WHERE id = ?"
-	owner := tx.QueryRow(check_post_owner_statement, postid)
+	checkPostOwnerStatement := "SELECT userid FROM post WHERE id = ?"
+	owner := tx.QueryRow(checkPostOwnerStatement, postid)
 	var ownerid int
 	err = owner.Scan(&ownerid)
 	if err != nil {
@@ -32,8 +32,8 @@ func (db *appdbimpl) DeletePostCascading(userid int, postid int) error {
 		return errors.New("you are not the owner of the post")
 	}
 
-	delete_post_statement := "DELETE FROM post WHERE id = ?"
-	_, err = tx.Exec(delete_post_statement, postid)
+	deletePostStatement := "DELETE FROM post WHERE id = ?"
+	_, err = tx.Exec(deletePostStatement, postid)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -42,8 +42,8 @@ func (db *appdbimpl) DeletePostCascading(userid int, postid int) error {
 		return err
 	}
 
-	delete_post_likes_statement := "DELETE FROM like WHERE postid = ?"
-	_, err = tx.Exec(delete_post_likes_statement, postid)
+	deletePostLikesStatement := "DELETE FROM like WHERE postid = ?"
+	_, err = tx.Exec(deletePostLikesStatement, postid)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -52,8 +52,8 @@ func (db *appdbimpl) DeletePostCascading(userid int, postid int) error {
 		return err
 	}
 
-	delete_post_comments_statement := "DELETE FROM comment WHERE postid = ?"
-	_, err = tx.Exec(delete_post_comments_statement, postid)
+	deletePostCommentsStatement := "DELETE FROM comment WHERE postid = ?"
+	_, err = tx.Exec(deletePostCommentsStatement, postid)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {

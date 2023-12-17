@@ -14,8 +14,8 @@ func (db *appdbimpl) GetUserByUsername(username string) (types.User, bool, error
 	var nullableBio sql.NullString
 	var nullablePicture sql.NullInt64
 
-	query_str := "SELECT id, username, feeling, bio, picture FROM user WHERE username = '" + username + "';"
-	err := db.c.QueryRow(query_str).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
+	query := "SELECT id, username, feeling, bio, picture FROM user WHERE username = '" + username + "';"
+	err := db.c.QueryRow(query).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
 
 	if err == sql.ErrNoRows {
 		return u, false, nil // not found but no error

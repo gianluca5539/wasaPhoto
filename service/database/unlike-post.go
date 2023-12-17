@@ -15,9 +15,9 @@ func (db *appdbimpl) UnLikePost(postid int, userid int) error {
 	}
 
 	// check if like exists (select 1)
-	like_exists_statement := "SELECT 1 FROM like WHERE postid = ? AND userid = ?"
+	likeExistsStatement := "SELECT 1 FROM like WHERE postid = ? AND userid = ?"
 	var exists int
-	err = tx.QueryRow(like_exists_statement, postid, userid).Scan(&exists)
+	err = tx.QueryRow(likeExistsStatement, postid, userid).Scan(&exists)
 	if err != nil && err != sql.ErrNoRows {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -34,8 +34,8 @@ func (db *appdbimpl) UnLikePost(postid int, userid int) error {
 	}
 
 	// remove like
-	like_remove_statement := "DELETE FROM like WHERE postid = ? AND userid = ?"
-	_, err = tx.Exec(like_remove_statement, postid, userid)
+	likeRemoveStatement := "DELETE FROM like WHERE postid = ? AND userid = ?"
+	_, err = tx.Exec(likeRemoveStatement, postid, userid)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
@@ -45,8 +45,8 @@ func (db *appdbimpl) UnLikePost(postid int, userid int) error {
 	}
 
 	// update post.likeCount
-	post_update_statement := "UPDATE post SET likecount = likecount - 1 WHERE id = ?"
-	_, err = tx.Exec(post_update_statement, postid)
+	postUpdateStatement := "UPDATE post SET likecount = likecount - 1 WHERE id = ?"
+	_, err = tx.Exec(postUpdateStatement, postid)
 	if err != nil {
 		err2 := tx.Rollback()
 		if err2 != nil {
