@@ -157,7 +157,6 @@ export default {
           }
         })
         .then((response) => {
-          console.log(response);
           this.likes = response.data.users ?? [];
         })
         .catch((error) => {
