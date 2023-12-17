@@ -46,6 +46,10 @@ export default {
     caption: {
       type: String,
       required: true
+    },
+    updatePost: {
+      type: Function,
+      required: false
     }
   },
   methods: {
@@ -83,6 +87,7 @@ export default {
     :date="this.date"
     :caption="this.caption"
     :closePost="this.closePost"
+    :updatePost="this.updatePost"
   />
   <button @click="this.openPost()" class="home-post-card">
     <div class="home-post-card-image-container">

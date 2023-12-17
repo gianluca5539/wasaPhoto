@@ -57,6 +57,10 @@ export default {
     closePost: {
       type: Function,
       required: true
+    },
+    updatePost: {
+      type: Function,
+      required: false
     }
   },
   methods: {
@@ -77,6 +81,7 @@ export default {
             })
             .then((response) => {
               this.likes.splice(index, 1);
+              this.updatePost(this.postid, 'likecount', this.likes.length);
             })
             .catch((error) => {
               alert('Could not unlike post. Please try again.');
@@ -103,6 +108,7 @@ export default {
                 },
                 ...this.likes
               ];
+              this.updatePost(this.postid, 'likecount', this.likes.length);
             })
             .catch((error) => {
               alert('Could not like post. Please try again.');

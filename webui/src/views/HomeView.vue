@@ -28,6 +28,14 @@ export default {
         .catch((error) => {
           alert("Couldn't get stream. Please try again later.");
         });
+    },
+    updatePost(postid, key, value) {
+      this.posts = this.posts.map((post) => {
+        if (post.postid == postid) {
+          post[key] = value;
+        }
+        return post;
+      });
     }
   },
   components: {
@@ -80,6 +88,7 @@ export default {
         :date="post.createdat"
         :caption="post.caption"
         :likeCount="post.likecount"
+        :updatePost="this.updatePost"
       />
     </div>
   </div>

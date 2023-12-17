@@ -529,6 +529,14 @@ export default {
     },
     closePost() {
       this.openedPost = null;
+    },
+    updatePost(postid, key, value) {
+      this.profileposts = this.profileposts.map((post) => {
+        if (post.postid == postid) {
+          post[key] = value;
+        }
+        return post;
+      });
     }
   },
   components: {
@@ -765,6 +773,7 @@ export default {
     :date="this.openedPost.createdat"
     :caption="this.openedPost.caption"
     :closePost="this.closePost"
+    :updatePost="this.updatePost"
   />
 </template>
 
