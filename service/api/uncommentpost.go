@@ -16,7 +16,10 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid post id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -26,7 +29,10 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -35,7 +41,10 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -44,12 +53,18 @@ func (rt *_router) unCommentPost(w http.ResponseWriter, r *http.Request, ps http
 		if err.Error() == "comment does not exist" {
 			w.WriteHeader(http.StatusNotFound)
 			errorobj := types.Error{Message: "Comment does not exist or you are not the owner"}
-			_ = json.NewEncoder(w).Encode(errorobj)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object")
+			}
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 

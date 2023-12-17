@@ -16,7 +16,10 @@ func (rt *_router) likePost(w http.ResponseWriter, r *http.Request, ps httproute
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid post id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -26,7 +29,10 @@ func (rt *_router) likePost(w http.ResponseWriter, r *http.Request, ps httproute
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -35,7 +41,10 @@ func (rt *_router) likePost(w http.ResponseWriter, r *http.Request, ps httproute
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -48,7 +57,10 @@ func (rt *_router) likePost(w http.ResponseWriter, r *http.Request, ps httproute
 		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 

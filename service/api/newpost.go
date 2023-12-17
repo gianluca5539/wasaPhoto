@@ -29,7 +29,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid request body"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -39,7 +42,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -48,7 +54,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -61,7 +70,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid image"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -73,7 +85,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid image"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -84,7 +99,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	// save picture
@@ -93,7 +111,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	defer outputFile.Close()
@@ -103,7 +124,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -112,7 +136,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -121,7 +148,10 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -139,6 +169,9 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	w.WriteHeader(http.StatusCreated)
 	// return the user object to the client
-	json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		rt.baseLogger.Error("Error encoding response object")
+	}
 
 }

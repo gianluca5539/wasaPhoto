@@ -16,7 +16,10 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid postid"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -26,7 +29,10 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -35,7 +41,10 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -46,12 +55,18 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 		if err.Error() == "you are not the owner of the post" {
 			w.WriteHeader(http.StatusForbidden)
 			errorobj := types.Error{Message: "you are not the owner of the post"}
-			_ = json.NewEncoder(w).Encode(errorobj)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object")
+			}
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 

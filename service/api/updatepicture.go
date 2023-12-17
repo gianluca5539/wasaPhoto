@@ -26,7 +26,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid user id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -37,7 +40,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid request body"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	// get newPicture from pictureReq
@@ -49,7 +55,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -58,14 +67,20 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
 	if requestedUserID != userID {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "You cannot update another user's picture"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -74,7 +89,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid picture"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -86,7 +104,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid picture"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -97,7 +118,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	// save picture
@@ -106,7 +130,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	defer outputFile.Close()
@@ -116,7 +143,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -125,7 +155,10 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 

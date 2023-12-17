@@ -20,7 +20,10 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid request body"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -30,7 +33,10 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	if len(username) < 3 || len(username) > 16 {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid username"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -39,7 +45,10 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	// If the user doesn't exist, create a new user in the database
@@ -48,7 +57,10 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			errorobj := types.Error{Message: "Internal server error"}
-			_ = json.NewEncoder(w).Encode(errorobj)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object")
+			}
 			return
 		}
 		token := user.UserID
@@ -60,7 +72,10 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		// Return the user and the token
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(res)
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 	} else {
 		token := user.UserID
 
@@ -71,6 +86,9 @@ func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.P
 		// Return the user and the token
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(res)
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 	}
 }

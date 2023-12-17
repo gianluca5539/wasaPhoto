@@ -16,7 +16,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid user id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -26,7 +29,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -35,7 +41,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -44,13 +53,19 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	if banned {
 		w.WriteHeader(http.StatusNotFound)
 		errorobj := types.Error{Message: "User not found"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -59,7 +74,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -69,13 +87,19 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 	if !found {
 		w.WriteHeader(http.StatusNotFound)
 		errorobj := types.Error{Message: "User not found"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -84,7 +108,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -95,7 +122,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			errorobj := types.Error{Message: "Internal server error"}
-			_ = json.NewEncoder(w).Encode(errorobj)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object")
+			}
 			return
 		}
 		followers = append(followers, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
@@ -106,7 +136,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -117,7 +150,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			errorobj := types.Error{Message: "Internal server error"}
-			_ = json.NewEncoder(w).Encode(errorobj)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object")
+			}
 			return
 		}
 		following = append(following, types.User{UserID: u.UserID, Username: u.Username, Picture: u.Picture, Bio: u.Bio, Feeling: u.Feeling})
@@ -128,7 +164,10 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -148,5 +187,8 @@ func (rt *_router) getProfile(w http.ResponseWriter, r *http.Request, ps httprou
 	// return the user
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		rt.baseLogger.Error("Error encoding response object")
+	}
 }

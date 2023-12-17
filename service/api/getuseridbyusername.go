@@ -20,7 +20,10 @@ func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, p
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -28,7 +31,10 @@ func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, p
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -37,7 +43,10 @@ func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, p
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -46,14 +55,20 @@ func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, p
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
 	if !found || banned {
 		w.WriteHeader(http.StatusNotFound)
 		errorobj := types.Error{Message: "User not found"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -62,6 +77,9 @@ func (rt *_router) getUserIDByUsername(w http.ResponseWriter, r *http.Request, p
 		ID int `json:"id"`
 	}{ID: user.UserID}
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		rt.baseLogger.Error("Error encoding response object")
+	}
 
 }

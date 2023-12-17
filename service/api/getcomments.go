@@ -15,7 +15,10 @@ func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid post id"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -23,7 +26,10 @@ func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httpro
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		_ = json.NewEncoder(w).Encode(errorobj)
+		err = json.NewEncoder(w).Encode(errorobj)
+		if err != nil {
+			rt.baseLogger.Error("Error encoding response object")
+		}
 		return
 	}
 
@@ -37,5 +43,8 @@ func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httpro
 	// return the user
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		rt.baseLogger.Error("Error encoding response object")
+	}
 }
