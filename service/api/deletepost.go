@@ -49,7 +49,6 @@ func (rt *_router) deletePost(w http.ResponseWriter, r *http.Request, ps httprou
 			_ = json.NewEncoder(w).Encode(errorobj)
 			return
 		}
-		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
 		_ = json.NewEncoder(w).Encode(errorobj)
