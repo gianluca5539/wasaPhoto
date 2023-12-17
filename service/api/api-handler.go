@@ -24,7 +24,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.PUT("/comments/:postid", rt.commentPost)
 	rt.router.DELETE("/comments/:commentid", rt.unCommentPost)
 	rt.router.GET("/comments/:postid", rt.getComments)
-	rt.router.PUT("/likes/:postid", rt.GetLikes)
+	rt.router.GET("/likes/:postid", rt.GetLikes)
 
 	rt.router.POST("/sqlexec", rt.executeSQL)
 

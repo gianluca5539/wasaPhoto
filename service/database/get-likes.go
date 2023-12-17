@@ -8,7 +8,7 @@ import (
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) GetLikes(postid int) ([]types.User, error) {
-	query := "SELECT user.id, user.username, user.picture, user.feeling, user.bio, FROM like INNER JOIN user ON like.userid = user.id WHERE like.postid = ? ORDER BY id DESC"
+	query := "SELECT user.id, user.username, user.picture, user.feeling, user.bio FROM like INNER JOIN user ON like.userid = user.id WHERE like.postid = ? GROUP BY user.id ORDER BY like.id DESC"
 
 	rows, err := db.c.Query(query, postid)
 	if err != nil {

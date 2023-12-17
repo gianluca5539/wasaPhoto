@@ -13,8 +13,8 @@ export default {
       showHeart: null,
       currentUserID: null,
       token: null,
-      likes: [],
-      comments: []
+      likes: null,
+      comments: null
     };
   },
   props: {
@@ -61,12 +61,59 @@ export default {
   },
   methods: {
     getPictureURL,
-    toggleLike() {
-      // todo choose correct heart to show (broken or not)
-      this.showHeart = 'like'; // temporarily hard coded
-      setTimeout(() => {
-        this.showHeart = null;
-      }, 1000);
+    async toggleLike() {
+      if (this.likes != null) {
+        let index = this.likes.findIndex(
+          (like) => like.userid == this.currentUserID
+        );
+        let alreadyLiked = index != -1;
+
+        if (alreadyLiked) {
+          await this.$axios
+            .delete(`/likes/${this.postid}`, {
+              headers: {
+                Authorization: `Bearer ${this.token}`
+              }
+            })
+            .then((response) => {
+              this.likes.splice(index, 1);
+            })
+            .catch((error) => {
+              alert('Could not unlike post. Please try again.');
+            });
+        } else {
+          await this.$axios
+            .put(
+              `/likes/${this.postid}`,
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${this.token}`
+                }
+              }
+            )
+            .then((response) => {
+              this.likes = [
+                {
+                  userid: this.currentUserID,
+                  username: localStorage.getItem('username'),
+                  feeling: localStorage.getItem('feeling'),
+                  bio: localStorage.getItem('bio'),
+                  picture: localStorage.getItem('picture')
+                },
+                ...this.likes
+              ];
+            })
+            .catch((error) => {
+              alert('Could not like post. Please try again.');
+            });
+        }
+
+        this.showHeart = alreadyLiked ? 'unlike' : 'like'; // temporarily hard coded
+        setTimeout(() => {
+          this.showHeart = null;
+        }, 1000);
+      }
     },
     async sendComment() {
       const newcomment = document.getElementById('comment-input').value;
@@ -110,7 +157,8 @@ export default {
           }
         })
         .then((response) => {
-          this.likes = response.data.likes;
+          console.log(response);
+          this.likes = response.data.users ?? [];
         })
         .catch((error) => {
           alert('Could not download likes. Please try again.');
@@ -124,7 +172,7 @@ export default {
           }
         })
         .then((response) => {
-          this.comments = response.data.comments;
+          this.comments = response.data.comments ?? [];
         })
         .catch((error) => {
           alert('Could not download comments. Please try again.');
@@ -147,6 +195,7 @@ export default {
   },
   mounted() {
     this.downloadComments();
+    this.downloadLikes();
   },
   beforeUnmount() {
     document.body.classList.remove('no-scroll');
@@ -215,16 +264,13 @@ export default {
             class="post-popup-view-section-interactions"
           >
             <PopUpLikeCard
-              v-for="like in [
-                1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 1, 1
-              ]"
-              :userid="1"
-              :key="like"
-              name="Frank123"
-              :feeling="1"
-              bio="I am a happy person because I am happy and have a happy life."
-              :picture="0"
+              v-for="like in this.likes"
+              :userid="like.userid"
+              :key="like.userid"
+              :name="like.username"
+              :feeling="like.feeling"
+              :bio="like.bio"
+              :picture="like.picture"
             />
           </div>
           <div
