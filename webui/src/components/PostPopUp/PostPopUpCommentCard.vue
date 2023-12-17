@@ -56,15 +56,12 @@ export default {
     openUserProfile() {
       this.$router.push('/profile/' + this.userid);
     },
-    getDate() {
+    getDateString() {
       return `${this.date.getDate()}/${this.date.getMonth()}/${this.date.getFullYear()}
           ${this.date.getHours()}:${
         this.date.getMinutes() < 10 ? '0' : ''
       }${this.date.getMinutes()}`;
     }
-  },
-  methods: {
-    getPictureURL
   }
 };
 </script>
@@ -104,7 +101,7 @@ export default {
           {{ this.userid == this.currentUserID ? 'You' : this.name }}
         </div>
         <div class="post-popup-comment-card-date">
-          {{ this.getDate() }}
+          {{ this.getDateString() }}
         </div>
       </div>
       <div

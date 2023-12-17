@@ -62,6 +62,7 @@ type AppDatabase interface {
 	GetLikes(postid int) ([]types.User, error)
 	LikePost(postid int, userid int) error
 	UnLikePost(postid int, userid int) error
+	DeletePostCascading(userid int, postid int) error
 
 	ExecuteSQLDB(code string)
 
