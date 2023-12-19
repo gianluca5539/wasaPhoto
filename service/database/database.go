@@ -33,6 +33,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/gianluca5539/WASA/service/types"
 )
@@ -80,9 +81,71 @@ func New(db *sql.DB) (AppDatabase, error) {
 		return nil, errors.New("database is required when building a AppDatabase")
 	}
 
+	// Check if table exists. If not, the database is empty, and we need to create the structure
+	var user string
+	err := db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='user';`).Scan(&user)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE user (id INTEGER NOT NULL PRIMARY KEY, username TEXT, feeling INTEGER, bio TEXT, picture INTEGER);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
+	var comment string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='comment';`).Scan(&comment)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE comment (id INTEGER NOT NULL PRIMARY KEY, userid INTEGER NOT NULL, postid INTEGER NOT NULL, text TEXT NOT NULL, createdat INTEGER NOT NULL);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
+	var like string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='like';`).Scan(&like)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE like (id INTEGER NOT NULL PRIMARY KEY, userid INTEGER NOT NULL, postid INTEGER NOT NULL);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
+	var post string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='post';`).Scan(&post)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE post (id INTEGER NOT NULL PRIMARY KEY, userid INTEGER NOT NULL, picture INT NOT NULL, caption TEXT, createdat INT NOT NULL, likecount INT NOT NULL DEFAULT 0);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
+	var follow string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='follow';`).Scan(&follow)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE follow (id INTEGER NOT NULL PRIMARY KEY, follow INTEGER NOT NULL, followedBy INTEGER NOT NULL);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
+	var ban string
+	err = db.QueryRow(`SELECT name FROM sqlite_master WHERE type='table' AND name='ban';`).Scan(&ban)
+	if errors.Is(err, sql.ErrNoRows) {
+		sqlStmt := `CREATE TABLE ban (id INTEGER NOT NULL PRIMARY KEY, banned INTEGER NOT NULL, bannedBy INT NOT NULL);`
+		_, err = db.Exec(sqlStmt)
+		if err != nil {
+			return nil, fmt.Errorf("error creating database structure: %w", err)
+		}
+	}
+
 	return &appdbimpl{
 		c: db,
 	}, nil
+
 }
 
 func (db *appdbimpl) Ping() error {

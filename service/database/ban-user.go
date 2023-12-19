@@ -6,9 +6,9 @@ import (
 
 // GetName is an example that shows you how to query data
 func (db *appdbimpl) BanUser(id int, bannedBy int) error {
-	banStatement := "insert into bannedUsers (banned, bannedBy) values (?, ?)"
+	banStatement := "insert into ban (banned, bannedBy) values (?, ?)"
 	removeFollowStatement := "DELETE FROM follow WHERE follow = ? AND followedBy = ?"
-	checkBanStatement := "SELECT EXISTS(SELECT 1 FROM bannedUsers WHERE banned = ? AND bannedBy = ?)"
+	checkBanStatement := "SELECT EXISTS(SELECT 1 FROM ban WHERE banned = ? AND bannedBy = ?)"
 
 	// Check if user is already banned and if not ban the user. Do everything in a transaction
 	tx, err := db.c.Begin()
