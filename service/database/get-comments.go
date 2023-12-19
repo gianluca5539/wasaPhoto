@@ -1,6 +1,8 @@
 package database
 
 import (
+	"database/sql"
+
 	"github.com/gianluca5539/WASA/service/types"
 )
 
@@ -17,11 +19,26 @@ func (db *appdbimpl) GetComments(postid int) ([]types.Comment, error) {
 	var comments []types.Comment
 	for rows.Next() {
 		var comment types.Comment
+		var nullablePicture sql.NullInt64
+		var nullableFeeling sql.NullInt64
 
-		err = rows.Scan(&comment.ID, &comment.UserID, &comment.PostID, &comment.Username, &comment.Picture, &comment.Feeling, &comment.Text, &comment.CreatedAt)
+		err = rows.Scan(&comment.ID, &comment.UserID, &comment.PostID, &comment.Username, &nullablePicture, &nullableFeeling, &comment.Text, &comment.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
+
+		if nullablePicture.Valid {
+			comment.Picture = int(nullablePicture.Int64)
+		} else {
+			comment.Picture = -1
+		}
+
+		if nullableFeeling.Valid {
+			comment.Feeling = int(nullableFeeling.Int64)
+		} else {
+			comment.Feeling = 0
+		}
+
 		comments = append(comments, comment)
 	}
 
