@@ -701,15 +701,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /likes/{postid}:
-    get:
-      tags: ['Posts']
-      summary: Gets the likes of a given picture
-      description: |-
-        If the picture does not exist, it will return an error (404).
-        If the picture exists and the requesting user is not banned, it will return the user object.
-        If the requesting user is banned, it will also return 404.
-      operationId: getLikes
-      parameters:
+    parameters:
         - name: postid
           in: path
           description: ID of the picture to get the likes of
@@ -718,6 +710,14 @@ paths:
             description: id of the post
             type: number
             example: 12
+    get:
+      tags: ['Posts']
+      summary: Gets the likes of a given picture
+      description: |-
+        If the picture does not exist, it will return an error (404).
+        If the picture exists and the requesting user is not banned, it will return the user object.
+        If the requesting user is banned, it will also return 404.
+      operationId: getLikes
       responses:
         '200':
           description: Users found and returned as an array
@@ -754,15 +754,6 @@ paths:
         If everything goes fine it will return code 200.
         If the picture was already liked it will return 200 too.
       operationId: likePhoto
-      parameters:
-        - name: postid
-          in: path
-          description: id of the picture we want to like
-          required: true
-          schema:
-            description: postid to like
-            type: number
-            example: 12
       security:
         - bearerAuth: []
       responses:
@@ -789,15 +780,6 @@ paths:
         If everything goes fine it will return code 200.
         If the picture was already liked it will return 200 too.
       operationId: unlikePhoto
-      parameters:
-        - name: postid
-          in: path
-          description: id of the picture we want to unlike
-          required: true
-          schema:
-            description: postid to unlike
-            type: number
-            example: 12
       security:
         - bearerAuth: []
       responses:
@@ -817,6 +799,15 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /comments/{postid}:
+    parameters:
+      - name: postid
+        in: path
+        description: ID of the picture to get the comments of
+        required: true
+        schema:
+          description: postid to get the comments of
+          type: number
+          example: 12
     get:
       tags: ['Posts']
       summary: Gets the comments of a given picture
@@ -825,15 +816,6 @@ paths:
         If the picture exists and the requesting user is not banned, it will return the user object.
         If the requesting user is banned, it will also return 404.
       operationId: getComments
-      parameters:
-        - name: postid
-          in: path
-          description: ID of the picture to get the comments of
-          required: true
-          schema:
-            description: postid to get the comments of
-            type: number
-            example: 12
       responses:
         '200':
           description: Comments found and returned as an array
@@ -870,15 +852,6 @@ paths:
         If the token is incorrect, it will return an error stating that the action is not permitted.
         If everything goes fine it will return code 200.
       operationId: commentPhoto
-      parameters:
-        - name: postid
-          in: path
-          description: ID of the picture to get the comments of
-          required: true
-          schema:
-            description: postid to get the comments of
-            type: number
-            example: 12
       requestBody:
         description: comment's post id and text
         content:
