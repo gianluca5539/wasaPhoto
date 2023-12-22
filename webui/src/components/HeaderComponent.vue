@@ -81,8 +81,8 @@ export default {
 <template>
   <div class="homepage-header-container">
     <div class="logo-search-container">
-      <button @click="this.toggleSearchOpen()" class="header-search-button">
-        <SearchIcon v-if="!this.searchOpen" :size="40" />
+      <button v-if="!this.searchOpen" @click="this.toggleSearchOpen()" class="header-search-button">
+        <SearchIcon  :size="40" />
       </button>
       <button
         v-if="!this.searchOpen"
