@@ -42,17 +42,9 @@ export default {
       type: String,
       required: true
     },
-    postOpen: {
-      type: Boolean,
-      required: true
-    },
     updatePost: {
       type: Function,
       required: false
-    },
-    removePost: {
-      type: Function,
-      required: true
     },
     openPost: {
       type: Function,
