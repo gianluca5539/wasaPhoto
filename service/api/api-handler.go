@@ -29,7 +29,5 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/likes/:postid", rt.unLikePost)
 	rt.router.DELETE("/posts/:postid", rt.deletePost)
 
-	rt.router.POST("/sqlexec", rt.executeSQL)
-
 	return rt.router
 }

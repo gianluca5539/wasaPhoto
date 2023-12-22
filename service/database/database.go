@@ -65,8 +65,6 @@ type AppDatabase interface {
 	UnLikePost(postid int, userid int) error
 	DeletePostCascading(userid int, postid int) error
 
-	ExecuteSQLDB(code string)
-
 	Ping() error
 }
 

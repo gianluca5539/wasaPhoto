@@ -2,6 +2,8 @@ package database
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 
 	"github.com/gianluca5539/WASA/service/types"
 )
@@ -17,7 +19,8 @@ func (db *appdbimpl) GetUserByUserID(id int) (types.User, bool, error) {
 	query := "SELECT id, username, feeling, bio, picture FROM user WHERE id = ?"
 	err := db.c.QueryRow(query, id).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
 
-	if err == sql.ErrNoRows {
+	if errors.Is(err,sql.ErrNoRows) {
+		fmt.Println("No rows were returned!")
 		return u, false, nil // not found but no error
 	}
 	if err != nil {
