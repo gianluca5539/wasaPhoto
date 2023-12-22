@@ -98,6 +98,7 @@ export default {
       />
       <HomePostComponent
         v-for="post in this.posts"
+        :key='post.postid'
         :postid="post.postid"
         :userid="post.userid"
         :picture="post.picture"
