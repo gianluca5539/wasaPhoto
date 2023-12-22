@@ -4,6 +4,7 @@ package database
 func (db *appdbimpl) UnBanUser(id int, bannedBy int) error {
 	// create a new sql statement
 	stmt, err := db.c.Prepare("delete from ban where banned = ? and bannedBy = ?")
+
 	if err != nil {
 		return err
 	}

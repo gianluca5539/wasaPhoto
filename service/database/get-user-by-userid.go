@@ -18,7 +18,7 @@ func (db *appdbimpl) GetUserByUserID(id int) (types.User, bool, error) {
 	query := "SELECT id, username, feeling, bio, picture FROM user WHERE id = ?"
 	err := db.c.QueryRow(query, id).Scan(&u.UserID, &u.Username, &nullableFeeling, &nullableBio, &nullablePicture)
 
-	if errors.Is(err,sql.ErrNoRows) {
+	if errors.Is(err, sql.ErrNoRows) {
 		return u, false, nil // not found but no error
 	}
 	if err != nil {

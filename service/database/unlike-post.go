@@ -18,14 +18,14 @@ func (db *appdbimpl) UnLikePost(postid int, userid int) error {
 	likeExistsStatement := "SELECT 1 FROM like WHERE postid = ? AND userid = ?"
 	var exists int
 	err = tx.QueryRow(likeExistsStatement, postid, userid).Scan(&exists)
-	if err != nil && !errors.Is(err,sql.ErrNoRows) {
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		err2 := tx.Rollback()
 		if err2 != nil {
 			return err
 		}
 		return err
 	}
-	if exists == 0 || errors.Is(err,sql.ErrNoRows) {
+	if exists == 0 || errors.Is(err, sql.ErrNoRows) {
 		err2 := tx.Rollback()
 		if err2 != nil {
 			return err
