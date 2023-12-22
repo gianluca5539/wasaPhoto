@@ -190,7 +190,7 @@ export default {
     },
     deleteComment(id) {
       this.$axios
-        .delete(`/comments/${id}`, {
+        .delete(`/comments/${this.postid}/${id}`, {
           headers: {
             Authorization: `Bearer ${this.token}`
           }

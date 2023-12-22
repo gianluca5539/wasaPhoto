@@ -917,7 +917,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /comments/{id}:
+  /comments/{postid}/{id}:
     delete:
       tags: ['Posts']
       summary: Deletes a comment
@@ -926,6 +926,14 @@ paths:
         If everything goes fine it will return code 200.
       operationId: uncommentPhoto
       parameters:
+        - name: postid
+          in: path
+          description: ID of the post with the comment to delete
+          required: true
+          schema:
+            description: postid of the comment
+            type: number
+            example: 12
         - name: id
           in: path
           description: ID of the comment to delete
