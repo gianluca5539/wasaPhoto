@@ -26,4 +26,4 @@ webui/*.njsproj
 webui/*.sln
 webui/*.sw?
 
-data/
+data/pictures

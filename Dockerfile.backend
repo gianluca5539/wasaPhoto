@@ -1,0 +1,29 @@
+# Stage 1: Build the Go webapi executable
+# Use golang 1.19.1 as the base image "builder"
+FROM golang:1.19.1 AS builder
+# set the working directory to /src
+WORKDIR /src/
+# Copy the needed directories from the repo into the "builder" image
+COPY ./cmd ./cmd
+COPY ./service ./service
+COPY ./vendor ./vendor
+COPY ./go.mod ./go.mod
+# build the webapi executable inside the container, and output it to /app/webapi
+RUN go build -o /app/webapi ./cmd/webapi
+
+# Stage 2: Copy the webapi executable into the final image
+# Use debian:stable as the base image
+FROM debian:stable
+# Port 3000 is the port that webapi listens on
+EXPOSE 3000
+# Set the working directory to /app/
+WORKDIR /app/
+# Copy the webapi executable from the builder stage into the final image
+COPY --from=builder /app/webapi ./
+# Copy the data/defaultpics directory from the repo into the final image (these are the "styling" images)
+COPY ./data/defaultpics ./data/defaultpics
+# Make the data directory writable by the webapi executable
+RUN chmod a+rw ./data
+# Make the user pictures directory inside the data directory
+RUN mkdir -p ./data/pictures
+CMD ["/app/webapi"]
