@@ -53,11 +53,11 @@ export default {
     },
     async loadPage() {
       Object.assign(this.$data, initialData()); // restore initial state
-      this.userid = parseInt(localStorage.getItem('userid'));
-      this.username = localStorage.getItem('username');
-      this.feeling = parseInt(localStorage.getItem('feeling'));
-      this.bio = localStorage.getItem('bio');
-      this.picture = parseInt(localStorage.getItem('picture'));
+      this.userid = parseInt(localStorage.getItem('userid_wasa_1982801'));
+      this.username = localStorage.getItem('username_wasa_1982801');
+      this.feeling = parseInt(localStorage.getItem('feeling_wasa_1982801'));
+      this.bio = localStorage.getItem('bio_wasa_1982801');
+      this.picture = parseInt(localStorage.getItem('picture_wasa_1982801'));
       document.body.classList.remove('no-scroll'); // unlock scrolling if it was locked before
 
       await this.getProfile();
@@ -65,7 +65,7 @@ export default {
     async getProfile() {
       this.profileuserid = parseInt(this.$route.params.id);
       this.followPopup = null; // close popup (needed when changing profile from follow list)
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       const res = await this.$axios
         .get(`/users/${this.profileuserid}/profile`, {
           headers: {
@@ -159,7 +159,7 @@ export default {
       reader.readAsDataURL(file);
     },
     async updateProfilePicture(newuserpicture) {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       const res = await this.$axios
         .put(
           `/users/${this.userid}/picture`,
@@ -185,7 +185,7 @@ export default {
       if (res) {
         // get the picture id from the response
         const pictureid = res.data.pictureid;
-        localStorage.setItem('picture', pictureid);
+        localStorage.setItem('picture_wasa_1982801', pictureid);
         this.picture = pictureid;
         this.userpicture = pictureid;
       }
@@ -235,7 +235,7 @@ export default {
         alert('Username must be between 3 and 16 characters long.');
         return;
       }
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       this.$axios
         .put(
           `/users/${this.userid}/username`,
@@ -249,7 +249,7 @@ export default {
           }
         )
         .then((res) => {
-          localStorage.setItem('username', newusername);
+          localStorage.setItem('username_wasa_1982801', newusername);
           this.username = newusername;
           this.profileusername = newusername;
         })
@@ -272,7 +272,7 @@ export default {
       this.closeEditBio();
       const newbio = document.getElementById('bio-popup-input').value;
       if (newbio === this.bio) return;
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       this.$axios
         .put(
           `/users/${this.userid}/bio`,
@@ -286,7 +286,7 @@ export default {
           }
         )
         .then((res) => {
-          localStorage.setItem('bio', newbio);
+          localStorage.setItem('bio_wasa_1982801', newbio);
           this.bio = newbio;
           this.profilebio = newbio;
         })
@@ -305,7 +305,7 @@ export default {
       if (this.profileuserid != this.userid) return;
       // feeling goes from 0 to 4, this function cycles it
       let newFeeling = (this.feeling + 1) % 5;
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       this.$axios
         .put(
           `/users/${this.userid}/feeling`,
@@ -321,7 +321,7 @@ export default {
         .then(() => {
           this.feeling = newFeeling;
           this.profilefeeling = newFeeling;
-          localStorage.setItem('feeling', this.feeling);
+          localStorage.setItem('feeling_wasa_1982801', this.feeling);
         })
         .catch((err) => {
           switch (err.response.status) {
@@ -336,7 +336,7 @@ export default {
         });
     },
     async toggleFollowUser() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       this.profilefollowers = this.profilefollowers || [];
       const alreadyFollowing = this.profilefollowers.some(
         (user) => user.userid == this.userid
@@ -403,7 +403,7 @@ export default {
       }
     },
     toggleBanUser() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       if (!this.banned) {
         this.$axios
           .put(
@@ -484,7 +484,7 @@ export default {
         alert('Please select an image.');
         return;
       }
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token_wasa_1982801');
       this.$axios
         .put(
           `/posts`,

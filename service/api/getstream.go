@@ -18,6 +18,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
+		rt.baseLogger.Error("Invalid user token")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -30,6 +31,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
+		rt.baseLogger.Error("Invalid user token")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -42,6 +44,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error getting following from db")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -55,6 +58,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error getting stream from db")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")

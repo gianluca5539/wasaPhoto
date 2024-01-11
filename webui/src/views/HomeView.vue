@@ -21,13 +21,24 @@ export default {
     getStream() {
       this.$axios
         .get('/stream', {
-          headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('token_wasa_1982801') }
         })
         .then((response) => {
           let posts = response.data.posts;
           this.posts = posts;
         })
         .catch((error) => {
+          if (error.response.status == 403) {
+            // clear local storage entries
+            localStorage.removeItem('userid_wasa_1982801');
+            localStorage.removeItem('username_wasa_1982801');
+            localStorage.removeItem('bio_wasa_1982801');
+            localStorage.removeItem('feeling_wasa_1982801');
+            localStorage.removeItem('picture_wasa_1982801');
+            localStorage.removeItem('token_wasa_1982801');
+            // redirect to login page
+            this.$router.push('/login');
+          }
           alert("Couldn't get stream. Please try again later.");
         });
     },
@@ -57,12 +68,12 @@ export default {
     HomePostComponent
   },
   created() {
-    this.userid = parseInt(localStorage.getItem('userid'));
-    this.username = localStorage.getItem('username');
-    this.bio = localStorage.getItem('bio');
-    this.feeling = parseInt(localStorage.getItem('feeling'));
-    this.picture = parseInt(localStorage.getItem('picture'));
-    this.token = localStorage.getItem('token');
+    this.userid = parseInt(localStorage.getItem('userid_wasa_1982801'));
+    this.username = localStorage.getItem('username_wasa_1982801');
+    this.bio = localStorage.getItem('bio_wasa_1982801');
+    this.feeling = parseInt(localStorage.getItem('feeling_wasa_1982801'));
+    this.picture = parseInt(localStorage.getItem('picture_wasa_1982801'));
+    this.token = localStorage.getItem('token_wasa_1982801');
 
     this.getStream();
   }

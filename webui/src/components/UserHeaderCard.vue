@@ -19,7 +19,7 @@ export default {
       this.optionsOpen = window.innerWidth > 1000;
     },
     openMyProfile() {
-      let userid = localStorage.getItem('userid');
+      let userid = localStorage.getItem('userid_wasa_1982801');
       this.$router.push(`/profile/${userid}`);
     },
     logout,

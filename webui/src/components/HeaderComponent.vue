@@ -73,7 +73,7 @@ export default {
   },
   components: { UserHeaderCard, SearchIcon, CloseIcon },
   created() {
-    this.token = localStorage.getItem('token');
+    this.token = localStorage.getItem('token_wasa_1982801');
   }
 };
 </script>

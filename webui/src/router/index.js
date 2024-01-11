@@ -23,7 +23,7 @@ const router = createRouter({
 // eslint-disable-next-line no-unused-vars
 router.beforeEach(async (to, from) => {
   // if the user is not logged in and tries to access a page other than login, redirect to login
-  let token = await localStorage.getItem('token');
+  let token = await localStorage.getItem('token_wasa_1982801');
   if (token === null && to.name !== 'login') {
     return { name: 'login' };
   }

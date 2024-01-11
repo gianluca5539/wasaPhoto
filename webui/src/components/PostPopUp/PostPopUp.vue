@@ -106,10 +106,10 @@ export default {
               this.likes = [
                 {
                   userid: this.currentUserID,
-                  username: localStorage.getItem('username'),
-                  feeling: localStorage.getItem('feeling'),
-                  bio: localStorage.getItem('bio'),
-                  picture: localStorage.getItem('picture')
+                  username: localStorage.getItem('username_wasa_1982801'),
+                  feeling: localStorage.getItem('feeling_wasa_1982801'),
+                  bio: localStorage.getItem('bio_wasa_1982801'),
+                  picture: localStorage.getItem('picture_wasa_1982801')
                 },
                 ...this.likes
               ];
@@ -235,8 +235,8 @@ export default {
     TrashCanIcon
   },
   created() {
-    this.currentUserID = parseInt(localStorage.getItem('userid'));
-    this.token = localStorage.getItem('token');
+    this.currentUserID = parseInt(localStorage.getItem('userid_wasa_1982801'));
+    this.token = localStorage.getItem('token_wasa_1982801');
   }
 };
 </script>

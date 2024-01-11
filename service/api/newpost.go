@@ -29,6 +29,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid request body"}
+		rt.baseLogger.Error("Invalid request body")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -42,6 +43,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
+		rt.baseLogger.Error("Invalid user token")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -54,6 +56,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		errorobj := types.Error{Message: "Invalid token"}
+		rt.baseLogger.Error("Invalid user token")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -70,6 +73,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid image"}
+		rt.baseLogger.Error("Invalid image")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -85,6 +89,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		errorobj := types.Error{Message: "Invalid image"}
+		rt.baseLogger.Error("Invalid image")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -99,6 +104,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error converting timestamp to int")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -111,6 +117,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error creating output file")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -124,6 +131,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error encoding image to output file")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -136,6 +144,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error inserting post into db")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")
@@ -148,6 +157,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
+		rt.baseLogger.Error("Error getting user from db")
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
 			rt.baseLogger.Error("Error encoding response object")

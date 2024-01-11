@@ -17,12 +17,12 @@ export default {
           username: this.username
         });
         if (res?.data != undefined) {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('userid', res.data.user.userid);
-          localStorage.setItem('username', res.data.user.username);
-          localStorage.setItem('bio', res.data.user.bio);
-          localStorage.setItem('feeling', res.data.user.feeling);
-          localStorage.setItem('picture', res.data.user.picture);
+          localStorage.setItem('token_wasa_1982801', res.data.token);
+          localStorage.setItem('userid_wasa_1982801', res.data.user.userid);
+          localStorage.setItem('username_wasa_1982801', res.data.user.username);
+          localStorage.setItem('bio_wasa_1982801', res.data.user.bio);
+          localStorage.setItem('feeling_wasa_1982801', res.data.user.feeling);
+          localStorage.setItem('picture_wasa_1982801', res.data.user.picture);
           this.loading = false;
           this.$router.push('/');
         }
