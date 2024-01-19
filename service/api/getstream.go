@@ -44,10 +44,10 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		rt.baseLogger.Error("Error getting following from db")
+		rt.baseLogger.Error("Error getting following from db", err)
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
-			rt.baseLogger.Error("Error encoding response object")
+			rt.baseLogger.Error("Error encoding response object", err)
 		}
 		return
 	}
@@ -58,10 +58,10 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorobj := types.Error{Message: "Internal server error"}
-		rt.baseLogger.Error("Error getting stream from db")
+		rt.baseLogger.Error("Error getting stream from db", err)
 		err = json.NewEncoder(w).Encode(errorobj)
 		if err != nil {
-			rt.baseLogger.Error("Error encoding response object")
+			rt.baseLogger.Error("Error encoding response object", err)
 		}
 		return
 	}
@@ -74,7 +74,7 @@ func (rt *_router) getStream(w http.ResponseWriter, r *http.Request, _ httproute
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(res)
 	if err != nil {
-		rt.baseLogger.Error("Error encoding response object")
+		rt.baseLogger.Error("Error encoding response object", err)
 	}
 
 }
