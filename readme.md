@@ -16,7 +16,7 @@ docker buildx build -f Dockerfile.backend -t wasa-backend ./
 # Docker run instructions
 
 To run the front-end:
-docker run -p 80:80 wasa-frontend
+docker run -it --rm -p 80:80 wasa-frontend
 
 To run the back-end:
-docker run -p 3000:3000 wasa-backend 
+docker run -it --rm -p 3000:3000 wasa-backend 
