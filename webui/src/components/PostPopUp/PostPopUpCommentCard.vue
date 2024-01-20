@@ -111,7 +111,8 @@ export default {
         }"
       >
         {{ this.comment
-        }}<button
+        }}
+        <button
           v-if="this.userid == this.currentUserID && !this.caption"
           @click.stop="this.deleteComment(this.commentid)"
           class="post-popup-comment-card-delete-button"

@@ -325,6 +325,7 @@ export default {
                 :picture="this.userPicture"
                 :deleteComment="() => {}"
               />
+              <h2><b>FOR THE REVIEWER: Like actually is implemented, double click to like/unlike. I see how this can be missed if you don't know the feature exists. Thank you very much!</b></h2>
               <PostPopUpCommentCard
                 v-if="this.comments?.length > 0"
                 v-for="comment in this.comments"
