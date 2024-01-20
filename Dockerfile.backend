@@ -21,9 +21,9 @@ WORKDIR /app/
 # Copy the webapi executable from the builder stage into the final image
 COPY --from=builder /app/webapi ./
 # Copy the data/defaultpics directory from the repo into the final image (these are the "styling" images)
-COPY ./data/defaultpics ./data/defaultpics
+COPY ./data/defaultpics ./data/defaultpics/
 # Make the data directory writable by the webapi executable
-RUN chmod a+rw ./data
+RUN chmod a+rw ./data/
 # Make the user pictures directory inside the data directory
-RUN mkdir -p ./data/pictures
+RUN mkdir -p ./data/pictures/
 CMD ["/app/webapi"]
