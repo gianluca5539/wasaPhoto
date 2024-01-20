@@ -126,6 +126,22 @@ func (rt *_router) updatePicture(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 	// save picture
+
+	// check if the directory exists, if not create it
+	if _, err := os.Stat("data/pictures"); os.IsNotExist(err) {
+		err = os.Mkdir("data/pictures", 0755)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			errorobj := types.Error{Message: "Internal server error"}
+			rt.baseLogger.Error("Error creating pictures directory", err)
+			err = json.NewEncoder(w).Encode(errorobj)
+			if err != nil {
+				rt.baseLogger.Error("Error encoding response object", err)
+			}
+			return
+		}
+	}
+
 	filename := "data/pictures/" + time + ".png"
 	outputFile, err := os.Create(filename)
 	if err != nil {
