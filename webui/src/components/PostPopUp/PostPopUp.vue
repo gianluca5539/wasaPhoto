@@ -222,6 +222,16 @@ export default {
   mounted() {
     this.downloadComments();
     this.downloadLikes();
+
+    let likePopUp = localStorage.getItem('likePopUp_wasa_1982801');
+    if (likePopUp == null || likePopUp == 'show') {
+      // show a choice bok to the user to choose whether to show the pop up or not
+      let choice = confirm(
+        'To like a post, double click the picture!\nIf you do not want to see this message again, click OK.'
+      );
+      localStorage.setItem('likePopUp_wasa_1982801', choice ? 'hide' : 'show');
+    }
+
   },
   beforeUnmount() {
     document.body.classList.remove('no-scroll');
@@ -325,7 +335,6 @@ export default {
                 :picture="this.userPicture"
                 :deleteComment="() => {}"
               />
-              <h2><b>FOR THE REVIEWER: Like actually is implemented, double click to like/unlike. I see how this can be missed if you don't know the feature exists. Thank you very much!</b></h2>
               <PostPopUpCommentCard
                 v-if="this.comments?.length > 0"
                 v-for="comment in this.comments"
