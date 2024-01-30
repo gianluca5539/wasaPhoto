@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/png"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -82,7 +82,7 @@ func (rt *_router) newPost(w http.ResponseWriter, r *http.Request, _ httprouter.
 	}
 
 	// Make a Reader out of the []byte
-	imgReader := ioutil.NopCloser(bytes.NewReader(imgBytes))
+	imgReader := io.NopCloser(bytes.NewReader(imgBytes))
 
 	// Decode the []byte to image.Image
 	img, err := png.Decode(imgReader)
